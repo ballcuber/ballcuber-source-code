@@ -11,6 +11,8 @@ using RevengeCube;
 using System.IO;
 using CefSharp.WinForms;
 using System.Diagnostics;
+using fgSolver.Modele;
+using System.Numerics;
 
 namespace fgSolver
 {
@@ -25,7 +27,8 @@ namespace fgSolver
             viewer = new ChromiumWebBrowser(GetUriViewer());
             this.viewer.Dock = DockStyle.Fill;
             this.pnlViewer.Controls.Add(this.viewer);
-        }
+            
+         }
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
@@ -65,28 +68,9 @@ namespace fgSolver
 
             txtMoves.Text = string.Join(" ", twists.Select(x => x.Name));
 
-            var startInfo = new ProcessStartInfo("java", "solver " + txtColors.Text);
-            startInfo.WorkingDirectory = Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "solver");
-            startInfo.RedirectStandardOutput = true;
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
-            var proc = Process.Start(startInfo);
-
-            
-
-            proc.WaitForExit(8000);
 
 
-            var output=  proc.StandardOutput.ReadToEnd();
-
-            var algStr = output.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).Last().Replace("    ", " ").Replace("   ", " ").Replace("  ", " ");
-
-            lblMoveCount.Text = algStr.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length.ToString();
-
-            var dir = GetUriViewer(algStr, txtMoves.Text);
-
-            viewer.Load(dir);
-
+            btnGo_Click(sender, e);
         }
 
 
@@ -104,6 +88,60 @@ namespace fgSolver
             }
 
             return url;
+        }
+
+        private void btnGo_Click(object sender, EventArgs e)
+        {
+            var startInfo = new ProcessStartInfo("java", "solver " + txtColors.Text);
+            startInfo.WorkingDirectory = Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "solver");
+            startInfo.RedirectStandardOutput = true;
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            var proc = Process.Start(startInfo);
+
+
+
+            proc.WaitForExit(8000);
+
+
+            var output = proc.StandardOutput.ReadToEnd();
+
+            var algStr = output.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).Last().Replace("    ", " ").Replace("   ", " ").Replace("  ", " ");
+
+            lblMoveCount.Text = algStr.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length.ToString();
+
+            txtAlg.Text = algStr;
+
+            btnMoves_Click(sender, e);
+
+          }
+
+        private void btnMoves_Click(object sender, EventArgs e)
+        {
+
+            var moves = MoveParser.Parse(txtAlg.Text);
+
+            txtCubeMoves.Text = string.Join("\r\n", moves.Select(x => x.ToString()).ToArray());
+
+            var calculator = new MoveCalculator();
+
+            foreach(Move mv in moves)
+            {
+                calculator.AddCubeMove(mv);
+            }
+
+            txtMachineMoves.Text = string.Join("\r\n", calculator.MachineMoves.Select(x => x.ToString()).ToArray());
+
+            txtMotorMoves.Text = string.Join("\r\n", calculator.MachineMoves.MotorMoves.Select(x => x.ToString()).ToArray());
+
+            txtNBMotorMoves.Text = "1/4: " + calculator.MachineMoves.MotorMoves.Sum(x => x.QuarterNumber).ToString() + "  moves: " + calculator.MachineMoves.MotorMoves.Count;
+
+            textLongMove.Text = string.Join("  ", calculator.MachineMoves.MotorMoves.Select(x => x.EquivalentCubeMove()));
+
+
+            var dir = GetUriViewer(/*txtAlg.Text+ "%0A%2F%2F" +*/ textLongMove.Text, txtMoves.Text );
+
+            viewer.Load(dir);
         }
     }
 }
