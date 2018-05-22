@@ -6,7 +6,7 @@ using System.Linq;
 namespace RevengeCube
 {
 
-    public class ColorCube
+    public class ColorCube : ICloneable
 	{
 
         /*                         U
@@ -44,7 +44,15 @@ namespace RevengeCube
         public static Color[] _order = {Color.White, Color.Red, Color.Blue, Color.Orange, Color.Green, Color.Yellow };
 
         private Color[] _colors = new Color[6 * 16];
-		private Dictionary<Faces, Color> colorDictionary;
+		public static Dictionary<Faces, Color> colorDictionary = new Dictionary<Faces, Color>()
+        {
+            {Faces.U, Color.White },
+            {Faces.L, Color.Red },
+            {Faces.F, Color.Blue },
+            {Faces.R, Color.Orange },
+            {Faces.B, Color.Green },
+            {Faces.D, Color.Yellow },
+        };
 		private static int[,] EDGE_LOCATIONS = {{ 1, 66 }, { 65, 2 }, { 17, 4 }, { 7, 50 }, { 8, 18 }, { 49, 11 }, { 33, 13 }, { 14, 34 },
 			{ 71, 20 }, { 55, 68 }, { 23, 36 }, { 39, 52 }, { 40, 27 }, { 56, 43 }, { 24, 75 }, { 72, 59 },
 			{ 81, 45 }, { 46, 82 }, { 30, 84 }, { 87, 61 }, { 88, 29 }, { 62, 91 }, { 78, 93 }, { 94, 77 }
@@ -62,18 +70,37 @@ namespace RevengeCube
 
 		public ColorCube ()
 		{
-
-			colorDictionary = new Dictionary<Faces, Color> ();
-			colorDictionary.Add (Faces.U, Color.White);
-			colorDictionary.Add (Faces.L, Color.Red);
-			colorDictionary.Add (Faces.F, Color.Blue);
-			colorDictionary.Add (Faces.R, Color.Orange);
-			colorDictionary.Add (Faces.B, Color.Green);
-			colorDictionary.Add (Faces.D, Color.Yellow);
-
+            // par défaut, le cube est entier
+            for(int c = 0; c < 6; c++)
+            {
+                for(int i = 0; i < 16; i++)
+                {
+                    _colors[c * 16 + i] = _order[c];
+                }
+            }
 		}
 
-		public void setColors(Cube cube){
+        public bool IsSolved
+        {
+            get
+            {
+                return this == new ColorCube();
+            }
+        }
+
+        public void setColors(Color[] colors)
+        {
+            if (colors == null) return;
+
+            for (int i = 0; i < Math.Min(colors.Length, this._colors.Length); i++)
+            {
+                this._colors[i] = colors[i];
+            }
+        }
+
+
+
+        public void setColors(Cube cube){
 			setColors (cube.EdgePosition, cube.CornerPosition, cube.CornerOrientation, cube.CenterPosition);
 		}
 
@@ -108,6 +135,46 @@ namespace RevengeCube
 			return ((k %= n) < 0) ? k + n : k;
 		}
 
+        public ColorCube CloneCube()
+        {
+            var cube = new ColorCube();
+            cube.setColors(_colors);
+            return cube;
+        }
+
+        public object Clone()
+        {
+            return CloneCube();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is ColorCube)) return false;
+
+            return (ColorCube)obj == this;
+        }
+
+        public static bool operator ==(ColorCube obj1, ColorCube obj2)
+        {
+            if ((object)obj1 == null ^ (object)obj2 == null) return false;
+
+            if ((object)obj1 == null && (object)obj2 == null) return true;
+
+            if (obj1.colors.Length != obj2.colors.Length) return false;
+
+            for (int i = 0; i < obj2.colors.Length; i++)
+            {
+                if (obj1.colors[i] != obj2.colors[i]) return false;
+            }
+
+            return true;
+        }
+
+        public static bool operator !=(ColorCube obj1, ColorCube obj2)
+        {
+            return !(obj1 == obj2);
+        }
+
         public Faces[] FaceColors
         {
             get
@@ -122,6 +189,11 @@ namespace RevengeCube
                 return f;
             }
         }
-	}
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }
 

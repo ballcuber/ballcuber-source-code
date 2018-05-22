@@ -1,6 +1,6 @@
 ﻿namespace fgSolver
 {
-    partial class Form1
+    partial class FormTest
     {
         /// <summary>
         /// Variable nécessaire au concepteur.
@@ -49,6 +49,8 @@
             this.txtMotorMoves = new System.Windows.Forms.RichTextBox();
             this.txtNBMotorMoves = new System.Windows.Forms.Label();
             this.textLongMove = new System.Windows.Forms.TextBox();
+            this.btnForward = new System.Windows.Forms.Button();
+            this.btnDev = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udMoves)).BeginInit();
             this.SuspendLayout();
@@ -225,7 +227,7 @@
             // 
             this.txtMotorMoves.Location = new System.Drawing.Point(901, 68);
             this.txtMotorMoves.Name = "txtMotorMoves";
-            this.txtMotorMoves.Size = new System.Drawing.Size(253, 167);
+            this.txtMotorMoves.Size = new System.Drawing.Size(253, 104);
             this.txtMotorMoves.TabIndex = 4;
             this.txtMotorMoves.Text = "";
             // 
@@ -245,11 +247,33 @@
             this.textLongMove.Size = new System.Drawing.Size(521, 20);
             this.textLongMove.TabIndex = 3;
             // 
+            // btnForward
+            // 
+            this.btnForward.Location = new System.Drawing.Point(901, 217);
+            this.btnForward.Name = "btnForward";
+            this.btnForward.Size = new System.Drawing.Size(75, 23);
+            this.btnForward.TabIndex = 5;
+            this.btnForward.Text = "Forward >>";
+            this.btnForward.UseVisualStyleBackColor = true;
+            this.btnForward.Click += new System.EventHandler(this.btnForward_Click);
+            // 
+            // btnDev
+            // 
+            this.btnDev.Location = new System.Drawing.Point(901, 192);
+            this.btnDev.Name = "btnDev";
+            this.btnDev.Size = new System.Drawing.Size(75, 23);
+            this.btnDev.TabIndex = 5;
+            this.btnDev.Text = "DevTools";
+            this.btnDev.UseVisualStyleBackColor = true;
+            this.btnDev.Click += new System.EventHandler(this.btnDev_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1235, 681);
+            this.Controls.Add(this.btnDev);
+            this.Controls.Add(this.btnForward);
             this.Controls.Add(this.textLongMove);
             this.Controls.Add(this.txtAlg);
             this.Controls.Add(this.txtMotorMoves);
@@ -284,7 +308,6 @@
         private System.Windows.Forms.NumericUpDown udMoves;
         private System.Windows.Forms.TextBox txtColors;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private CefSharp.WinForms.ChromiumWebBrowser brow;
         private System.Windows.Forms.Panel pnlViewer;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblMoveCount;
@@ -299,6 +322,8 @@
         private System.Windows.Forms.RichTextBox txtMotorMoves;
         private System.Windows.Forms.Label txtNBMotorMoves;
         private System.Windows.Forms.TextBox textLongMove;
+        private System.Windows.Forms.Button btnForward;
+        private System.Windows.Forms.Button btnDev;
     }
 }
 

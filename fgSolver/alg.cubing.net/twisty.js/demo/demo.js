@@ -146,6 +146,11 @@ $(document).ready(function() {
     twistyScene.queueMoves(makeCCC(parseInt($("#cubeDimension").val())));
     twistyScene.play.start();
   });
+  
+  $("#testfg").bind("click", function() {
+    twistyScene.queueMoves(testfg());
+    twistyScene.play.start();
+  });
 
   $("#lucasparity").bind("click", function() {
     var lucasparity = alg.cube.fromString("r U2 x r U2 r U2 r' U2 L U2 r' U2 r U2 r' U2 r'");
@@ -397,5 +402,20 @@ function makeCCC(n) {
   }
 
   return cccMoves;
+
+}
+
+/*
+ * Algs for testing fg
+ */
+
+function testfg() {
+
+  return [
+      {base: "l", endLayer: 1, amount: -1},
+      {base: "u", endLayer: 2, amount: 1},
+      {base: "r", endLayer: 3, amount: -1, startLayer: 2},
+      {base: "f", endLayer: 4, amount: -1}
+    ];
 
 }

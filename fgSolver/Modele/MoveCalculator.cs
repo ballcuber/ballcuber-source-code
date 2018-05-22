@@ -15,6 +15,11 @@ namespace fgSolver.Modele
 
         public Axe Axe;
 
+        public MotorMove(Axe a)
+        {
+            this.Axe = a;
+        }
+
         public MotorMove(Axe a, Couronne c, Sens s)
         {
             this.Axe = a;
@@ -171,9 +176,31 @@ namespace fgSolver.Modele
 
             return string.Join(" ", moves);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() == this.GetType()) return false;
+
+            return this == (MotorMove)obj;
+        }
+
+        public static bool operator ==(MotorMove m1, MotorMove m2)
+        {
+            return m1.Axe == m2.Axe && m1.MaxMovesCount == m2.MaxMovesCount && m1.MidMaxMovesCount == m2.MidMaxMovesCount && m1.MidMinMovesCount == m2.MidMinMovesCount;
+        }
+
+        public static bool operator !=(MotorMove m1, MotorMove m2)
+        {
+            return !(m1 == m2);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
-    class MachineMoveList : List<Move>
+    public class MachineMoveList : List<Move>
     {
         public List<MotorMove> MotorMoves  = new List<MotorMove>();
 
@@ -191,6 +218,52 @@ namespace fgSolver.Modele
             {
                 MotorMoves.Add(motorMove);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() == this.GetType()) return false;
+
+            return this == (MachineMoveList)obj;
+        }
+
+        public static bool operator ==(MachineMoveList m1, MachineMoveList m2)
+        {
+            if ((object)m1 == null && (object)m2 == null) return true;
+
+            if ((object)m1 == null ^ (object)m2 == null) return false;
+
+            if ((object)m1.MotorMoves == null ^ (object)m2.MotorMoves == null) return false;
+
+            if ((object)m1.MotorMoves != null && (object)m2.MotorMoves != null)
+            {
+                if (m1.MotorMoves.Count != m2.MotorMoves.Count) return false;
+
+                for (int i = 0; i < m1.MotorMoves.Count; i++)
+                {
+                    if (m1.MotorMoves[i] != m2.MotorMoves[i]) return false;
+                }
+            }
+
+            if (m1.Count != m2.Count) return false;
+
+            for (int i= 0;i< m1.Count; i++)
+            {
+                if(m1[i]!=m2[i]) return false;
+            }
+
+
+            return true;
+        }
+
+        public static bool operator !=(MachineMoveList m1, MachineMoveList m2)
+        {
+            return !(m1 == m2);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 

@@ -10,25 +10,25 @@ using System.Windows.Forms;
 using RevengeCube;
 using System.IO;
 using CefSharp.WinForms;
+using CefSharp;
 using System.Diagnostics;
 using fgSolver.Modele;
 using System.Numerics;
 
 namespace fgSolver
 {
-    public partial class Form1 : Form
+    public partial class FormTest : Form
     {
         private ChromiumWebBrowser viewer;
 
-        public Form1()
+        public FormTest()
         {
             InitializeComponent();
 
             viewer = new ChromiumWebBrowser(GetUriViewer());
             this.viewer.Dock = DockStyle.Fill;
             this.pnlViewer.Controls.Add(this.viewer);
-            
-         }
+        }
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
@@ -125,7 +125,7 @@ namespace fgSolver
 
             var calculator = new MoveCalculator();
 
-            foreach(Move mv in moves)
+            foreach (Move mv in moves)
             {
                 calculator.AddCubeMove(mv);
             }
@@ -139,9 +139,29 @@ namespace fgSolver
             textLongMove.Text = string.Join("  ", calculator.MachineMoves.MotorMoves.Select(x => x.EquivalentCubeMove()));
 
 
-            var dir = GetUriViewer(/*txtAlg.Text+ "%0A%2F%2F" +*/ textLongMove.Text, txtMoves.Text );
+            var dir = GetUriViewer(/*txtAlg.Text+ "%0A%2F%2F" +*/ textLongMove.Text, txtMoves.Text);
+
+            viewer.FrameLoadEnd += ResetCubeOnLoad; // reset du cube au chargement
 
             viewer.Load(dir);
+
+
+        }
+
+        private void ResetCubeOnLoad(object sender, FrameLoadEndEventArgs e)
+        {
+            viewer.FrameLoadEnd -= ResetCubeOnLoad; // suppression du handler
+            viewer.GetBrowser().MainFrame.ExecuteJavaScriptAsync("$( \"#reset\" ).trigger( \"click\" );");
+        }
+
+        private void btnForward_Click(object sender, EventArgs e)
+        {
+           viewer.GetBrowser().MainFrame.ExecuteJavaScriptAsync("$( \"#forward\" ).trigger( \"click\" );");
+        }
+
+        private void btnDev_Click(object sender, EventArgs e)
+        {
+            viewer.ShowDevTools();
         }
     }
 }

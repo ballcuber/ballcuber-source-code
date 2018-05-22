@@ -59,7 +59,7 @@ algxControllers.controller('algxController', ["$scope", "$location", "debounce",
     for (var param in param_defaults) {
       $scope[param] = param_defaults[param];
     }
-    $scope.speed = 1;
+    $scope.speed = 6;
     $scope.clear();
   }
 
@@ -155,7 +155,7 @@ algxControllers.controller('algxController', ["$scope", "$location", "debounce",
   ]);
   $scope.custom_scheme = "";
 
-  $scope.speed = 1;
+  $scope.speed = 6;
   $scope.current_move = "0";
 
   $scope.setupStatus = "valid";
@@ -347,6 +347,19 @@ algxControllers.controller('algxController', ["$scope", "$location", "debounce",
     return index + column;
   }
 
+  
+  /*
+ * Algs for testing fg
+ */
+
+function testfg() {
+
+  return [
+      {base: "l", endLayer: 1, amount: -1},
+    ];
+
+}
+
   // We set this variable outside so that it will be overwritten.
   // This currently helps with performance, presumably due to garbage collection.
   var twistyScene;
@@ -366,6 +379,12 @@ algxControllers.controller('algxController', ["$scope", "$location", "debounce",
       cachedRenderer: true
     });
     $("#viewer").append($(twistyScene.getDomElement()));
+	
+	  
+	  $("#testfg").bind("click", function() {
+		twistyScene.queueMoves(testfg());
+		twistyScene.play.start();
+	  });
 
     twistyScene.initializePuzzle({
       "type": "cube",

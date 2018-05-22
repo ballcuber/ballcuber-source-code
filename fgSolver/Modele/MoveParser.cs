@@ -8,11 +8,14 @@ namespace fgSolver.Modele
 {
     class MoveParser
     {
-        public static IEnumerable<Move> Parse(string expr)
+        public static List<Move> Parse(string expr)
         {
             var moves = new List<Move>();
 
-            var exploadedExpr = expr.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            if (expr == "OK") return moves; // cube déjà résolu
+
+           var exploadedExpr = expr.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
 
             foreach(string moveExpr in exploadedExpr)
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.ComponentModel;
 
 namespace fgSolver.Modele
 {
@@ -12,11 +13,16 @@ namespace fgSolver.Modele
         X=0,
         Y=1,
         Z=2,
+
+        [Browsable(false)]
         NUM
     }
 
     public enum Couronne : int
     {
+        [Browsable(false)]
+        UNKNOWN = 0, // valeur par défaut pour la serialization
+
         Max = 2,
         MidMax = Max/2,
         MidMin = -MidMax,
@@ -29,7 +35,7 @@ namespace fgSolver.Modele
         Negatif = -1
     }
 
-    struct Move
+    public struct Move
     {
         private Axe _axe;
         public Axe Axe
@@ -101,6 +107,26 @@ namespace fgSolver.Modele
             return (int)_couronne + _axe.ToString() + " " + (_sens == Sens.Positif ? "+" : "-");
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() == this.GetType()) return false;
 
+            return this == (Move)obj;
+        }
+
+        public static bool operator ==(Move m1, Move m2)
+        {
+            return m1.Axe == m2.Axe && m1.Couronne == m2.Couronne && m1.Sens == m2.Sens;
+        }
+
+        public static bool operator !=(Move m1, Move m2)
+        {
+            return !(m1 == m2);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
