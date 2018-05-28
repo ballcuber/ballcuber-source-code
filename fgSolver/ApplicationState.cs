@@ -167,8 +167,9 @@ namespace fgSolver
         [XmlIgnore()]
         public bool SolutionInCalculation { get; set; } = false;
 
-       // public ResolutionSession ResolutionSession { get; set; }
-
+        // public ResolutionSession ResolutionSession { get; set; }
+        [XmlIgnore()]
+        public Scanner Scanner { get; set; } = new Scanner();
 
         public void SaveConfiguration()
         {
@@ -342,4 +343,45 @@ namespace fgSolver
         
     }
 
+
+    public class Scanner : ApplicationState
+    {
+        public static Faces FirstScannedFace = Faces.L;
+
+        // face en cours de scan
+        public Faces CurrentScannedFace { get; set; } = FirstScannedFace;
+
+        // la face CurrentScannedFace est en attente d'apparition devant la caméra
+        public bool WaitingForFace { get; set; } = true;
+
+
+        public bool Starting
+        {
+            get
+            {
+                return CurrentScannedFace == FirstScannedFace && WaitingForFace;
+            }
+        }
+
+        public void Reset()
+        {
+            CurrentScannedFace = FirstScannedFace;
+            WaitingForFace = true;
+        }
+        /*
+        private const string WAIT_TEXT = "En attente du côté ";
+
+        public string GetStepText()
+        {
+            switch (Step)
+            {
+                case ScanStep.WaitFace:
+                    return WAIT_TEXT + "Face";
+                    break;
+
+                default:
+                    return "aa";
+            }
+        }*/
+    }
 }

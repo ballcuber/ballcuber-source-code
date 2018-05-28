@@ -13,7 +13,8 @@ namespace RevengeCube
         F,
         R,
         B,
-        D
+        D,
+        UNKNOWN
     }
 
 }

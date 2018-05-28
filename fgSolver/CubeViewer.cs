@@ -78,22 +78,20 @@ namespace fgSolver
             }
         }
 
-        private void RefreshCube(ColorCube cube)
+        public void RefreshCube(ColorCube cube)
         {
-            if (cube == null) cube = new ColorCube();
-
-            var faces = cube.FaceColors;
+            var faces = cube?.FaceColors;
 
             var sb = new StringBuilder();
 
-            sb.Append("setColors([");
+            sb.Append("reloadWithColors([");
 
             for (int i = 0; i < 6; i++)
             {
                 sb.Append("[");
                 for (int j = 0; j < 16; j++)
                 {
-                    sb.Append((int)faces[i * 16 + j] + 1);
+                    sb.Append(faces == null ? 7 : (int)faces[i * 16 + j] + 1);
                     sb.Append(",");
                 }
                 sb.Append("],");
@@ -103,24 +101,34 @@ namespace fgSolver
             ExecuteJS(sb.ToString());
         }
 
+        public void setColorsAndInclination(IEnumerable<Color> colors, double inclination)
+        {
+            if (colors == null)
+            {
+                RefreshCube(null);
+                return;
+            }
+
+            var sb = new StringBuilder();
+
+            sb.Append("setColors([");
+
+            sb.Append(string.Join(",", colors.Select((color) => string.Format("0x{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B))));
+
+            sb.Append("],");
+
+            sb.Append(inclination.ToString().Replace(',', '.'));
+
+            sb.Append(')');
+
+            ExecuteJS(sb.ToString());
+        }
+
+
+
         public void ExecuteMachineMove(MotorMove mv)
         {
-            string axe;
 
-            switch (mv.Axe)
-            {
-                case Axe.X:
-                    axe = "b";
-                    break;
-                case Axe.Y:
-                    axe = "l";
-                    break;
-                case Axe.Z:
-                    axe = "u";
-                    break;
-                default:
-                    return;
-            }
 
             int[] moves = { 0, mv.MaxMovesCount, mv.MidMaxMovesCount, mv.MidMinMovesCount };
 
@@ -154,13 +162,46 @@ namespace fgSolver
                             moves[j] -= amount;
                         }
 
-                        ExecuteJS("move(\"" + axe + "\", " + startLayer + ", " + endLayer + ", " + -amount + ")");
+                        Move(mv.Axe,startLayer, endLayer,amount);
 
                         break;
                     }
                 }
                 
             }
+        }
+
+        public void Move(Axe axe, int startLayer, int endLayer, int amount)
+        {
+            string axeName;
+
+            switch (axe)
+            {
+                case Axe.X:
+                    axeName = "b";
+                    break;
+                case Axe.Y:
+                    axeName = "l";
+                    break;
+                case Axe.Z:
+                    axeName = "u";
+                    break;
+                default:
+                    return;
+            }
+            ExecuteJS("move(\"" + axeName + "\", " + startLayer + ", " + endLayer + ", " + -amount + ")");
+        }
+
+
+        public void RotateCube(Axe axe, int amount = 1)
+        {
+            SetSpeed(1);
+            Move(axe, 1, 4, amount);
+        }
+
+        public void SetCameraInclination(double radian)
+        {
+            ExecuteJS("setCameraInclination(" + radian.ToString().Replace(',','.') + ")");
         }
 
         private void btnTestMotorMoves_Click(object sender, EventArgs e)
@@ -193,9 +234,14 @@ namespace fgSolver
             }
         }
 
+        public void SetSpeed(int speed)
+        {
+            ExecuteJS("twistyScene.setSpeed(" + speed + ")");
+        }
+
         private void udSpeed_ValueChanged(object sender, EventArgs e)
         {
-            ExecuteJS("twistyScene.setSpeed(" + udSpeed.Value + ")");
+            SetSpeed((int)udSpeed.Value);
         }
     }
 }

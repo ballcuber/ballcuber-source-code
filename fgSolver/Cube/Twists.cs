@@ -213,7 +213,7 @@ namespace RevengeCube
 			}
 			Faces retValue = Faces.B;
 			int max = -1;
-			foreach (Faces face in Enum.GetValues(typeof(Faces))) {
+			foreach (Faces face in Enum.GetValues(typeof(Faces)).OfType<Faces>().Except(new Faces[] { Faces.UNKNOWN })) {
 				int index = (int)face;
 				if (faceArray [index] > max) {
 					max = faceArray [index];

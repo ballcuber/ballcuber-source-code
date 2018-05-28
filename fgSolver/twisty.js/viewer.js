@@ -234,10 +234,19 @@ twisty.scene = function(options) {
     view.camera.position.x = 2.5*Math.sin(theta) * scale;
     view.camera.position.y = actualHeight * scale;
     view.camera.position.z = 2.5*Math.cos(theta) * scale;
+	
     view.camera.lookAt(new THREE.Vector3(0, -0.075 * scale * (actualHeight)/CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, 0));
+	
+	that.setCameraInclination(0);
   }
   
-    
+  
+  this.setCameraInclination = function(inclination) {
+		view.camera.up.x = Math.sin(inclination);
+		view.camera.up.y = Math.cos(inclination);
+		view.camera.up.z = Math.sin(inclination);
+	}
+      
   this.getCameraTheta = function(){
 	  return control.cameraTheta;
   }
@@ -580,6 +589,10 @@ twisty.scene = function(options) {
 
   this.getMaxPosition = function(idx) {
     return model.moveList.length;
+  }
+  
+  this.getSpeed = function() {
+    return control.speed;
   }
 
 

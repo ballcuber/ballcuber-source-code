@@ -123,23 +123,62 @@ var stage = [
 ];
 
 
-function setColors(colors){
+function reloadWithColors(colors){
 	stage = colors;
 	reloadCube();
 }
 
-function move(pBase, pStartLayer, pEndLayer, pAmount){
-	twistyScene.queueMoves([{base: pBase, startLayer: pStartLayer, endLayer: pEndLayer, amount: pAmount}]);
-    twistyScene.play.start();
+function setColors(colors, inclination){
+	for(let i=0;i< colors.length;i++){
+		twistyScene.debug.model.twisty["3d"].children[i].children["0"].material = new THREE.MeshBasicMaterial( { color: colors[i], overdraw: 0.5 });
+		twistyScene.debug.model.twisty["3d"].children[i].children["1"].material = new THREE.MeshBasicMaterial( { color: colors[i], overdraw: 0.5 });
+		
+	}
+	twistyScene.setCameraInclination(inclination);
+	twistyScene.setCameraPosition(0, 0);
+	twistyScene.redraw();
 }
+
+function move(pBase, pStartLayer, pEndLayer, pAmount){
+	if(twistyScene != undefined){
+		twistyScene.queueMoves([{base: pBase, startLayer: pStartLayer, endLayer: pEndLayer, amount: pAmount}]);
+		twistyScene.play.start();
+	}
+}
+
+function setCameraPosition(theta, height){
+	if(twistyScene != undefined){
+		twistyScene.setCameraPosition(theta, height);
+		twistyScene.redraw();
+	}
+}
+
+function setCameraInclination(inclination){
+	if(twistyScene != undefined){
+		twistyScene.setCameraInclination(inclination);
+		twistyScene.setCameraPosition(0, 0);
+		twistyScene.redraw();
+	}
+}
+
+function setColorsAndInclinaison(colors, inclination){
+	stage = colors;
+	reloadCube();
+	twistyScene.setCameraInclination(inclination);
+	twistyScene.setCameraPosition(0, 0);
+}
+
 
   function reloadCube() {
     log("reload cube");
+	
+	var speed = 4;
 	
 	// store camera position
 	if(twistyScene != undefined){
 		var formerTheta = twistyScene.getCameraTheta();
 		var formerHeight = twistyScene.getCameraHeight();
+		speed = twistyScene.getSpeed();
 	}
 	
     var renderer = THREE["WebGLRenderer"];

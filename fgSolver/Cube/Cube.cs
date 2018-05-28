@@ -45,6 +45,8 @@ namespace RevengeCube
 
 		public static Cube OriginalCube = new oCube ();
 
+        private DateTime _creationDate;
+
 		public Cube ()
 		{
 			_twists = new LinkedList<Twist> ();
@@ -52,20 +54,24 @@ namespace RevengeCube
 			_cornerOrientation = new int[8];
 			_edgePosition = Enumerable.Range (0, 24).ToArray ();
 			_centerPosition = (from c in Center.order
-			                   select (int)c.face).ToArray (); 
-		}
+			                   select (int)c.face).ToArray ();
+            _creationDate = DateTime.Now;
 
-		private Cube(int[] cornerPosition, int[] cornerOrientation,
-			int[] edgePosition, int[] centerPosition, LinkedList<Twist> twists){
-			_twists = twists;
-			_cornerPosition = cornerPosition;
-			_cornerOrientation = cornerOrientation;
-			_edgePosition = edgePosition;
-			_centerPosition = centerPosition; 
+        }
 
-		}
+        private Cube(int[] cornerPosition, int[] cornerOrientation,
+            int[] edgePosition, int[] centerPosition, LinkedList<Twist> twists, DateTime creationDate)
+        {
+            _twists = twists;
+            _cornerPosition = cornerPosition;
+            _cornerOrientation = cornerOrientation;
+            _edgePosition = edgePosition;
+            _centerPosition = centerPosition;
 
-		public int[] CornerPosition {
+            _creationDate = creationDate;
+        }
+
+        public int[] CornerPosition {
 			get{ return _cornerPosition; }
 		}
 
@@ -88,7 +94,8 @@ namespace RevengeCube
 				(int[])_cornerOrientation.Clone(),
 				(int[])_edgePosition.Clone(),
 				(int[])_centerPosition.Clone(),
-				cloneTwists ? new LinkedList<Twist>(_twists) : new LinkedList<Twist>()
+				cloneTwists ? new LinkedList<Twist>(_twists) : new LinkedList<Twist>(),
+                _creationDate
 			);
 		}
 

@@ -192,8 +192,8 @@ for (var i = 0; i < numSides; i++) {
     stickerTemplate.add(cubieTemplate);
   }
 
-  for (var su = 0; su < cubeOptions.dimension; su++) {
     for (var sv = 0; sv < cubeOptions.dimension; sv++) {
+  for (var su = 0; su < cubeOptions.dimension; su++) {
 
       if (isVoidCube &&
           (0 < su && su < cubeOptions.dimension - 1) &&
@@ -206,13 +206,20 @@ for (var i = 0; i < numSides; i++) {
 
 
       if (Array.isArray(cubeOptions.stage) &&  cubeOptions.stage.length==6 && Array.isArray(cubeOptions.stage[i]) && cubeOptions.stage[i].length==cubeOptions.dimension* cubeOptions.dimension) {
-        var material = materials[side][cubeOptions.stage[i][su + cubeOptions.dimension*sv]];
-        var material2 = materials.singleSided[cubeOptions.stage[i][su + cubeOptions.dimension*sv]];
+      //var side = ["singleSided", "doubleSided"][j];
+      var material = new THREE.MeshBasicMaterial( { color: cubeOptions.colors[cubeOptions.stage[i][su + cubeOptions.dimension*sv]], overdraw: 0.5 });
+     // if (side === "doubleSided") {
+       // material.side = THREE.DoubleSide;
+     // }
+      material.opacity = cubeOptions.opacity;
+	  
+       // var material = materials[side][cubeOptions.stage[i][su + cubeOptions.dimension*sv]];
+        var material2 = material; //materials.singleSided[cubeOptions.stage[i][su + cubeOptions.dimension*sv]];
       }
 	  else{
 		  var material = materials[side][i+1];
 		  var material2 = materials.singleSided[i+1];  
-	  }
+	 }
 
       sticker.children[0].material = material;
 

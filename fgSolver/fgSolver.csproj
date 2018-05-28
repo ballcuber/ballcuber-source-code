@@ -62,6 +62,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\FaceCube.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emgu.CV.UI, Version=3.1.0.2282, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
       <HintPath>..\packages\EmguCV.3.1.0.1\lib\net30\Emgu.CV.UI.dll</HintPath>
@@ -224,11 +227,19 @@
     <Compile Include="SolverControl.Designer.cs">
       <DependentUpon>SolverControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Video\ImageProcessor.cs" />
+    <Compile Include="Video\Quadrilateral.cs" />
     <Compile Include="Video\VideoScannerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Video\VideoScannerControl.Designer.cs">
       <DependentUpon>VideoScannerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Video\VideoScannerDebugForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Video\VideoScannerDebugForm.Designer.cs">
+      <DependentUpon>VideoScannerDebugForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Alarm\AlarmControl.resx">
       <DependentUpon>AlarmControl.cs</DependentUpon>
@@ -281,6 +292,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Video\VideoScannerControl.resx">
       <DependentUpon>VideoScannerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Video\VideoScannerDebugForm.resx">
+      <DependentUpon>VideoScannerDebugForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="alg.cubing.net\lib\font-awesome\fonts\fontawesome-webfont.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -552,6 +566,7 @@
     <None Include="Resources\Warning.png" />
     <None Include="Resources\OK.png" />
     <None Include="Resources\Camera.png" />
+    <Content Include="Resources\FaceCube.ico" />
     <Content Include="twisty.js\alg\alg.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

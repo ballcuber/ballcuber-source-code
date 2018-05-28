@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TeensyStep", "..\..\..\..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestImageProcessing", "TestImageProcessing\TestImageProcessing.csproj", "{83EFCC04-D0C9-4A92-B7CE-8BD2EEC86031}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAlgoClassification", "TestAlgoClassification\TestAlgoClassification.csproj", "{00B39A9B-F022-4D9A-BB55-6755D835D923}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,18 @@ Global
 		{83EFCC04-D0C9-4A92-B7CE-8BD2EEC86031}.Release|x64.Build.0 = Release|Any CPU
 		{83EFCC04-D0C9-4A92-B7CE-8BD2EEC86031}.Release|x86.ActiveCfg = Release|Any CPU
 		{83EFCC04-D0C9-4A92-B7CE-8BD2EEC86031}.Release|x86.Build.0 = Release|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Debug|x64.Build.0 = Debug|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Debug|x86.Build.0 = Debug|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Release|x64.ActiveCfg = Release|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Release|x64.Build.0 = Release|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Release|x86.ActiveCfg = Release|Any CPU
+		{00B39A9B-F022-4D9A-BB55-6755D835D923}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

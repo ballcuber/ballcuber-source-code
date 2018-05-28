@@ -7,7 +7,7 @@ namespace RevengeCube
 {
 
     public class ColorCube : ICloneable
-	{
+    {
 
         /*                         U
  *                        -------------------
@@ -41,10 +41,10 @@ namespace RevengeCube
  */
 
 
-        public static Color[] _order = {Color.White, Color.Red, Color.Blue, Color.Orange, Color.Green, Color.Yellow };
+        public static Color[] _order = { Color.White, Color.Red, Color.Blue, Color.Orange, Color.Green, Color.Yellow , Color.Transparent};
 
         private Color[] _colors = new Color[6 * 16];
-		public static Dictionary<Faces, Color> colorDictionary = new Dictionary<Faces, Color>()
+        public static Dictionary<Faces, Color> colorDictionary = new Dictionary<Faces, Color>()
         {
             {Faces.U, Color.White },
             {Faces.L, Color.Red },
@@ -52,21 +52,24 @@ namespace RevengeCube
             {Faces.R, Color.Orange },
             {Faces.B, Color.Green },
             {Faces.D, Color.Yellow },
+            {Faces.UNKNOWN, Color.Transparent }
         };
-		private static int[,] EDGE_LOCATIONS = {{ 1, 66 }, { 65, 2 }, { 17, 4 }, { 7, 50 }, { 8, 18 }, { 49, 11 }, { 33, 13 }, { 14, 34 },
-			{ 71, 20 }, { 55, 68 }, { 23, 36 }, { 39, 52 }, { 40, 27 }, { 56, 43 }, { 24, 75 }, { 72, 59 },
-			{ 81, 45 }, { 46, 82 }, { 30, 84 }, { 87, 61 }, { 88, 29 }, { 62, 91 }, { 78, 93 }, { 94, 77 }
-		};
-		private static int[,] CORNER_LOCATIONS = { { 0, 16, 67 },  { 15, 48, 35 }, { 3,  64, 51 }, { 12,  32, 19 },
-			{ 80, 31, 44 }, { 95, 63, 76 }, { 83, 47, 60 }, { 92, 79, 28 }
-		};
-		private static int[] CENTER_LOCATIONS = { 53, 54, 57, 58,
-			21, 22, 25, 26,
-			5,  6,  9,  10,
-			85, 86, 89, 90,
-			37, 38, 41, 42,
-			69, 70, 73, 74
-		};
+        private static int[,] EDGE_LOCATIONS = {{ 1, 66 }, { 65, 2 }, { 17, 4 }, { 7, 50 }, { 8, 18 }, { 49, 11 }, { 33, 13 }, { 14, 34 },
+            { 71, 20 }, { 55, 68 }, { 23, 36 }, { 39, 52 }, { 40, 27 }, { 56, 43 }, { 24, 75 }, { 72, 59 },
+            { 81, 45 }, { 46, 82 }, { 30, 84 }, { 87, 61 }, { 88, 29 }, { 62, 91 }, { 78, 93 }, { 94, 77 }
+        };
+        private static int[,] CORNER_LOCATIONS = { { 0, 16, 67 },  { 15, 48, 35 }, { 3,  64, 51 }, { 12,  32, 19 },
+            { 80, 31, 44 }, { 95, 63, 76 }, { 83, 47, 60 }, { 92, 79, 28 }
+        };
+        private static int[] CENTER_LOCATIONS = { 53, 54, 57, 58,
+            21, 22, 25, 26,
+            5,  6,  9,  10,
+            85, 86, 89, 90,
+            37, 38, 41, 42,
+            69, 70, 73, 74
+        };
+
+        public DateTime CreationDate {get;}
 
 		public ColorCube ()
 		{
@@ -78,7 +81,15 @@ namespace RevengeCube
                     _colors[c * 16 + i] = _order[c];
                 }
             }
-		}
+
+            CreationDate = DateTime.Now;
+
+        }
+
+        private ColorCube(DateTime creationDate)
+        {
+            this.CreationDate = creationDate;
+        }
 
         public bool IsSolved
         {
@@ -137,7 +148,7 @@ namespace RevengeCube
 
         public ColorCube CloneCube()
         {
-            var cube = new ColorCube();
+            var cube = new ColorCube(CreationDate);
             cube.setColors(_colors);
             return cube;
         }
@@ -167,7 +178,7 @@ namespace RevengeCube
                 if (obj1.colors[i] != obj2.colors[i]) return false;
             }
 
-            return true;
+            return obj1.CreationDate == obj2.CreationDate;
         }
 
         public static bool operator !=(ColorCube obj1, ColorCube obj2)
