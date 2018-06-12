@@ -39,6 +39,14 @@ namespace fgSolver
         }
 
 
+        public int Index
+        {
+            get
+            {
+                return 100;
+            }
+        }
+
 
         public void NavigueTo() {
             using(var state = GlobalState.GetState())

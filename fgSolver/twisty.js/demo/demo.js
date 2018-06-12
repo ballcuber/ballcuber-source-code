@@ -187,7 +187,7 @@ function setColorsAndInclinaison(colors, inclination){
     twistyScene = new twisty.scene({
       renderer: renderer,
       allowDragging: true,
-      "speed": 4,
+      "speed": speed,
       stats: true
     });
 	

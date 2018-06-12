@@ -34,6 +34,14 @@ namespace fgSolver
             }
         }
 
+        public int Index
+        {
+            get
+            {
+                return 101;
+            }
+        }
+
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
             boardControl1.PeriodicUpdate(formerState, currentState);

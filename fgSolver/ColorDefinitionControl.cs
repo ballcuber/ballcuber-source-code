@@ -43,6 +43,15 @@ namespace fgSolver
             }
         }
 
+
+        public int Index
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
         private void btnRand_Click(object sender, EventArgs e)
         {
             var cube = new Cube();

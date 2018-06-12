@@ -35,6 +35,15 @@ namespace fgSolver
             }
         }
 
+
+        public int Index
+        {
+            get
+            {
+                return 2;
+            }
+        }
+
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
             cubeNets.PeriodicUpdate(currentState.Solution?.OriginalCube);

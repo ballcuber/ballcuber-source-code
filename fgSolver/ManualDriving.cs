@@ -36,6 +36,14 @@ namespace fgSolver
             }
         }
 
+        public int Index
+        {
+            get
+            {
+                return 102;
+            }
+        }
+
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
             

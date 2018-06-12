@@ -49,13 +49,13 @@ namespace fgSolver
             {
 
             Color nextColor = Color.White;
-            for (var i = 0; i < ColorCube.colorDictionary.Count; i++)
+            for (var i = 0; i < ColorCube.colorDictionary.Count-1; i++)
             {
                 if (state.InitialCube.colors[_index] == ColorCube.colorDictionary.Values.ElementAt(i))
                 {
                     var nextI = i + (e.Button == MouseButtons.Left ? 1 : -1);
-                    if (nextI == ColorCube.colorDictionary.Count) nextI = 0;
-                    else if (nextI == -1) nextI = ColorCube.colorDictionary.Count - 1;
+                    if (nextI == ColorCube.colorDictionary.Count-1) nextI = 0;
+                    else if (nextI == -1) nextI = ColorCube.colorDictionary.Count - 2;
 
                     nextColor = ColorCube.colorDictionary.Values.ElementAt(nextI);
                     break;

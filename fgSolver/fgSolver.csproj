@@ -89,6 +89,14 @@
       <HintPath>..\packages\OpenTK.GLControl.1.1.2225.0\lib\net20\OpenTK.GLControl.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OxyPlot, Version=1.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.Core.1.0.0\lib\net45\OxyPlot.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OxyPlot.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.WindowsForms.1.0.0\lib\net45\OxyPlot.WindowsForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -227,7 +235,7 @@
     <Compile Include="SolverControl.Designer.cs">
       <DependentUpon>SolverControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Video\ImageProcessor.cs" />
+    <Compile Include="Video\ColorClassification.cs" />
     <Compile Include="Video\Quadrilateral.cs" />
     <Compile Include="Video\VideoScannerControl.cs">
       <SubType>UserControl</SubType>

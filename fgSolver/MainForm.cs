@@ -43,7 +43,7 @@ namespace fgSolver
 
             FormManager.Init();
 
-            foreach(var form in FormManager.Forms)
+            foreach(var form in FormManager.Forms.OrderBy((x) => x.Value.Index))
             {
                 var tooltip = new ToolStripButton();
                 tooltip.Image = form.Value.Image;

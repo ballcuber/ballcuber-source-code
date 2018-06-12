@@ -21,5 +21,8 @@ namespace fgSolver
 
         // se produit lorsque la page est quitée
         void LeaveFrom();
+
+        // Index dans la liste en haut
+        int Index { get; }
     }
 }

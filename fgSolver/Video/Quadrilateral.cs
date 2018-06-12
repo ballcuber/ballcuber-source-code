@@ -15,13 +15,13 @@ namespace fgSolver
         public int m;
         public int n;
 
-        public Hsv MeanColorHSV;
+       // public Hsv MeanColorHSV;
 
         public Bgr MeanColorBGR;
 
         public Vector2 Center;
 
-        public Color Color;
+        //public Color Color;
     }
 
     public class Quadrilateral

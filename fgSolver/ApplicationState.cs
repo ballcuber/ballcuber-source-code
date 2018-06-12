@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -48,7 +49,9 @@ namespace fgSolver
                 {
                     var lst = (IList)Activator.CreateInstance(prop.PropertyType);
 
-                    foreach(var elt in (IList)propValue)
+                    lst.Clear();
+
+                    foreach (var elt in (IList)propValue)
                     {
                         lst.Add(Clone(elt));
                     }
@@ -97,6 +100,40 @@ namespace fgSolver
         }
     }
 
+    public class ColorAssociation : ApplicationState
+    {
+        [XmlIgnore()]
+        public Color TheoreticalColor { get; set; }
+
+        [XmlIgnore()]
+        public Color RealColor { get; set; }
+
+        public string TheoreticalColorName
+        {
+            get
+            {
+                return TheoreticalColor.R + ";" + TheoreticalColor.G + ";" + TheoreticalColor.B;
+            }
+            set
+            {
+                var strs = value.Split(new char[] { ';' });
+                TheoreticalColor= Color.FromArgb(int.Parse(strs[0]), int.Parse(strs[1]), int.Parse(strs[2]));
+            }
+        }
+
+        public string RealColorName
+        {
+            get
+            {
+                return RealColor.Name;
+            }
+            set
+            {
+                RealColor = Color.FromName(value);
+            }
+        }
+
+    }
 
     public class GlobalState : ApplicationState,IDisposable
     {
@@ -162,7 +199,7 @@ namespace fgSolver
         [XmlIgnore()]
         public List<Alarm> Alarms { get; set; } = new List<Alarm>();
 
-
+        public List<ColorAssociation> ColorsAssociation { get; set; } = new List<ColorAssociation>();
 
         [XmlIgnore()]
         public bool SolutionInCalculation { get; set; } = false;
@@ -189,6 +226,7 @@ namespace fgSolver
                 GlobalState p = xs.Deserialize(rd) as GlobalState;
                 this.HardwareConfig1 = p.HardwareConfig1;
                 this.HardwareConfig2 = p.HardwareConfig2;
+                this.ColorsAssociation = p.ColorsAssociation;
             }
         }
     }

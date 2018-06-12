@@ -37,7 +37,7 @@ namespace fgSolver
             }
             else
             {
-                // TODO : raise error
+                Logger.Log("Impossible de naviguer vers la fenêtre de type " + typeof(T).Name);
             }
         }
 

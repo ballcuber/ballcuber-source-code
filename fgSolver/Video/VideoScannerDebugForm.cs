@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OxyPlot;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +13,7 @@ namespace fgSolver
 {
     public partial class VideoScannerDebugForm : Form
     {
-        private const char SEPARATOR = ';';
+        private const string SEPARATOR = ";";
 
         private List<Pastille>[,,] _scannedColors;
 
@@ -25,51 +26,54 @@ namespace fgSolver
         {
             this._scannedColors = _scannedColors;
 
+            txtInfo.Clear();
 
+            txtInfo.AppendText("avgR");
+            txtInfo.AppendText(SEPARATOR);
+            txtInfo.AppendText("avgG");
+            txtInfo.AppendText(SEPARATOR);
+            txtInfo.AppendText("avgB");
+            txtInfo.AppendText(SEPARATOR);
+            txtInfo.AppendText("stdR");
+            txtInfo.AppendText(SEPARATOR);
+            txtInfo.AppendText("stdG");
+            txtInfo.AppendText(SEPARATOR);
+            txtInfo.AppendText("stdB");
+            txtInfo.AppendText("\r\n");
 
             try
             {
-                var sbAvgH = new StringBuilder();
-                var sbAvgS = new StringBuilder();
-                var sbAvgV = new StringBuilder();
-
-                var sbAvgR = new StringBuilder();
-                var sbAvgG = new StringBuilder();
-                var sbAvgB = new StringBuilder();
-
                 foreach (var pastille in _scannedColors)
                 {
-                    sbAvgH.Append(pastille.Average((x) => x.MeanColorHSV.Hue));
-                    sbAvgH.Append(SEPARATOR);
+                    var avgR = pastille.Average((x) => x.MeanColorBGR.Red);
+                    var avgG = pastille.Average((x) => x.MeanColorBGR.Green);
+                    var avgB = pastille.Average((x) => x.MeanColorBGR.Blue);
 
-                    sbAvgS.Append(pastille.Average((x) => x.MeanColorHSV.Satuation));
-                    sbAvgS.Append(SEPARATOR);
+                    var stdR = Math.Sqrt(pastille.Average((x) => x.MeanColorBGR.Red * x.MeanColorBGR.Red) - avgR * avgR);
+                    var stdG = Math.Sqrt(pastille.Average((x) => x.MeanColorBGR.Green * x.MeanColorBGR.Green) - avgG * avgG);
+                    var stdB = Math.Sqrt(pastille.Average((x) => x.MeanColorBGR.Blue * x.MeanColorBGR.Blue) - avgB * avgB);
 
-                    sbAvgV.Append(pastille.Average((x) => x.MeanColorHSV.Value));
-                    sbAvgV.Append(SEPARATOR);
+                    txtInfo.AppendText(avgR.ToString());
+                    txtInfo.AppendText(SEPARATOR);
 
-                    sbAvgR.Append(pastille.Average((x) => x.MeanColorBGR.Red));
-                    sbAvgR.Append(SEPARATOR);
+                    txtInfo.AppendText(avgG.ToString());
+                    txtInfo.AppendText(SEPARATOR);
 
-                    sbAvgG.Append(pastille.Average((x) => x.MeanColorBGR.Green));
-                    sbAvgG.Append(SEPARATOR);
+                    txtInfo.AppendText(avgB.ToString());
+                    txtInfo.AppendText(SEPARATOR);
 
-                    sbAvgB.Append(pastille.Average((x) => x.MeanColorBGR.Blue));
-                    sbAvgB.Append(SEPARATOR);
+                    txtInfo.AppendText(stdR.ToString());
+                    txtInfo.AppendText(SEPARATOR);
 
+                    txtInfo.AppendText(stdG.ToString());
+                    txtInfo.AppendText(SEPARATOR);
+
+                    txtInfo.AppendText(stdB.ToString());
+
+
+                    txtInfo.AppendText("\r\n");
                 }
 
-                txtInfo.AppendText(sbAvgH.ToString());
-                txtInfo.AppendText("\r\n");
-                txtInfo.AppendText(sbAvgS.ToString());
-                txtInfo.AppendText("\r\n");
-                txtInfo.AppendText(sbAvgV.ToString());
-                txtInfo.AppendText("\r\n");
-                txtInfo.AppendText(sbAvgR.ToString());
-                txtInfo.AppendText("\r\n");
-                txtInfo.AppendText(sbAvgG.ToString());
-                txtInfo.AppendText("\r\n");
-                txtInfo.AppendText(sbAvgB.ToString());
             }
             catch (Exception ex)
             {

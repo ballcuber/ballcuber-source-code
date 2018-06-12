@@ -38,7 +38,7 @@
             this.txtInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtInfo.Location = new System.Drawing.Point(12, 89);
             this.txtInfo.Name = "txtInfo";
-            this.txtInfo.Size = new System.Drawing.Size(822, 332);
+            this.txtInfo.Size = new System.Drawing.Size(822, 176);
             this.txtInfo.TabIndex = 0;
             this.txtInfo.Text = "";
             // 

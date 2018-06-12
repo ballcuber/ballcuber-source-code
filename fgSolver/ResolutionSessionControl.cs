@@ -39,6 +39,15 @@ namespace fgSolver
             }
         }
 
+
+        public int Index
+        {
+            get
+            {
+                return 3;
+            }
+        }
+
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
             if (currentState.Solution?.MachineMoves?.MotorMoves != null)

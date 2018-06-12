@@ -21,17 +21,6 @@ namespace fgSolver
 {
     public partial class VideoScannerControl : UserControl, INavigableForm
     {
-        public Dictionary<Color, Vector2> Colors = new Dictionary<Color, Vector2>() {
-    {Color.Yellow, new Vector2(73,130) },
-    {Color.Blue, new Vector2(18,180) },
-    {Color.White, new Vector2(19,70) },
-    {Color.Green, new Vector2(54,170) },
-    {Color.Orange, new Vector2(116,150) },
-    {Color.Red, new Vector2(115,150) },
-
-        };
-
-
         private Capture _capture;
 
         private ImageBox _viewer;
@@ -80,6 +69,14 @@ namespace fgSolver
             }
         }
 
+        public int Index
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
             switch (currentState.Scanner.CurrentScannedFace)
@@ -124,17 +121,22 @@ namespace fgSolver
         {
             lock (_lockVideoAccess)
             {
-                _capture = new Capture();
+                _capture = new Capture(0);
             }
 
+            ResetAll();
+        }
+
+        private void ResetAll()
+        {
             using (var state = GlobalState.GetState())
             {
                 state.Scanner.Reset();
             }
 
             MainForm.Instance.Viewer.RefreshCube(null);
-        }
 
+        }
 
         public void LeaveFrom()
         {
@@ -157,11 +159,7 @@ namespace fgSolver
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            using (var state = GlobalState.GetState())
-            {
-                state.Scanner.Reset();
-            }
-
+            ResetAll();
         }
 
         private List<Pastille>[,,] _scannedColors = new List<Pastille>[6,4,4];
@@ -179,16 +177,19 @@ namespace fgSolver
 
                 //run this until application closed (close button click on image viewer)
                 var frame = _capture.QueryFrame();
+
+                if (frame == null) return;
+
                 inImage = frame.ToImage<Bgr, byte>(); //draw the image obtained from camera
 
-                var contourImage = inImage.Clone();
+               // var contourImage = inImage.Clone();
 
-                //   Mat outImage = new Mat();
+                   Mat outImage = new Mat();
 
-                //CvInvoke.MedianBlur(frame, outImage, 5);
+                CvInvoke.MedianBlur(inImage, outImage, 5);
 
-                var processsImageChannels = new Image<Bgr, byte>(inImage.Size);
-                CvInvoke.CvtColor(frame, processsImageChannels, ColorConversion.Rgb2Hsv);
+                ////var processsImageChannels = new Image<Bgr, byte>(inImage.Size);
+                ////CvInvoke.CvtColor(frame, processsImageChannels, ColorConversion.Rgb2Hsv);
 
 
 
@@ -199,7 +200,7 @@ namespace fgSolver
 
                 Mat canny = new Mat();
 
-                CvInvoke.Canny(inImage, canny, 58, 130, 3, true);
+                CvInvoke.Canny(outImage, canny, 58, 130, 3, true);
 
                 //cannyViewer.Image = canny;
 
@@ -231,7 +232,7 @@ namespace fgSolver
 
                                 var pts = approxContour.ToArray();
 
-                                contourImage.DrawPolyline(pts, true, new Bgr(Color.Green));
+                              //  contourImage.DrawPolyline(pts, true, new Bgr(Color.Green));
 
                                 var quadri = new Quadrilateral(pts, 0.1, 0.1);
 
@@ -354,26 +355,26 @@ namespace fgSolver
                                 else if (ptRect.Y + averageLength / 2 >= inImage.Height) ptRect.Y = inImage.Height - 1 - (int)averageLength / 2;
 
                                 var rectangle = new Rectangle((int)ptRect.X, (int)ptRect.Y, (int)averageLength / 2, (int)averageLength / 2);
-                                var rectMat = processsImageChannels.GetSubRect(rectangle);
+                             //   var rectMat = processsImageChannels.GetSubRect(rectangle);
 
-                                var color = CvInvoke.Mean(rectMat);
+                              //  var color = CvInvoke.Mean(rectMat);
 
-                                pastille.MeanColorHSV.MCvScalar = color;
+                             //   pastille.MeanColorHSV.MCvScalar = color;
 
-                                rectMat = inImage.GetSubRect(rectangle);
+                              var  rectMat = inImage.GetSubRect(rectangle);
                                 pastille.MeanColorBGR.MCvScalar = CvInvoke.Mean(rectMat);
 
-                                var minDist = float.MaxValue;
-                                foreach (var elt in Colors)
-                                {
-                                    var dist = (elt.Value - new Vector2((float)color.V0, (float)color.V1)).Length;
+                                //var minDist = float.MaxValue;
+                                //foreach (var elt in Colors)
+                                //{
+                                //    var dist = (elt.Value - new Vector2((float)color.V0, (float)color.V1)).Length;
 
-                                    if (dist < minDist)
-                                    {
-                                        minDist = dist;
-                                        pastille.Color = elt.Key;
-                                    }
-                                }
+                                //    if (dist < minDist)
+                                //    {
+                                //        minDist = dist;
+                                //        pastille.Color = elt.Key;
+                                //    }
+                                //}
 
                             }
                         }
@@ -396,9 +397,9 @@ namespace fgSolver
                             }
 
 
-                            var l = 20;
-                            var rect = new Rectangle(pastille.m * l + l, pastille.n * l + l, l / 2, l / 2);
-                            inImage.Draw(rect, new Bgr(pastille.Color), l / 2, LineType.AntiAlias);
+                            //var l = 20;
+                            //var rect = new Rectangle(pastille.m * l + l, pastille.n * l + l, l / 2, l / 2);
+                            //inImage.Draw(rect, new Bgr(pastille.Color), l / 2, LineType.AntiAlias);
 
                         }
                         inImage.Draw(new CircleF(new PointF(origine.X, origine.Y), 5), new Bgr(Color.Purple), 10);
@@ -476,6 +477,7 @@ namespace fgSolver
                                     allFacesScanned = true;
                                     state.Scanner.CurrentScannedFace = Faces.UNKNOWN;
                                     MainForm.Instance.Viewer.RotateCube(Modele.Axe.Y);
+                                    System.Threading.Thread.Sleep(1000);
                                     break;
                                 default:
                                     Logger.Log("Face inconnue lors du scan", TraceEventType.Error);
@@ -484,11 +486,11 @@ namespace fgSolver
 
                         }
                     }
-                    else if(pastilleMatrix != null)
+                    else if (pastilleMatrix != null)
                     {
                         _noCubeSW.Stop();
 
-                        if(state.Scanner.CurrentScannedFace == Faces.UNKNOWN)
+                        if (state.Scanner.CurrentScannedFace == Faces.UNKNOWN)
                         {
                             state.Scanner.Reset();
                         }
@@ -502,7 +504,7 @@ namespace fgSolver
                         }
 
                         // raz du cube
-                        if(state.Scanner.Starting)
+                        if (state.Scanner.Starting)
                         {
                             MainForm.Instance.Viewer.RefreshCube(null);
                             MainForm.Instance.Viewer.RotateCube(Modele.Axe.Z);
@@ -511,9 +513,9 @@ namespace fgSolver
                         SumAngle += angle;
                         nbAngleSamples++;
 
-                        if (_refreshCubeSW.ElapsedMilliseconds > 300 && nbAngleSamples>0)
+                        if (_refreshCubeSW.ElapsedMilliseconds > 300 && nbAngleSamples > 0)
                         {
-                            MainForm.Instance.Viewer.setColorsAndInclination(_scannedColors.OfType<List<Pastille>>().Select((lst) => lst.Count == 0 ? Color.FromArgb(0x22,0x22,0x22) :  Color.FromArgb((int)lst.Average((x)=> x.MeanColorBGR.Red), (int)lst.Average((x) => x.MeanColorBGR.Green), (int)lst.Average((x) => x.MeanColorBGR.Blue))), SumAngle / nbAngleSamples);
+                            MainForm.Instance.Viewer.setColorsAndInclination(_scannedColors.OfType<List<Pastille>>().Select((lst) => lst.Count == 0 ? Color.FromArgb(0x22, 0x22, 0x22) : Color.FromArgb((int)lst.Average((x) => x.MeanColorBGR.Red), (int)lst.Average((x) => x.MeanColorBGR.Green), (int)lst.Average((x) => x.MeanColorBGR.Blue))), SumAngle / nbAngleSamples);
 
                             SumAngle = 0;
                             nbAngleSamples = 0;
@@ -528,10 +530,18 @@ namespace fgSolver
                     {
                         inImage.Draw(new Rectangle(0, 0, inImage.Width, inImage.Height), new Bgr(Color.Red), 10);
                     }
+
+                    if (allFacesScanned)
+                    {
+                     state.InitialCube=   ColorClassification.GetCube(_scannedColors.OfType<List<Pastille>>().Select((lst) => Color.FromArgb((int)lst.Average((x) => x.MeanColorBGR.Red), (int)lst.Average((x) => x.MeanColorBGR.Green), (int)lst.Average((x) => x.MeanColorBGR.Blue))).ToList(), state.ColorsAssociation);
+                    }
                 }
 
-                
-            }
+                if (allFacesScanned)
+                {
+                    FormManager.Navigate<ColorDefinitionControl>();
+                }
+           }
 
             _viewer.Image = inImage;
         }

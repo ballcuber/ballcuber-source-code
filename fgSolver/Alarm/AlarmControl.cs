@@ -35,6 +35,14 @@ namespace fgSolver
             }
         }
 
+        public int Index
+        {
+            get
+            {
+                return 200;
+            }
+        }
+
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
             if(lstAlarms.Items.Count != currentState.Alarms.Count)
