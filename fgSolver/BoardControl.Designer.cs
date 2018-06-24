@@ -31,9 +31,18 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblConnect = new System.Windows.Forms.Label();
             this.btnConnect = new System.Windows.Forms.Button();
-            this.ledConnected = new Bulb.LedBulb();
             this.btnEnable = new System.Windows.Forms.Button();
             this.btnDisable = new System.Windows.Forms.Button();
+            this.pnlFunctions = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.grpServos = new System.Windows.Forms.GroupBox();
+            this.btnOpenServo = new System.Windows.Forms.Button();
+            this.btnLockServo = new System.Windows.Forms.Button();
+            this.grpMain = new System.Windows.Forms.GroupBox();
+            this.ledConnected = new Bulb.LedBulb();
+            this.btnInit = new System.Windows.Forms.Button();
+            this.grpServos.SuspendLayout();
+            this.grpMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -43,7 +52,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(395, 30);
+            this.lblTitle.Size = new System.Drawing.Size(416, 30);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Carte x";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -51,7 +60,7 @@
             // lblConnect
             // 
             this.lblConnect.AutoSize = true;
-            this.lblConnect.Location = new System.Drawing.Point(54, 65);
+            this.lblConnect.Location = new System.Drawing.Point(122, 37);
             this.lblConnect.Name = "lblConnect";
             this.lblConnect.Size = new System.Drawing.Size(53, 13);
             this.lblConnect.TabIndex = 2;
@@ -59,28 +68,19 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(165, 61);
+            this.btnConnect.Location = new System.Drawing.Point(6, 32);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect.Size = new System.Drawing.Size(84, 23);
             this.btnConnect.TabIndex = 3;
             this.btnConnect.Text = "Connexion";
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
-            // ledConnected
-            // 
-            this.ledConnected.Color = System.Drawing.Color.Lime;
-            this.ledConnected.Location = new System.Drawing.Point(28, 61);
-            this.ledConnected.Name = "ledConnected";
-            this.ledConnected.On = true;
-            this.ledConnected.Size = new System.Drawing.Size(20, 20);
-            this.ledConnected.TabIndex = 1;
-            // 
             // btnEnable
             // 
-            this.btnEnable.Location = new System.Drawing.Point(57, 111);
+            this.btnEnable.Location = new System.Drawing.Point(7, 10);
             this.btnEnable.Name = "btnEnable";
-            this.btnEnable.Size = new System.Drawing.Size(90, 23);
+            this.btnEnable.Size = new System.Drawing.Size(97, 23);
             this.btnEnable.TabIndex = 3;
             this.btnEnable.Text = "Enable outputs";
             this.btnEnable.UseVisualStyleBackColor = true;
@@ -88,27 +88,119 @@
             // 
             // btnDisable
             // 
-            this.btnDisable.Location = new System.Drawing.Point(57, 140);
+            this.btnDisable.Location = new System.Drawing.Point(7, 37);
             this.btnDisable.Name = "btnDisable";
-            this.btnDisable.Size = new System.Drawing.Size(90, 23);
+            this.btnDisable.Size = new System.Drawing.Size(97, 23);
             this.btnDisable.TabIndex = 3;
             this.btnDisable.Text = "Disable outputs";
             this.btnDisable.UseVisualStyleBackColor = true;
             this.btnDisable.Click += new System.EventHandler(this.btnDisable_Click);
+            // 
+            // pnlFunctions
+            // 
+            this.pnlFunctions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlFunctions.AutoScroll = true;
+            this.pnlFunctions.AutoScrollMinSize = new System.Drawing.Size(1000, 10000);
+            this.pnlFunctions.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.pnlFunctions.Location = new System.Drawing.Point(0, 106);
+            this.pnlFunctions.Name = "pnlFunctions";
+            this.pnlFunctions.Size = new System.Drawing.Size(418, 323);
+            this.pnlFunctions.TabIndex = 6;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(7, 77);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(97, 23);
+            this.btnRefresh.TabIndex = 3;
+            this.btnRefresh.Text = "Rafraichir";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // grpServos
+            // 
+            this.grpServos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpServos.Controls.Add(this.btnLockServo);
+            this.grpServos.Controls.Add(this.btnOpenServo);
+            this.grpServos.Location = new System.Drawing.Point(255, 19);
+            this.grpServos.Name = "grpServos";
+            this.grpServos.Size = new System.Drawing.Size(157, 57);
+            this.grpServos.TabIndex = 7;
+            this.grpServos.TabStop = false;
+            this.grpServos.Text = "Servos";
+            // 
+            // btnOpenServo
+            // 
+            this.btnOpenServo.Location = new System.Drawing.Point(6, 19);
+            this.btnOpenServo.Name = "btnOpenServo";
+            this.btnOpenServo.Size = new System.Drawing.Size(68, 23);
+            this.btnOpenServo.TabIndex = 3;
+            this.btnOpenServo.Text = "Ouvrir";
+            this.btnOpenServo.UseVisualStyleBackColor = true;
+            this.btnOpenServo.Click += new System.EventHandler(this.btnOpenServo_Click);
+            // 
+            // btnLockServo
+            // 
+            this.btnLockServo.Location = new System.Drawing.Point(80, 19);
+            this.btnLockServo.Name = "btnLockServo";
+            this.btnLockServo.Size = new System.Drawing.Size(68, 23);
+            this.btnLockServo.TabIndex = 3;
+            this.btnLockServo.Text = "Vérouiller";
+            this.btnLockServo.UseVisualStyleBackColor = true;
+            this.btnLockServo.Click += new System.EventHandler(this.btnLockServo_Click);
+            // 
+            // grpMain
+            // 
+            this.grpMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpMain.Controls.Add(this.btnEnable);
+            this.grpMain.Controls.Add(this.btnInit);
+            this.grpMain.Controls.Add(this.pnlFunctions);
+            this.grpMain.Controls.Add(this.grpServos);
+            this.grpMain.Controls.Add(this.btnDisable);
+            this.grpMain.Controls.Add(this.btnRefresh);
+            this.grpMain.Location = new System.Drawing.Point(-1, 68);
+            this.grpMain.Name = "grpMain";
+            this.grpMain.Size = new System.Drawing.Size(418, 429);
+            this.grpMain.TabIndex = 8;
+            this.grpMain.TabStop = false;
+            // 
+            // ledConnected
+            // 
+            this.ledConnected.Color = System.Drawing.Color.Lime;
+            this.ledConnected.Location = new System.Drawing.Point(96, 33);
+            this.ledConnected.Name = "ledConnected";
+            this.ledConnected.On = true;
+            this.ledConnected.Size = new System.Drawing.Size(20, 20);
+            this.ledConnected.TabIndex = 1;
+            // 
+            // btnInit
+            // 
+            this.btnInit.Location = new System.Drawing.Point(126, 10);
+            this.btnInit.Name = "btnInit";
+            this.btnInit.Size = new System.Drawing.Size(84, 23);
+            this.btnInit.TabIndex = 3;
+            this.btnInit.Text = "Init. Steppers";
+            this.btnInit.UseVisualStyleBackColor = true;
+            this.btnInit.Click += new System.EventHandler(this.btnInit_Click);
             // 
             // BoardControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Controls.Add(this.btnDisable);
-            this.Controls.Add(this.btnEnable);
+            this.Controls.Add(this.grpMain);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.lblConnect);
             this.Controls.Add(this.ledConnected);
             this.Controls.Add(this.lblTitle);
             this.Name = "BoardControl";
-            this.Size = new System.Drawing.Size(395, 510);
+            this.Size = new System.Drawing.Size(416, 496);
+            this.grpServos.ResumeLayout(false);
+            this.grpMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -122,5 +214,12 @@
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Button btnEnable;
         private System.Windows.Forms.Button btnDisable;
+        private System.Windows.Forms.FlowLayoutPanel pnlFunctions;
+        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.GroupBox grpServos;
+        private System.Windows.Forms.Button btnLockServo;
+        private System.Windows.Forms.Button btnOpenServo;
+        private System.Windows.Forms.GroupBox grpMain;
+        private System.Windows.Forms.Button btnInit;
     }
 }

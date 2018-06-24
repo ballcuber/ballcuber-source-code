@@ -51,7 +51,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.boardControl2);
             this.splitContainer1.Size = new System.Drawing.Size(827, 520);
-            this.splitContainer1.SplitterDistance = 413;
+            this.splitContainer1.SplitterDistance = 425;
             this.splitContainer1.TabIndex = 0;
             // 
             // boardControl1
@@ -61,7 +61,7 @@
             this.boardControl1.Index = 1;
             this.boardControl1.Location = new System.Drawing.Point(0, 0);
             this.boardControl1.Name = "boardControl1";
-            this.boardControl1.Size = new System.Drawing.Size(413, 520);
+            this.boardControl1.Size = new System.Drawing.Size(425, 520);
             this.boardControl1.TabIndex = 0;
             // 
             // boardControl2
@@ -71,7 +71,7 @@
             this.boardControl2.Index = 2;
             this.boardControl2.Location = new System.Drawing.Point(0, 0);
             this.boardControl2.Name = "boardControl2";
-            this.boardControl2.Size = new System.Drawing.Size(410, 520);
+            this.boardControl2.Size = new System.Drawing.Size(398, 520);
             this.boardControl2.TabIndex = 0;
             // 
             // BoardsControl

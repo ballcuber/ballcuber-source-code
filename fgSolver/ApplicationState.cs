@@ -177,8 +177,12 @@ namespace fgSolver
             return index < 2 ? HardwareConfig1 : HardwareConfig2;
         }
 
+        public HardwareConfigGlobal HardwareConfigGlobal { get; set; } = new HardwareConfigGlobal();
         public HardwareConfig HardwareConfig1 { get; set; } = new HardwareConfig(1);
         public HardwareConfig HardwareConfig2 { get; set; } = new HardwareConfig(2);
+        public ServoConfig ServoConfig { get; set; } = new ServoConfig();
+
+
 
         private Solution _solution;
 
@@ -227,8 +231,56 @@ namespace fgSolver
                 this.HardwareConfig1 = p.HardwareConfig1;
                 this.HardwareConfig2 = p.HardwareConfig2;
                 this.ColorsAssociation = p.ColorsAssociation;
+                this.HardwareConfigGlobal = p.HardwareConfigGlobal;
+                this.ServoConfig = p.ServoConfig;
             }
         }
+    }
+
+    public class HardwareConfigGlobal : ApplicationState
+    {
+        [Category("Paramètre")]
+        public int MotorTeeth { get; set; } // nombre de dents sur le pignon moteur
+
+        [Category("Paramètre")]
+        public int BallTeeth { get; set; } // nombre de dent sur le pignon de la sphère
+
+        [Category("Paramètre")]
+        public int StepPersRevolution { get; set; } // nombre de pas par tour du moteur
+
+        [Category("Paramètre")]
+        public int Speed { get; set;}
+
+        [Category("Paramètre")]
+        public int Acceleration { get; set; }
+
+        // retourne le nombre de pas nécessaire pour faire quarters quart de tour de sphère
+        public int ConvertMoveToSteps(int quarters, bool inverted)
+        {
+            if (MotorTeeth == 0) return 0;
+
+            if (inverted) quarters = -quarters;
+
+            return quarters * StepPersRevolution / 4 * BallTeeth / MotorTeeth;
+        }
+
+    }
+
+    public class ServoConfig : ApplicationState
+    {
+        public int OpenedPosition0 { get; set; }
+        public int LockedPosition0 { get; set; }
+
+        public int OpenedPosition1 { get; set; }
+        public int LockedPosition1 { get; set; }
+
+        public int OpenedPosition2 { get; set; }
+        public int LockedPosition2 { get; set; }
+
+        public int OpenedPosition3 { get; set; }
+        public int LockedPosition3 { get; set; }
+
+
     }
 
     public class Motor : ApplicationState
@@ -242,14 +294,6 @@ namespace fgSolver
         [Category("Identification")]
         public RampsSteppers Stepper { get; set; }
 
-        [Category("Paramètre")]
-        public int MotorTeeth { get; set; } // nombre de dents sur le pignon moteur
-
-        [Category("Paramètre")]
-        public int BallTeeth { get; set; } // nombre de dent sur le pignon de la sphère
-
-        [Category("Paramètre")]
-        public int StepPersRevolution { get; set; } // nombre de pas par tour du moteur
 
         [Category("Paramètre")]
         public bool Inverted { get; set; } // sens inverse
@@ -262,16 +306,6 @@ namespace fgSolver
             {
                 return (byte)Stepper;
             }
-        }
-
-        // retourne le nombre de pas nécessaire pour faire quarters quart de tour de sphère
-        public int ConvertMoveToSteps(int quarters)
-        {
-            if (MotorTeeth == 0) return 0;
-
-            if (Inverted) quarters = -quarters;
-
-            return quarters * StepPersRevolution / 4 * BallTeeth / MotorTeeth;
         }
 
         public override string ToString()
@@ -306,6 +340,8 @@ namespace fgSolver
                 return Runner.GetBoard(Index).Connected;
             }
         }
+
+        public bool HasServo { get;set; }
 
         public HardwareConfig CloneHardwareConfig()
         {

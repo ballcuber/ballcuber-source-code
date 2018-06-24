@@ -48,7 +48,10 @@ namespace fgSolver
             boardControl2.PeriodicUpdate(formerState, currentState);
         }
 
-        public void NavigueTo() { }
+        public void NavigueTo() {
+            boardControl1.NavigueTo();
+            boardControl2.NavigueTo();
+        }
 
         public void LeaveFrom() { }
 

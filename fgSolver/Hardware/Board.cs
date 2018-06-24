@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Sharer;
 using fgSolver.Modele;
 using Sharer.Command;
+using System.Threading;
 
 namespace fgSolver.Hardware
 {
@@ -23,11 +24,28 @@ namespace fgSolver.Hardware
     {
         private SharerConnection _connection;
 
+        public SharerConnection Connection
+        {
+            get
+            {
+                return _connection;
+            }
+        }
+
+        public List<Sharer.FunctionCall.SharerFunction> Functions
+        {
+            get
+            {
+                return _connection?.Functions;
+            }
+        }
+
         private int _index;
         public int Index
         {
             get
             {
+       
                 return _index;
             }
         } 
@@ -57,7 +75,10 @@ namespace fgSolver.Hardware
 
             _connection.Connect();
 
-            _connection.RefreshFunctions();
+            // Armer un timer pour rafraichir la liste des fonctions, ,il faut le temps que le arduino reboot
+            Timer tmr = null;
+            tmr  = new Timer((state) => { _connection.RefreshFunctions(); tmr.Dispose(); }, null, 2000, 0);
+           
         }
 
         public bool Connected
@@ -98,45 +119,36 @@ namespace fgSolver.Hardware
                 return;
             }
 
-            byte m1 = 0xFF;
-            byte m2 = 0xFF;
-            byte m3 = 0xFF;
+            byte[] m = new byte[2] { 0xFF, 0xFF };
+            int[] r = new int[2] { 0, 0 };
 
-            int r1 = 0;
-            int r2 = 0;
-            int r3 = 0;
 
-            foreach(var motor in config.Motors.Where((x) => x.Axe == mv.Axe))
+            var motors = config.Motors.Where((x) => x.Axe == mv.Axe).ToArray();
+
+            if (motors.Count() == 0) return;
+            else if (motors.Count() > 2) throw new Exception("Il ne peut pas y avoir plus de deux moteurs pas à pas pilotés en même temps pour des questions de performance");
+
+            using (var state = GlobalState.GetState())
             {
-                if (motor.Courronne == Couronne.MidMin && mv.MidMinMovesCount != 0)
+                for(int i=0;i<motors.Length; i++)
                 {
-                    m1 = motor.Index;
-                    r1 = motor.ConvertMoveToSteps(mv.MidMinMovesCount);
-                }
-                else if (motor.Courronne == Couronne.MidMax && mv.MidMaxMovesCount != 0)
-                {
-                    m2 = motor.Index;
-                    r2 = motor.ConvertMoveToSteps(mv.MidMaxMovesCount);
-                }
-                else if (motor.Courronne == Couronne.Max && mv.MaxMovesCount != 0)
-                {
-                    m3 = motor.Index;
-                    r3 = motor.ConvertMoveToSteps(mv.MaxMovesCount);
+                    m[i] = motors[i].Index;
+                    r[i] = state.HardwareConfigGlobal.ConvertMoveToSteps(mv.MidMinMovesCount, motors[i].Inverted);
                 }
             }
 
             // pas de mouvement, rien ne sert d'envoyer 0
-            if (r1 == 0 && r2 == 0 && r3 == 0) return;
+            if (r[0] == 0 && r[1] == 0) return;
 
             AssertConnectedAndConfigured(config);
-            var ret = BlockingMove(timeout, m1, r1, m2, r2, m3, r3);
+            var ret = BlockingMove(timeout, m[0], r[0], m[1], r[1]);
 
             if (!ret.Value) throw new Exception("Impossible d'exécuter le mouvement " + mv.ToString());
         }
 
-        public SharerFunctionReturn<bool> BlockingMove(TimeSpan timeout, byte m1, long r1, byte m2, long r2, byte m3, long r3)
+        public SharerFunctionReturn<bool> BlockingMove(TimeSpan timeout, byte m1, long r1, byte m2, long r2)
         {
-            return _connection.Call<bool>("blockingMove", timeout, m1, r1, m2, r2, m3, r3);
+            return _connection.Call<bool>("blockingMove", timeout, m1, r1, m2, r2);
         }
 
         public SharerFunctionReturn<bool> DisableOutputs(int mask)
@@ -147,6 +159,31 @@ namespace fgSolver.Hardware
         public SharerFunctionReturn<bool> EnableOutputs(int mask)
         {
             return _connection.Call<bool>("enableOutputs", mask);
+        }
+
+        public void LockServos()
+        {
+            using (var state = GlobalState.GetState())
+            {
+                _connection.Call("ServoWrite", state.ServoConfig.LockedPosition0, state.ServoConfig.LockedPosition1, state.ServoConfig.LockedPosition2, state.ServoConfig.LockedPosition3);
+            }
+        }
+
+        public void OpenServos()
+        {
+            using (var state = GlobalState.GetState())
+            {
+                _connection.Call("ServoWrite", state.ServoConfig.OpenedPosition0, state.ServoConfig.OpenedPosition1, state.ServoConfig.OpenedPosition2, state.ServoConfig.OpenedPosition3);
+            }
+        }
+
+        public void InitSteppers()
+        {
+            using (var state = GlobalState.GetState())
+            {
+                _connection.Call("setMaxSpeed", 0xff, state.HardwareConfigGlobal.Speed);
+                _connection.Call("setAcceleration", 0xff, state.HardwareConfigGlobal.Acceleration);
+            }
         }
     }
 }

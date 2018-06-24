@@ -1,3 +1,4 @@
+#include <Servo.h>
 #include <MultiStepper.h>
 #include <AccelStepper.h>
 #include <Sharer.h>
@@ -5,10 +6,10 @@
 
 
 
-#define STEPPER_COUNT  5
+#define STEPPER_COUNT	5
+#define SERVO_COUNT		4
 
-
-
+// définitions des steppers
 AccelStepper E0Stepper(AccelStepper::DRIVER, E0_STEP_PIN, E0_STEP_PIN);
 AccelStepper E1Stepper(AccelStepper::DRIVER, E1_STEP_PIN, E1_STEP_PIN);
 AccelStepper XStepper(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
@@ -17,6 +18,33 @@ AccelStepper ZStepper(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 
 AccelStepper * Steppers[STEPPER_COUNT] = { &E0Stepper,&E1Stepper,&XStepper,&YStepper,&ZStepper };
 
+
+// définition des servos
+Servo Servo0;
+Servo Servo1;
+Servo Servo2;
+Servo Servo3;
+
+Servo * Servos[SERVO_COUNT] = {&Servo0, &Servo1, &Servo2, &Servo3 };
+
+
+void ServoWrite(int pos0, int pos1, int pos2, int pos3) {
+	if (pos0 >= 0) {
+		Servo0.write(pos0);
+	}
+
+	if (pos1 >= 0) {
+		Servo1.write(pos1);
+	}
+
+	if (pos2 >= 0) {
+		Servo2.write(pos2);
+	}
+
+	if (pos3 >= 0) {
+		Servo3.write(pos3);
+	}
+}
 
 #define GENERIC_ALL_STEPPER(name, ...)				\
 	for (int i = 0; i < STEPPER_COUNT; i++) {		\
@@ -101,23 +129,15 @@ void setMinPulseWidth(int mask, unsigned int minWidth) {
 }
 
 
-bool blockingMove(byte m1, long r1, byte m2, long r2, byte m3, long r3) {
+bool blockingMove(byte m1, long r1, byte m2, long r2) {
 	bool useM1 = m1 < STEPPER_COUNT;
 	bool useM2 = m2 < STEPPER_COUNT;
-	bool useM3 = m3 < STEPPER_COUNT;
 
 	if (useM1) Steppers[m1]->move(r1);
 
 	if (useM2) Steppers[m2]->move(r2);
 
-	if (useM3) Steppers[m3]->move(r3);
-
-	bool moving = true;
-	while (moving) {
-		moving = useM1 && Steppers[m1]->run();
-		moving |= useM2 && Steppers[m2]->run();
-		moving |= useM3 && Steppers[m3]->run();
-	}
+	while ((useM1 && Steppers[m1]->run()) | (useM2 && Steppers[m2]->run()));
 
 	return true;
 }
@@ -146,18 +166,23 @@ void setup() {
 	YStepper.setEnablePin(Y_ENABLE_PIN);
 	ZStepper.setEnablePin(Z_ENABLE_PIN);
 
+	Servo0.attach(SERVO0_PIN);
+	Servo1.attach(SERVO1_PIN);
+	Servo2.attach(SERVO2_PIN);
+	Servo3.attach(SERVO3_PIN);
+
 	
 	for (int i = 0; i < STEPPER_COUNT; i++) {
 		Steppers[i]->setPinsInverted(false, false, true);	// invert enable pin (LOW or power on)
 		Steppers[i]->setMaxSpeed(14000);
 		Steppers[i]->setAcceleration(1400000);
-		Steppers[i]->enableOutputs();
+		Steppers[i]->disableOutputs();
 	}
 
 	
 	Sharer_ShareVoid(blockingMove2, long, r1);
 	Sharer_ShareVoid(stop, int, mask);
-	Sharer_ShareFunction(bool, blockingMove, byte, m1, long, r1, byte, m2, long, r2, byte, m3, long, r3);
+	Sharer_ShareFunction(bool, blockingMove, byte, m1, long, r1, byte, m2, long, r2);
 	Sharer_ShareVoid(setMaxSpeed, int, mask, float, speed);
 	Sharer_ShareVoid(setAcceleration, int, mask, float, accel);
 	Sharer_ShareVoid(moveTo, int, mask, long, absolute);
@@ -173,7 +198,7 @@ void setup() {
 	Sharer_ShareVoid(enableOutputs, int, mask);
 	Sharer_ShareFunction(bool, isRunning, int, iStepper);
 	Sharer_ShareVoid(setMinPulseWidth, int, mask, uint16_t, minWidth);
-
+	Sharer_ShareVoid(ServoWrite, int, pos0, int, pos1, int, pos2, int, pos3);
 	/*
 	for (int i = 0; i < Sharer.functionList.count; i++) {
 		Serial.print(strlen_P(Sharer.functionList.functions[i].name));
@@ -219,10 +244,9 @@ void setup() {
 
 void loop() {
 	Sharer.run();
-	for (int i = 0; i < STEPPER_COUNT; i++) {
-		//Serial.println(i);
-		Steppers[i]->run();
+	//for (int i = 0; i < STEPPER_COUNT; i++) {
+	//	//Serial.println(i);
+	//	Steppers[i]->run();
 
-	}
-
+	//}
 }
