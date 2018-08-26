@@ -77,7 +77,15 @@ namespace fgSolver.Hardware
 
             // Armer un timer pour rafraichir la liste des fonctions, ,il faut le temps que le arduino reboot
             Timer tmr = null;
-            tmr  = new Timer((state) => { _connection.RefreshFunctions(); tmr.Dispose(); }, null, 2000, 0);
+            tmr  = new Timer((state) => {
+                try
+                {
+                    _connection.RefreshFunctions(); tmr.Dispose();
+                }
+                catch (Exception ex){
+                    Logger.Log(ex);
+                }
+            }, null, 2000, 0);
            
         }
 
@@ -133,7 +141,8 @@ namespace fgSolver.Hardware
                 for(int i=0;i<motors.Length; i++)
                 {
                     m[i] = motors[i].Index;
-                    r[i] = state.HardwareConfigGlobal.ConvertMoveToSteps(mv.MidMinMovesCount, motors[i].Inverted);
+                                 
+                    r[i] = state.HardwareConfigGlobal.ConvertMoveToSteps(mv.GetMoves(motors[i].Courronne), motors[i].Inverted);
                 }
             }
 

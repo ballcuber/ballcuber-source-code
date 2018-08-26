@@ -17,6 +17,9 @@ namespace fgSolver
     {
         public static ResolutionSessionControl Instance;
 
+
+        private System.Windows.Shell.TaskbarItemInfo _Taskbar = new System.Windows.Shell.TaskbarItemInfo();
+
         public ResolutionSessionControl()
         {
             InitializeComponent();
@@ -52,6 +55,7 @@ namespace fgSolver
         {
             if (currentState.Solution?.MachineMoves?.MotorMoves != null)
             {
+                /*
                 if (formerState.Solution != currentState.Solution)
                 {
 
@@ -86,20 +90,25 @@ namespace fgSolver
 
                     txtMoves.ResumeLayout();
                 }
-
+                */
                 lblStatus.Text = (currentState.Solution.LastExecutedMotorMove + 1) + "/" + currentState.Solution.MachineMoves.MotorMoves.Count;
 
                 progressBar.Maximum = currentState.Solution.MachineMoves.MotorMoves.Count;
                 progressBar.Value = (currentState.Solution.LastExecutedMotorMove + 1);
-            }
+
+                _Taskbar.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+                _Taskbar.ProgressValue = progressBar.Value;
+
+           }
             else
             {
-                txtMoves.Text = "";
                 lblStatus.Text = "";
                 progressBar.Value = 0;
+                _Taskbar.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
             }
 
             btnRun.Enabled = currentState.Solution != null && !currentState.Solution.IsRunning;
+            btnStop.Enabled = currentState.Solution != null && currentState.Solution.IsRunning;
         }
         
 
@@ -131,5 +140,12 @@ namespace fgSolver
 
         public void LeaveFrom() { }
 
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            using(var state = GlobalState.GetState())
+            {
+                state.Solution = null;
+            }
+        }
     }
 }

@@ -110,6 +110,7 @@ namespace fgSolver
                 stripAlarm.Visible = false;
             }
 
+            strpAcq.Visible = stripAlarm.Visible;
 
             // Refresh HMI
             _viewer.PeriodicUpdate(_formerState, currentState);
@@ -175,13 +176,12 @@ namespace fgSolver
             FormManager.Navigate<AlarmControl>();
         }
 
-        private void stripAlarm_DoubleClick(object sender, EventArgs e)
+        private void strpAcq_Click(object sender, EventArgs e)
         {
             using (var state = GlobalState.GetState())
             {
                 state.Alarms.Clear();
             }
-            FormManager.Previous();
         }
     }
 }

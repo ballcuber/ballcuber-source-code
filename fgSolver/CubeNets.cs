@@ -83,7 +83,10 @@ namespace fgSolver
                     return;
             }
 
-            if (MoveClick != null) MoveClick(sender, new MoveClickEventArgs(mv));
+            System.Threading.Tasks.Task.Factory.StartNew(new Action(() =>
+            {
+                if (MoveClick != null) MoveClick(sender, new MoveClickEventArgs(mv));
+            }));
         }
 
 

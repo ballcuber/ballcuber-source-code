@@ -102,6 +102,7 @@ namespace fgSolver.Modele
             sol.SolverOutput = output;
             sol.Moves = moves;
             sol.MovesString = algStr;
+            sol.Date = DateTime.Now;
 
             return sol;
         }

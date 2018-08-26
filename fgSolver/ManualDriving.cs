@@ -51,16 +51,8 @@ namespace fgSolver
 
         private void cubeNets_MoveClick(object sender, MoveClickEventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-
-            try
-            {
                 Runner.BlockingMove(e.MotorMove);
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
+
         }
 
         public void NavigueTo() { }

@@ -56,7 +56,7 @@ namespace fgSolver
             {
                 string txt = string.Join("\r\n",currentState.Solution.MachineMoves.MotorMoves.Select(x => x.ToString()).ToArray());
 
-                txtMoves.Text = txt;
+                txtMoves.Text = currentState.Solution.Date + " :\r\n" + txt;
             }
 
             btnSolve.Enabled = !currentState.SolutionInCalculation && currentState.Solution == null;

@@ -575,6 +575,9 @@
     <None Include="Resources\OK.png" />
     <None Include="Resources\Camera.png" />
     <Content Include="Resources\FaceCube.ico" />
+    <None Include="Resources\Stop.png" />
+    <None Include="Resources\fix.png" />
+    <None Include="Resources\fix1.png" />
     <Content Include="twisty.js\alg\alg.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -10,6 +10,8 @@ namespace fgSolver.Modele
 {
     public class Solution : ApplicationState
     {
+        public DateTime Date { get; set; }
+
         public string MovesString { get; set; }
 
         public ColorCube OriginalCube { get; set; }
@@ -55,7 +57,7 @@ namespace fgSolver.Modele
                 if (sol.MachineMoves != MachineMoves) return false;
             }
 
-            return LastExecutedMotorMove == sol.LastExecutedMotorMove;
+            return LastExecutedMotorMove == sol.LastExecutedMotorMove && Date == sol.Date;
         }
 
         public override int GetHashCode()
@@ -94,6 +96,7 @@ namespace fgSolver.Modele
             }
 
             newSolution.LastExecutedMotorMove = LastExecutedMotorMove;
+            newSolution.Date = Date;
 
             return newSolution;
         }

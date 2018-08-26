@@ -43,6 +43,25 @@ namespace fgSolver.Modele
             }
         }
 
+        public int GetMoves(Couronne courrone)
+        {
+            switch (courrone)
+            {
+                case Couronne.Max:
+                    return MaxMovesCount;
+                    break;
+                case Couronne.MidMax:
+                    return MidMaxMovesCount;
+                    break;
+                case Couronne.MidMin:
+                    return MidMinMovesCount;
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
+        }
+
         private void increment(ref int count, Sens s)
         {
             count += (int)s;

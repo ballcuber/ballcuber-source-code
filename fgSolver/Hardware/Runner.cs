@@ -89,11 +89,14 @@ namespace fgSolver.Hardware
 
                 MainForm.Instance.Viewer.RefreshCube();
 
+                DateTime startDate = DateTime.Now;
+
                 using (var state = GlobalState.GetState())
                 {
                     if (state.Solution?.MachineMoves != null)
                     {
                         state.Solution.LastExecutedMotorMove = -1;
+                        startDate = state.Solution.Date;
                     }
                 }
 
@@ -105,7 +108,7 @@ namespace fgSolver.Hardware
 
                     using (var state = GlobalState.GetState())
                     {
-                        if (state.Solution?.MachineMoves?.MotorMoves != null)
+                        if (state.Solution?.MachineMoves?.MotorMoves != null && startDate== state.Solution.Date)
                         {
                             int nextStep;
                             if (state.Solution.LastExecutedMotorMove < 0) nextStep = 0;

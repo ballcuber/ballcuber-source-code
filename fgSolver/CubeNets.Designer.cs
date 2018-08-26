@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableCube = new System.Windows.Forms.TableLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -47,7 +48,10 @@
             this.button22 = new System.Windows.Forms.Button();
             this.button24 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tableCube.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tableCube
@@ -89,6 +93,7 @@
             this.tableCube.Controls.Add(this.button22, 9, 9);
             this.tableCube.Controls.Add(this.button24, 10, 9);
             this.tableCube.Controls.Add(this.button23, 11, 9);
+            this.tableCube.Controls.Add(this.pictureBox1, 8, 8);
             this.tableCube.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableCube.Location = new System.Drawing.Point(0, 0);
             this.tableCube.Name = "tableCube";
@@ -122,6 +127,7 @@
             this.button1.TabIndex = 0;
             this.button1.Tag = "Y1+";
             this.button1.Text = "▲";
+            this.toolTip.SetToolTip(this.button1, "Y+ (Max)");
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.moveClick);
             // 
@@ -135,6 +141,7 @@
             this.button2.TabIndex = 1;
             this.button2.Tag = "Y1-";
             this.button2.Text = "▼";
+            this.toolTip.SetToolTip(this.button2, "Y- (Max)");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.moveClick);
             // 
@@ -148,6 +155,7 @@
             this.button3.TabIndex = 2;
             this.button3.Tag = "Y2+";
             this.button3.Text = "▲";
+            this.toolTip.SetToolTip(this.button3, "Y+ (MidMax)");
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.moveClick);
             // 
@@ -161,6 +169,7 @@
             this.button4.TabIndex = 3;
             this.button4.Tag = "Y2-";
             this.button4.Text = "▼";
+            this.toolTip.SetToolTip(this.button4, "Y- (MidMax)");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.moveClick);
             // 
@@ -174,6 +183,7 @@
             this.button5.TabIndex = 4;
             this.button5.Tag = "Y3+";
             this.button5.Text = "▲";
+            this.toolTip.SetToolTip(this.button5, "Y+ (MidMin)");
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.moveClick);
             // 
@@ -187,6 +197,7 @@
             this.button6.TabIndex = 5;
             this.button6.Tag = "Y3-";
             this.button6.Text = "▼";
+            this.toolTip.SetToolTip(this.button6, "Y- (MidMin)");
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.moveClick);
             // 
@@ -200,6 +211,7 @@
             this.button9.TabIndex = 8;
             this.button9.Tag = "Z1+";
             this.button9.Text = "►";
+            this.toolTip.SetToolTip(this.button9, "Z+ (Max)");
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.moveClick);
             // 
@@ -213,6 +225,7 @@
             this.button10.TabIndex = 9;
             this.button10.Tag = "Z2+";
             this.button10.Text = "►";
+            this.toolTip.SetToolTip(this.button10, "Z+ (MidMax)");
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.moveClick);
             // 
@@ -226,6 +239,7 @@
             this.button11.TabIndex = 10;
             this.button11.Tag = "Z3+";
             this.button11.Text = "►";
+            this.toolTip.SetToolTip(this.button11, "Z+ (MidMin)");
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.moveClick);
             // 
@@ -239,6 +253,7 @@
             this.button13.TabIndex = 12;
             this.button13.Tag = "Z1-";
             this.button13.Text = "◄";
+            this.toolTip.SetToolTip(this.button13, "Z- (Max)");
             this.button13.UseVisualStyleBackColor = true;
             this.button13.Click += new System.EventHandler(this.moveClick);
             // 
@@ -252,6 +267,7 @@
             this.button16.TabIndex = 15;
             this.button16.Tag = "Z2-";
             this.button16.Text = "◄";
+            this.toolTip.SetToolTip(this.button16, "Z- (MidMax)");
             this.button16.UseVisualStyleBackColor = true;
             this.button16.Click += new System.EventHandler(this.moveClick);
             // 
@@ -265,6 +281,7 @@
             this.button15.TabIndex = 14;
             this.button15.Tag = "Z3-";
             this.button15.Text = "◄";
+            this.toolTip.SetToolTip(this.button15, "Z- (MidMin)");
             this.button15.UseVisualStyleBackColor = true;
             this.button15.Click += new System.EventHandler(this.moveClick);
             // 
@@ -278,6 +295,7 @@
             this.button19.TabIndex = 18;
             this.button19.Tag = "X3-";
             this.button19.Text = "▲";
+            this.toolTip.SetToolTip(this.button19, "X3- (MidMin)");
             this.button19.UseVisualStyleBackColor = true;
             this.button19.Click += new System.EventHandler(this.moveClick);
             // 
@@ -291,6 +309,7 @@
             this.button20.TabIndex = 19;
             this.button20.Tag = "X2-";
             this.button20.Text = "▲";
+            this.toolTip.SetToolTip(this.button20, "X2- (MidMax)");
             this.button20.UseVisualStyleBackColor = true;
             this.button20.Click += new System.EventHandler(this.moveClick);
             // 
@@ -304,6 +323,7 @@
             this.button18.TabIndex = 17;
             this.button18.Tag = "X1-";
             this.button18.Text = "▲";
+            this.toolTip.SetToolTip(this.button18, "X1- (Max)");
             this.button18.UseVisualStyleBackColor = true;
             this.button18.Click += new System.EventHandler(this.moveClick);
             // 
@@ -317,6 +337,7 @@
             this.button22.TabIndex = 21;
             this.button22.Tag = "X3+";
             this.button22.Text = "▼";
+            this.toolTip.SetToolTip(this.button22, "X3+ (MidMin)");
             this.button22.UseVisualStyleBackColor = true;
             this.button22.Click += new System.EventHandler(this.moveClick);
             // 
@@ -330,6 +351,7 @@
             this.button24.TabIndex = 23;
             this.button24.Tag = "X2+";
             this.button24.Text = "▼";
+            this.toolTip.SetToolTip(this.button24, "X2+ (MidMax)");
             this.button24.UseVisualStyleBackColor = true;
             this.button24.Click += new System.EventHandler(this.moveClick);
             // 
@@ -341,10 +363,22 @@
             this.button23.Name = "button23";
             this.button23.Size = new System.Drawing.Size(20, 20);
             this.button23.TabIndex = 22;
-            this.button23.Tag = "X1+";
+            this.button23.Tag = "X+ (Max)";
             this.button23.Text = "▼";
             this.button23.UseVisualStyleBackColor = true;
             this.button23.Click += new System.EventHandler(this.moveClick);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = global::fgSolver.Properties.Resources.fix;
+            this.pictureBox1.Location = new System.Drawing.Point(160, 160);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(20, 20);
+            this.pictureBox1.TabIndex = 24;
+            this.pictureBox1.TabStop = false;
+            this.toolTip.SetToolTip(this.pictureBox1, "Immobile");
             // 
             // CubeNets
             // 
@@ -354,6 +388,7 @@
             this.Name = "CubeNets";
             this.Size = new System.Drawing.Size(360, 280);
             this.tableCube.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -379,5 +414,7 @@
         private System.Windows.Forms.Button button22;
         private System.Windows.Forms.Button button24;
         private System.Windows.Forms.Button button23;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

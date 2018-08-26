@@ -49,6 +49,7 @@
             this.navPnl = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.tmrAlarmBlink = new System.Windows.Forms.Timer(this.components);
+            this.strpAcq = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
@@ -67,6 +68,7 @@
             this.toolStripDropDownButton1,
             this.toolStripDropDownButton2,
             this.toolStripDropDownButtonAdvanced,
+            this.strpAcq,
             this.stripAlarm});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -153,7 +155,6 @@
             this.stripAlarm.AutoSize = false;
             this.stripAlarm.AutoToolTip = false;
             this.stripAlarm.BackColor = System.Drawing.Color.Yellow;
-            this.stripAlarm.DoubleClickEnabled = true;
             this.stripAlarm.Image = global::fgSolver.Properties.Resources.Warning;
             this.stripAlarm.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.stripAlarm.Name = "stripAlarm";
@@ -161,7 +162,6 @@
             this.stripAlarm.Text = "(2) Il y a un gros soucis de m                  ...";
             this.stripAlarm.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.stripAlarm.Click += new System.EventHandler(this.stripAlarm_Click);
-            this.stripAlarm.DoubleClick += new System.EventHandler(this.stripAlarm_DoubleClick);
             // 
             // toolStrip2
             // 
@@ -244,6 +244,19 @@
             this.tmrAlarmBlink.Interval = 1000;
             this.tmrAlarmBlink.Tick += new System.EventHandler(this.tmrAlarmeBlink_Tick);
             // 
+            // strpAcq
+            // 
+            this.strpAcq.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.strpAcq.AutoSize = false;
+            this.strpAcq.AutoToolTip = false;
+            this.strpAcq.DoubleClickEnabled = true;
+            this.strpAcq.Image = global::fgSolver.Properties.Resources.OK;
+            this.strpAcq.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.strpAcq.Name = "strpAcq";
+            this.strpAcq.Size = new System.Drawing.Size(22, 22);
+            this.strpAcq.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
+            this.strpAcq.Click += new System.EventHandler(this.strpAcq_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -288,5 +301,6 @@
         private System.Windows.Forms.ToolStripMenuItem suivantToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton stripAlarm;
         private System.Windows.Forms.Timer tmrAlarmBlink;
+        private System.Windows.Forms.ToolStripButton strpAcq;
     }
 }
