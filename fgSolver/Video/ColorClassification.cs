@@ -88,7 +88,7 @@ namespace fgSolver
 
 
 
-        public static ColorCube GetCube(IList<Color> colors, IList<ColorAssociation> colorsAssociation)
+        public static ColorCube GetCube(IList<Color> colors)
         {
             var result = Classify(colors);
 

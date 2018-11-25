@@ -7,50 +7,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using fgSolver.Hardware;
 using Emgu.CV.UI;
 using Emgu.CV;
+using static fgSolver.VideoParameters;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
-using OpenTK;
 using Emgu.CV.Util;
-using System.Diagnostics;
-using RevengeCube;
 
-namespace fgSolver
+namespace fgSolver.Video
 {
     public partial class VideoScannerControl : UserControl, INavigableForm
     {
+
         private Capture _capture;
+        private ImageBox _processViewer;
 
-        private ImageBox _viewer;
+        private ImageBox[] _faceViewers = new ImageBox[3];
 
-        private object _lockVideoAccess = new object();
+        private const int size = 100;
+
         public VideoScannerControl()
         {
             InitializeComponent();
 
-            _viewer = new ImageBox();
-            _viewer.FunctionalMode = ImageBox.FunctionalModeOption.RightClickMenu;
-            _viewer.VerticalScrollBar.Visible = false;
-            pnlVideo.Controls.Add(_viewer);
-            _viewer.Dock = DockStyle.Fill;
 
-            for(int f = 0; f < 6; f++)
+
+            for (int i = 0; i < 3; i++)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        _scannedColors[f, i, j] = new List<Pastille>();
-                    }
-                }
+                _faceViewers[i] = new ImageBox();
+                _faceViewers[i].Dock = DockStyle.Fill;
+                _faceViewers[i].Width = size;
             }
+            pnl1.Controls.Add(_faceViewers[0]);
+            pnl2.Controls.Add(_faceViewers[1]);
+            pnl3.Controls.Add(_faceViewers[2]);
 
-            Application.Idle += Application_Idle;
-
-            _refreshCubeSW.Start();
-
+            _processViewer = new ImageBox();
+            pnlMain.Controls.Add(_processViewer);
+            pnlMain.Controls.SetChildIndex(_processViewer, 0);
+            _processViewer.Dock = DockStyle.Fill;
         }
 
         public string FormName
@@ -77,489 +72,373 @@ namespace fgSolver
             }
         }
 
-        public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
+        public void LeaveFrom()
         {
-            switch (currentState.Scanner.CurrentScannedFace)
+            if (_capture != null)
             {
-                case Faces.L:
-                    barProgress.Value = currentState.Scanner.WaitingForFace ? 0 : 1;
-                    break;
-                case Faces.B:
-                    barProgress.Value = 2;
-                    break;
-                case Faces.R:
-                    barProgress.Value = 3;
-                    break;
-                case Faces.F:
-                    barProgress.Value = 4;
-                    break;
-                case Faces.D:
-                    barProgress.Value = 5;
-                    break;
-                case Faces.U:
-                    barProgress.Value = 6;
-                    break;
-                case Faces.UNKNOWN:
-                    barProgress.Value = 7;
-                    break;
-                default:
-                    barProgress.Value = 0;
-                    break;
+                _capture.Stop();
+                _capture.Dispose();
+                _capture = null;
+            }
+            using (var state = GlobalState.GetState())
+            {
+                MainForm.Instance.Viewer.RefreshCube(state.InitialCube);
             }
 
-            if (currentState.Scanner.CurrentScannedFace == Faces.UNKNOWN)
-            {
-                lblStatus.Text = "Scan terminé";
-            }
-            else
-            {
-                lblStatus.Text = currentState.Scanner.WaitingForFace ? "En attente de le face " + currentState.Scanner.CurrentScannedFace + "..." : "Scan de " + currentState.Scanner.CurrentScannedFace + " en cours";
-            }
         }
 
         public void NavigueTo()
         {
-            lock (_lockVideoAccess)
+            using (var state = GlobalState.GetState())
             {
-                _capture = new Capture(0);
+                _capture = new Capture(state.VideoParameters.CaptureID); //create a camera captue
+                grid.SelectedObject = state.VideoParameters;
             }
+            DebugImages = new Mat[(int)SelectedImage.Count];
+            _lastResults = new MCvScalar[2, 3, 4, 4];
+            _currentSommet = -1;
+            btnSommet2.Enabled = false;
+            btnInit.Enabled = false;
+           validateAsked = false;
+            this.btnValidateCalib.BackgroundImage = global::fgSolver.Properties.Resources.OK;
+            grid.Visible = false;
 
-            ResetAll();
+            MainForm.Instance.Viewer.RefreshCube(null);
+            _lastScannedSommet = -1;
         }
 
-        private void ResetAll()
+        public Mat[] DebugImages = new Mat[(int)SelectedImage.Count];
+
+        private MCvScalar[,,,] _lastResults = new MCvScalar[2, 3, 4, 4];
+
+        // 0 ou 1, -1 pour désactiver
+        private int _currentSommet = -1;
+
+        public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
+        {
+            if (_capture == null) return;
+
+
+            var frame = _capture.QueryFrame();
+            var inImage = frame;
+            DebugImages[(int)SelectedImage.InImage] = inImage;
+
+            var medianBlurImageIn = new Image<Bgr, byte>(inImage.Size);
+            CvInvoke.MedianBlur(inImage, medianBlurImageIn, currentState.VideoParameters.MedianBlurSize);
+            //DebugImages[(int)SelectedImage.MedianBlurIn] = medianBlurImageIn.Mat;
+
+
+            double rectSize = (size - 4 * currentState.VideoParameters.SquareDistance) / 4;
+
+            for (int i = 0; i < 3; i++)
+            {
+                var points = new PointF[] { currentState.VideoParameters.Points[2 * i], currentState.VideoParameters.Points[2 * i + 1], currentState.VideoParameters.Points[(2 * i + 2) % 6], currentState.VideoParameters.Center };
+
+                var destPoint = new PointF[] { new Point(size - 1, size - 1), new Point(0, size - 1), new Point(0, 0), new Point(size - 1, 0) };
+                var transformMat = CvInvoke.GetPerspectiveTransform(points, destPoint);
+
+                var dest = new Image<Bgr, byte>(new Size(size, size));
+
+                CvInvoke.WarpPerspective(medianBlurImageIn, dest, transformMat, new Size(size, size));
+
+                for (int y = 0; y < 4; y++)
+                {
+                    double yTop = (0.5 + y) * currentState.VideoParameters.SquareDistance + y * rectSize;
+
+                    for (int x = 0; x < 4; x++)
+                    {
+                        double xLeft = (0.25 + x) * currentState.VideoParameters.SquareDistance + x * rectSize;
+                        var rect = new Rectangle(new Point((int)xLeft, (int)yTop), new Size((int)rectSize, (int)rectSize));
+
+                        if (_currentSommet >= 0)
+                        {
+                            MCvScalar mean = new MCvScalar();
+                            MCvScalar std = new MCvScalar();
+
+                            CvInvoke.MeanStdDev(dest.GetSubRect(rect), ref mean, ref std);
+
+                            _lastResults[_currentSommet, i, x, y] = mean;
+                            btnSommet2.Enabled = true;
+
+                            if (_currentSommet == 1)
+                            {
+                                btnInit.Enabled = true;
+                            }
+
+                        }
+                        dest.Draw(rect, new Bgr(Color.Blue));
+
+
+                    }
+                }
+
+                _faceViewers[i].Image = dest;
+
+            }
+
+
+            Image<Bgr, byte> displayedImage = null;
+
+            displayedImage = (grid.Visible ? DoCalibration(medianBlurImageIn, currentState) : inImage).ToImage<Bgr, byte>();
+
+            // afficher l'hexagone
+            displayedImage.DrawPolyline(currentState.VideoParameters.Points, true, new Bgr(Color.Red), 3);
+
+
+            // afficher les n°
+            for (int i = 0; i < currentState.VideoParameters.Points.Length; i++)
+            {
+                displayedImage.Draw(i.ToString(), currentState.VideoParameters.Points[i], FontFace.HersheySimplex, 1, new Bgr(Color.Orange));
+            }
+
+            // Croix centrale
+            displayedImage.Draw(new Cross2DF(currentState.VideoParameters.Center, 10, 10), new Bgr(Color.Red), 3);
+
+
+
+
+
+            if (_currentSommet > -1)
+            {
+                _currentSommet = -1;
+
+                MainForm.Instance.Viewer.setColors(GetColorList());
+            }
+            _processViewer.Image = displayedImage;
+        }
+
+        private List<Color> GetColorList()
+        {
+            var colors = new List<Color>();
+
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    var color = _lastResults[1, 1, 3 - y, x];
+                    colors.Add(Color.FromArgb((int)color.V2, (int)color.V1, (int)color.V0));
+                }
+
+            }
+
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    var color = _lastResults[1, 2, 3 - y, x];
+                    colors.Add(Color.FromArgb((int)color.V2, (int)color.V1, (int)color.V0));
+                }
+
+            }
+
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    var color = _lastResults[0, 1, y, 3 - x];
+                    colors.Add(Color.FromArgb((int)color.V2, (int)color.V1, (int)color.V0));
+                }
+
+            }
+
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    var color = _lastResults[0, 2, 3 - x, 3 - y];
+                    colors.Add(Color.FromArgb((int)color.V2, (int)color.V1, (int)color.V0));
+                }
+
+            }
+
+
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    var color = _lastResults[1, 0, x, y];
+                    colors.Add(Color.FromArgb((int)color.V2, (int)color.V1, (int)color.V0));
+                }
+
+            }
+
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    var color = _lastResults[0, 0, x, y];
+                    colors.Add(Color.FromArgb((int)color.V2, (int)color.V1, (int)color.V0));
+                }
+
+            }
+            return colors;
+        }
+
+
+        private int _lastScannedSommet = -1;
+        private void btnSommet1_Click(object sender, EventArgs e)
+        {
+            _currentSommet = 0;
+            MainForm.Instance.Viewer.setCameraPosition(Math.PI / 4, -2);
+            if (_lastScannedSommet == 1)
+            {
+                MainForm.Instance.Viewer.Move(Modele.Axe.Z, 1, 4, 1);
+                MainForm.Instance.Viewer.Move(Modele.Axe.Y, 1, 4, -1);
+                MainForm.Instance.Viewer.Move(Modele.Axe.X, 1, 4, -1);
+            }
+            _lastScannedSommet = 0;
+        }
+
+        private void btnSommet2_Click(object sender, EventArgs e)
+        {
+            _currentSommet = 1;
+            if (_lastScannedSommet != 1)
+            {
+                MainForm.Instance.Viewer.Move(Modele.Axe.X, 1, 4, 1);
+                MainForm.Instance.Viewer.Move(Modele.Axe.Y, 1, 4, 1);
+                MainForm.Instance.Viewer.Move(Modele.Axe.Z, 1, 4, -1);
+            }
+
+            _lastScannedSommet = 1;
+        }
+
+        private void btnParam_Click(object sender, EventArgs e)
+        {
+            grid.Visible = !grid.Visible;
+
+        }
+
+        private void grid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             using (var state = GlobalState.GetState())
             {
-                state.Scanner.Reset();
+                state.SaveConfiguration();
             }
-
-            MainForm.Instance.Viewer.RefreshCube(null);
-
         }
 
-        public void LeaveFrom()
+        private Mat DoCalibration(Image<Bgr, byte> medianBlurImageIn, GlobalState state)
         {
-            lock (_lockVideoAccess)
+
+            DebugImages[(int)SelectedImage.InImageB] = medianBlurImageIn[0].Mat;
+            DebugImages[(int)SelectedImage.InImageG] = medianBlurImageIn[1].Mat;
+            DebugImages[(int)SelectedImage.InImageR] = medianBlurImageIn[2].Mat;
+
+            var InImageSum = medianBlurImageIn[0] + medianBlurImageIn[1] + medianBlurImageIn[2];
+            DebugImages[(int)SelectedImage.InImageSum] = InImageSum.Mat;
+
+            Mat threshold = new Mat();
+            CvInvoke.Threshold(InImageSum, threshold, state.VideoParameters.Threshold, 255, ThresholdType.Binary);
+            DebugImages[(int)SelectedImage.threshold] = threshold;
+
+            Mat CannyImage = new Mat();
+            CvInvoke.Canny(threshold, CannyImage, state.VideoParameters.CannyThreshold1, state.VideoParameters.CannyThreshold2, 3, true);
+            DebugImages[(int)SelectedImage.Canny] = CannyImage;
+
+
+            var contoursImage = medianBlurImageIn.Clone();
+            DebugImages[(int)SelectedImage.approxContour] = contoursImage.Mat;
+
+            using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
             {
-                if (_capture != null)
+                CvInvoke.FindContours(CannyImage, contours, null, RetrType.External, ChainApproxMethod.ChainApproxNone);
+
+                VectorOfPoint maxContour = null;
+                double arcSize = -1;
+
+                for (int i = 0; i < contours.Size; i++)
                 {
-                    _capture.Stop();
-                    _capture.Dispose();
-                    _capture = null;
-                }
-            }
-
-            using(var state = GlobalState.GetState())
-            {
-                MainForm.Instance.Viewer.RefreshCube(state.InitialCube);
-            }
-        }
-
-
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            ResetAll();
-        }
-
-        private List<Pastille>[,,] _scannedColors = new List<Pastille>[6,4,4];
-
-        private void Application_Idle(object sender, EventArgs e)
-        {
-
-            Image<Bgr, byte> inImage = null;
-            lock (_lockVideoAccess)
-            {
-                if (_capture == null) return;
-
-                Pastille[,] pastilleMatrix = null;
-                double angle=0;
-
-                //run this until application closed (close button click on image viewer)
-                var frame = _capture.QueryFrame();
-
-                if (frame == null) return;
-
-                inImage = frame.ToImage<Bgr, byte>(); //draw the image obtained from camera
-
-               // var contourImage = inImage.Clone();
-
-                   Mat outImage = new Mat();
-
-                CvInvoke.MedianBlur(inImage, outImage, 5);
-
-                ////var processsImageChannels = new Image<Bgr, byte>(inImage.Size);
-                ////CvInvoke.CvtColor(frame, processsImageChannels, ColorConversion.Rgb2Hsv);
-
-
-
-                // var processsImage = new Mat();
-                // CvInvoke.ExtractChannel(inImage, processsImage, 1);
-
-                //processViewer.Image = processsImageChannels;
-
-                Mat canny = new Mat();
-
-                CvInvoke.Canny(outImage, canny, 58, 130, 3, true);
-
-                //cannyViewer.Image = canny;
-
-                //CvInvoke.DrawContours(outImage, contours,-1, new MCvScalar(0,0,255));
-
-                using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
-                {
-
-                    CvInvoke.FindContours(canny, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
-
-                    var lstParallelogram = new List<Quadrilateral>();
-
-                    for (int i = 0; i < contours.Size; i++)
+                    var arc = CvInvoke.ArcLength(contours[i], true);
+                    if (arc > arcSize)
                     {
-
-
-                        using (VectorOfPoint contour = contours[i])
-                        using (VectorOfPoint approxContour = new VectorOfPoint())
-                        {
-                            var arc = CvInvoke.ArcLength(contour, true);
-
-                            // éliminer les objets les plus petits
-                            if (arc / 4 < inImage.Width / 30) continue;
-
-                            CvInvoke.ApproxPolyDP(contour, approxContour, arc * 0.02, true);
-
-                            if (approxContour.Size == 4)
-                            {
-
-                                var pts = approxContour.ToArray();
-
-                              //  contourImage.DrawPolyline(pts, true, new Bgr(Color.Green));
-
-                                var quadri = new Quadrilateral(pts, 0.1, 0.1);
-
-                                if (quadri.IsParallelogram)
-                                {
-                                    lstParallelogram.Add(quadri);
-                                }
-
-                            }
-
-                        }
+                        arcSize = arc;
+                        maxContour = contours[i];
                     }
 
-                    //contourViewer.Image = contourImage;
+                }
+                if (maxContour != null)
+                {
 
-                    // suppression des doublons
-                    var comparer = new QuadrilateralCenterComparer(0.3);
-                    lstParallelogram = lstParallelogram.Distinct(comparer).ToList();
-
-                    var lstSquares = lstParallelogram.Where((x) => x.IsSquare).ToList();
-
-                    // nombre minimal de cube
-                    if (lstSquares.Count > 5)
+                    using (VectorOfPoint approxContour = new VectorOfPoint())
                     {
-                        var minX = lstSquares.Min((x) => x.Center.X);
-                        var maxX = lstSquares.Max((x) => x.Center.X);
-                        var minY = lstSquares.Min((x) => x.Center.Y);
-                        var maxY = lstSquares.Max((x) => x.Center.Y);
 
-                        lstSquares.Min((x) => x.Center.X);
+                        CvInvoke.ApproxPolyDP(maxContour, approxContour, state.VideoParameters.ContourEpsilon, true);
+                        var convexContour = CvInvoke.ConvexHull(approxContour.ToArray().Select((x) => new PointF(x.X, x.Y)).ToArray());
+                        var pointConvexContour = convexContour.Select((x) => new Point((int)x.X, (int)x.Y)).ToArray();
 
-                        // largeur moyenne d'une pastille
-                        var averageLength = lstSquares.Average((x) => x.AverageLength);
+                        var circle = CvInvoke.MinEnclosingCircle(convexContour);
 
-                        // distance entre les centres des pastilles. Première approximation
-                        var centerDistance = averageLength * 1.4;
-
-                        var bottom = new Vector2(lstSquares.Average((x) => x.Bottom.X), lstSquares.Average((x) => x.Bottom.Y));
-
-                        bottom.Normalize();
-
-                        var right = new Vector2(bottom.Y, -bottom.X);
-
-                        var pastilles = new List<Pastille>();
-
-                        var pastilleOrigine = new Pastille();
-                        pastilleOrigine.m = 0;
-                        pastilleOrigine.n = 0;
-                        pastilleOrigine.Quadrilateral = lstSquares[0];
-                        pastilleOrigine.Center = lstSquares[0].Center;
-                        pastilles.Add(pastilleOrigine);
-
-                        var origine = lstSquares[0].Center;
-
-                        for (int i = 1; i < lstSquares.Count; i++)
+                        if (convexContour.Length == 6 && validateAsked)
                         {
-                            var u = lstSquares[i].Center - origine;
+                            validateAsked = false;
 
-                            var pastille = new Pastille();
-                            pastille.Quadrilateral = lstSquares[i];
-
-                            pastille.m = (int)Math.Round(Vector2.Dot(u, bottom) / centerDistance);
-                            pastille.n = (int)Math.Round(Vector2.Dot(u, right) / centerDistance);
-
-                            pastille.Center = lstSquares[i].Center;
-
-                            pastilles.Add(pastille);
-                        }
-
-                        var xMax = pastilles.Max((x) => x.n);
-                        var xMin = pastilles.Min((x) => x.n);
-                        var yMax = pastilles.Max((x) => x.m);
-                        var yMin = pastilles.Min((x) => x.m);
-
-                        if (xMax - xMin != 3 || yMax - yMin != 3) return; // ce n'est pas un cube 4x4
-
-                        // x et y entre 0 et 3
-                        pastilles.ForEach((x) => { x.m -= yMin; x.n -= xMin; });
-
-                        // recalcul de centerDistance
-                        centerDistance = 0;
-                        for (int i = 0; i < pastilles.Count - 1; i++)
-                        {
-                            var dm = pastilles[i + 1].m - pastilles[i].m;
-                            var dn = pastilles[i + 1].n - pastilles[i].n;
-                            centerDistance += (pastilles[i].Center - pastilles[i + 1].Center).LengthFast / Math.Sqrt(dm * dm + dn * dn);
-                        }
-                        centerDistance /= pastilles.Count - 1;
-
-                       pastilleMatrix = new Pastille[4, 4];
-
-                        for (int m = 0; m < 4; m++)
-                        {
-                            for (int n = 0; n < 4; n++)
+                            if (MessageBox.Show("Un hexagonne a été trouvé, mettre à jour ?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                             {
-                                var pastille = pastilles.FirstOrDefault((x) => x.m == m && x.n == n);
-
-                                if (pastille == null)
+                                using (var globState = GlobalState.GetState())
                                 {
-                                    pastille = new Pastille();
-                                    pastille.m = m;
-                                    pastille.n = n;
+                                    globState.VideoParameters.Center = new Point((int)circle.Center.X, (int)circle.Center.Y);
 
-                                    // calcul de la position des pastilles non détéctées
-                                    foreach (var p in pastilles)
+                                    var maxY = convexContour.Max((x) => x.Y);
+
+                                    var indexSommetHaut = convexContour.ToList().FindIndex((x) => x.Y >= maxY - 0.1);
+
+                                    for (int i = indexSommetHaut; i < convexContour.Length; i++)
                                     {
-                                        pastille.Center += p.Center + (float)centerDistance * ((m - p.m) * bottom + (n - p.n) * right);
+                                        globState.VideoParameters.Points[i] = pointConvexContour[i];
                                     }
-                                    pastille.Center /= pastilles.Count;
-                                }
 
-                                pastilleMatrix[m, n] = pastille;
-
-                                var ptRect = pastille.Center - new Vector2(averageLength / 4);
-
-                                if (ptRect.X < 0) ptRect.X = 0;
-                                else if (ptRect.X + averageLength / 2 >= inImage.Width) ptRect.X = inImage.Width - 1 - (int)averageLength / 2;
-
-                                if (ptRect.Y < 0) ptRect.Y = 0;
-                                else if (ptRect.Y + averageLength / 2 >= inImage.Height) ptRect.Y = inImage.Height - 1 - (int)averageLength / 2;
-
-                                var rectangle = new Rectangle((int)ptRect.X, (int)ptRect.Y, (int)averageLength / 2, (int)averageLength / 2);
-                             //   var rectMat = processsImageChannels.GetSubRect(rectangle);
-
-                              //  var color = CvInvoke.Mean(rectMat);
-
-                             //   pastille.MeanColorHSV.MCvScalar = color;
-
-                              var  rectMat = inImage.GetSubRect(rectangle);
-                                pastille.MeanColorBGR.MCvScalar = CvInvoke.Mean(rectMat);
-
-                                //var minDist = float.MaxValue;
-                                //foreach (var elt in Colors)
-                                //{
-                                //    var dist = (elt.Value - new Vector2((float)color.V0, (float)color.V1)).Length;
-
-                                //    if (dist < minDist)
-                                //    {
-                                //        minDist = dist;
-                                //        pastille.Color = elt.Key;
-                                //    }
-                                //}
-
-                            }
-                        }
+                                    for (int i = 0; i < indexSommetHaut; i++)
+                                    {
+                                        globState.VideoParameters.Points[i] = pointConvexContour[i];
+                                    }
 
 
-                        foreach (var pastille in pastilleMatrix)
-                        {
-                            if (pastille.Quadrilateral != null)
-                            {
-                                inImage.DrawPolyline(pastille.Quadrilateral.Points, true, new Bgr(Color.Blue), 3);
-                                inImage.Draw(new LineSegment2D(new Point((int)(pastille.Quadrilateral.Center.X), (int)(pastille.Quadrilateral.Center.Y)), new Point((int)(pastille.Quadrilateral.Center.X + right.X * 20), (int)(pastille.Quadrilateral.Center.Y + right.Y * 20))), new Bgr(Color.SeaGreen), 3);
-                                inImage.Draw(new LineSegment2D(new Point((int)(pastille.Quadrilateral.Center.X), (int)(pastille.Quadrilateral.Center.Y)), new Point((int)(pastille.Quadrilateral.Center.X + bottom.X * 20), (int)(pastille.Quadrilateral.Center.Y + bottom.Y * 20))), new Bgr(Color.Red), 3);
-                                inImage.Draw(pastille.m + ";" + pastille.n, new Point((int)pastille.Quadrilateral.Center.X - 10, (int)pastille.Quadrilateral.Center.Y + 10), FontFace.HersheyComplex, 0.5, new Bgr(Color.Aquamarine), 1);
-                            }
-                            else
-                            {
-                                var circle = new CircleF(new PointF(pastille.Center.X, pastille.Center.Y), averageLength / 4);
-                                inImage.Draw(circle, new Bgr(Color.Pink), (int)averageLength / 4);
-                                //inImage.Draw(circle, new Bgr(Color.Pink), 3);
-                            }
+                                    grid.Refresh();
 
+                                    globState.SaveConfiguration();
+                                    this.btnValidateCalib.BackgroundImage = global::fgSolver.Properties.Resources.OK;
 
-                            //var l = 20;
-                            //var rect = new Rectangle(pastille.m * l + l, pastille.n * l + l, l / 2, l / 2);
-                            //inImage.Draw(rect, new Bgr(pastille.Color), l / 2, LineType.AntiAlias);
-
-                        }
-                        inImage.Draw(new CircleF(new PointF(origine.X, origine.Y), 5), new Bgr(Color.Purple), 10);
-
-                        angle = Math.Atan2(bottom.X, bottom.Y);
-                    }
-
-                }
-
-                var allFacesScanned = false;
-
-
-
-
-                // traitement des infos de l'image, mise à jour de l'état
-                using (var state = GlobalState.GetState())
-                {
-
-                    if (state.Scanner.Starting)
-                    {
-                        for (int f = 0; f < 6; f++)
-                        {
-                            for (int i = 0; i < 4; i++)
-                            {
-                                for (int j = 0; j < 4; j++)
-                                {
-                                    _scannedColors[f, i, j].Clear();
-                                    //_scannedCube.colors[f * 16 + i * 4 + j] = Color.Transparent;
                                 }
                             }
                         }
-                    }
 
-                    // si on est en scan mais qu'aucun cube n'est détécté
-                    if (!state.Scanner.WaitingForFace && pastilleMatrix == null)
-                    {
-                        // lancer un timer
-                        if (!_noCubeSW.IsRunning)
-                        {
-                            _noCubeSW.Restart();
-                        }
+                        contoursImage.DrawPolyline(pointConvexContour, true, new Bgr(Color.Green), 3);
 
-                        // si le temps imparti est atteint, passer à la face suivant
-                        else if (_noCubeSW.ElapsedMilliseconds > 1000)
-                        {
-                            _noCubeSW.Stop();
+                        contoursImage.Draw(circle, new Bgr(Color.DarkGreen), 3);
 
-                            state.Scanner.WaitingForFace = true;
-                            MainForm.Instance.Viewer.SetCameraInclination(0);
+                        contoursImage.Draw(new Cross2DF(circle.Center, 10, 10), new Bgr(Color.DarkGreen), 3);
 
-
-                            switch (state.Scanner.CurrentScannedFace)
-                            {
-                                case Faces.L:
-                                    state.Scanner.CurrentScannedFace = Faces.B;
-                                    MainForm.Instance.Viewer.RotateCube(Modele.Axe.Z);
-                                    break;
-                                case Faces.B:
-                                    state.Scanner.CurrentScannedFace = Faces.R;
-                                    MainForm.Instance.Viewer.RotateCube(Modele.Axe.Z);
-                                    break;
-                                case Faces.R:
-                                    state.Scanner.CurrentScannedFace = Faces.F;
-                                    MainForm.Instance.Viewer.RotateCube(Modele.Axe.Z);
-                                    break;
-                                case Faces.F:
-                                    state.Scanner.CurrentScannedFace = Faces.D;
-                                    MainForm.Instance.Viewer.RotateCube(Modele.Axe.Y);
-                                    break;
-                                case Faces.D:
-                                    state.Scanner.CurrentScannedFace = Faces.U;
-                                    MainForm.Instance.Viewer.RotateCube(Modele.Axe.Y, -2);
-                                    break;
-                                case Faces.U:
-                                    allFacesScanned = true;
-                                    state.Scanner.CurrentScannedFace = Faces.UNKNOWN;
-                                    MainForm.Instance.Viewer.RotateCube(Modele.Axe.Y);
-                                    System.Threading.Thread.Sleep(1000);
-                                    break;
-                                default:
-                                    Logger.Log("Face inconnue lors du scan", TraceEventType.Error);
-                                    break;
-                            }
-
-                        }
-                    }
-                    else if (pastilleMatrix != null)
-                    {
-                        _noCubeSW.Stop();
-
-                        if (state.Scanner.CurrentScannedFace == Faces.UNKNOWN)
-                        {
-                            state.Scanner.Reset();
-                        }
-
-                        for (int i = 0; i < 4; i++)
-                        {
-                            for (int j = 0; j < 4; j++)
-                            {
-                                _scannedColors[(int)state.Scanner.CurrentScannedFace, i, j].Add(pastilleMatrix[i, j]);
-                            }
-                        }
-
-                        // raz du cube
-                        if (state.Scanner.Starting)
-                        {
-                            MainForm.Instance.Viewer.RefreshCube(null);
-                            MainForm.Instance.Viewer.RotateCube(Modele.Axe.Z);
-                        }
-
-                        SumAngle += angle;
-                        nbAngleSamples++;
-
-                        if (_refreshCubeSW.ElapsedMilliseconds > 300 && nbAngleSamples > 0)
-                        {
-                            MainForm.Instance.Viewer.setColorsAndInclination(_scannedColors.OfType<List<Pastille>>().Select((lst) => lst.Count == 0 ? Color.FromArgb(0x22, 0x22, 0x22) : Color.FromArgb((int)lst.Average((x) => x.MeanColorBGR.Red), (int)lst.Average((x) => x.MeanColorBGR.Green), (int)lst.Average((x) => x.MeanColorBGR.Blue))), SumAngle / nbAngleSamples);
-
-                            SumAngle = 0;
-                            nbAngleSamples = 0;
-                            _refreshCubeSW.Restart();
-                        }
-
-                        state.Scanner.WaitingForFace = false;
-                    }
-
-                    // dessiner un carré autour de l'image si un scan est en cours
-                    if (!state.Scanner.WaitingForFace)
-                    {
-                        inImage.Draw(new Rectangle(0, 0, inImage.Width, inImage.Height), new Bgr(Color.Red), 10);
-                    }
-
-                    if (allFacesScanned)
-                    {
-                     state.InitialCube=   ColorClassification.GetCube(_scannedColors.OfType<List<Pastille>>().Select((lst) => Color.FromArgb((int)lst.Average((x) => x.MeanColorBGR.Red), (int)lst.Average((x) => x.MeanColorBGR.Green), (int)lst.Average((x) => x.MeanColorBGR.Blue))).ToList(), state.ColorsAssociation);
                     }
                 }
 
-                if (allFacesScanned)
-                {
-                    FormManager.Navigate<ColorDefinitionControl>();
-                }
-           }
-
-            _viewer.Image = inImage;
+                return DebugImages[(int)state.VideoParameters.DebugImage];
+            }
         }
 
-        // moyenne de l'angle du cube
-        private double SumAngle = 0;
-        private int nbAngleSamples = 0;
-
-        // temps sans cube présent à la caméra
-        private Stopwatch _noCubeSW = new Stopwatch();
-
-        // timer de refresh du viewer 3d
-        private Stopwatch _refreshCubeSW = new Stopwatch();
-
-
-        private void btnDebug_Click(object sender, EventArgs e)
+        private void grid_VisibleChanged(object sender, EventArgs e)
         {
-            (new VideoScannerDebugForm(_scannedColors)).Show();
+            btnValidateCalib.Visible = grid.Visible;
+        }
+
+        private bool validateAsked = false;
+
+        private void btnValidateCalib_Click(object sender, EventArgs e)
+        {
+           if( MessageBox.Show("Voulez-vous lancer une détection de l'héxagone ?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                validateAsked = true;
+                this.btnValidateCalib.BackgroundImage = global::fgSolver.Properties.Resources.AnimatedCube;
+
+            }
+        }
+
+        private void btnInit_Click(object sender, EventArgs e)
+        {
+           var colors =  GetColorList();
+
+            using (var state = GlobalState.GetState())
+            {
+                state.InitialCube = ColorClassification.GetCube(colors);
+            }
         }
     }
 }

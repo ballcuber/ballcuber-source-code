@@ -172,19 +172,23 @@ namespace fgSolver
         }
 
 
-        public HardwareConfig HardwareConfig(int index)
+        public HardwareConfig HardwareConfig(HardwareConfigBoard index)
         {
-            return index < 2 ? HardwareConfig1 : HardwareConfig2;
+            return index == HardwareConfigBoard.Board1 ? HardwareConfig1 : HardwareConfig2;
         }
 
         public HardwareConfigGlobal HardwareConfigGlobal { get; set; } = new HardwareConfigGlobal();
-        public HardwareConfig HardwareConfig1 { get; set; } = new HardwareConfig(1);
-        public HardwareConfig HardwareConfig2 { get; set; } = new HardwareConfig(2);
+        public HardwareConfig HardwareConfig1 { get; set; } = new HardwareConfig(HardwareConfigBoard.Board1);
+        public HardwareConfig HardwareConfig2 { get; set; } = new HardwareConfig(HardwareConfigBoard.Board2);
         public ServoConfig ServoConfig { get; set; } = new ServoConfig();
 
-
+        public VideoParameters VideoParameters { get; set; } = new VideoParameters();
 
         private Solution _solution;
+
+
+        public MotorList Motors { get; set; } = new MotorList();
+
 
         [XmlIgnore()]
         public Solution Solution
@@ -233,8 +237,58 @@ namespace fgSolver
                 this.ColorsAssociation = p.ColorsAssociation;
                 this.HardwareConfigGlobal = p.HardwareConfigGlobal;
                 this.ServoConfig = p.ServoConfig;
+                this.VideoParameters = p.VideoParameters;
+                if (p.Motors?.Motors == null || p.Motors.Motors.Count == 0 )
+                {
+                    this.Motors.Reset();
+                }
+                else { 
+                    this.Motors = p.Motors;
+                }
             }
         }
+    }
+
+    public class VideoParameters : ApplicationState
+    {
+        public enum SelectedImage
+        {
+            InImage,
+            //MedianBlurIn,
+            InImageB,
+            InImageG,
+            InImageR,
+            InImageSum,
+            threshold,
+            Canny,
+            approxContour,
+
+            [Browsable(false)]
+            Count,
+            [Browsable(false)]
+            Last = Count - 1,
+        }
+
+
+            public int CaptureID { get; set; } = 0;
+
+            public Point[] Points { get; set; } = new Point[6];
+
+            public Point Center { get; set; }
+
+            public int PerpectiveSize { get; set; } = 100;
+
+            public int SquareDistance { get; set; } = 5;
+
+            public SelectedImage DebugImage { get; set; } = SelectedImage.Last;
+
+            public int CannyThreshold1 { get; set; } = 20;
+            public int CannyThreshold2 { get; set; } = 20;
+
+            public int MedianBlurSize { get; set; } = 11;
+            public double ContourEpsilon { get; set; } = 50;
+            public double Threshold { get; set; } = 120;
+ 
     }
 
     public class HardwareConfigGlobal : ApplicationState
@@ -285,20 +339,17 @@ namespace fgSolver
 
     public class Motor : ApplicationState
     {
-        [Category("Identification")]
+        [ReadOnly(true)]
         public Axe Axe { get; set; }
 
-        [Category("Identification")]
+        [ReadOnly(true)]
         public Couronne Courronne { get; set; }
 
-        [Category("Identification")]
         public RampsSteppers Stepper { get; set; }
 
 
-        [Category("Paramètre")]
         public bool Inverted { get; set; } // sens inverse
 
-        [Category("Paramètre")]
         // index dans le tableau interne au code arduino
         public byte Index
         {
@@ -308,25 +359,40 @@ namespace fgSolver
             }
         }
 
+        // mask ne représentant que ce moteur
+        public int Mask
+        {
+            get
+            {
+                return 1<< Index;
+            }
+        }
+
+        public HardwareConfigBoard Board { get; set; }
+
         public override string ToString()
         {
             return Axe + " " + Courronne + " " + Stepper;
         }
     }
 
+    public enum HardwareConfigBoard
+    {
+        Board1,
+        Board2
+    }
+
     public class HardwareConfig : ApplicationState
     {
         public HardwareConfig() { }
 
-       public HardwareConfig(int index) { this.Index = index; }
+       public HardwareConfig(HardwareConfigBoard index) { this.Index = index; }
 
-        public int Index { get; set; }
+        public HardwareConfigBoard Index { get; set; }
 
         public string COMPort { get; set; }
 
         public int BaudRate { get; set; }
-
-        public List<Motor> Motors { get; set; } = new List<Motor>();
 
         public bool Simulated { get; set; }
 
@@ -457,5 +523,32 @@ namespace fgSolver
                     return "aa";
             }
         }*/
+    }
+
+    public class MotorList : ApplicationState
+    {
+        public List<Motor> Motors { get; set; } = new List<Motor>();
+
+        public MotorList()
+        {
+
+        }
+
+        public void Reset()
+        {
+            Motors.Clear();
+            int i = 0;
+            for (Axe a = Axe.X; a < Axe.NUM; a++)
+            {
+                foreach (var c in Enum.GetValues(typeof(Couronne)).OfType<Couronne>().Except(new Couronne[] { Couronne.Min, Couronne.UNKNOWN }))
+                {
+                    var m = new Motor();
+                    m.Axe = a;
+                    m.Courronne = c;
+                    Motors.Add(m);
+                    i++;
+                }
+            }
+        }
     }
 }

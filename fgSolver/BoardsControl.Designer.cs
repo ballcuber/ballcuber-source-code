@@ -58,7 +58,7 @@
             // 
             this.boardControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.boardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.boardControl1.Index = 1;
+            this.boardControl1.Index = HardwareConfigBoard.Board1;
             this.boardControl1.Location = new System.Drawing.Point(0, 0);
             this.boardControl1.Name = "boardControl1";
             this.boardControl1.Size = new System.Drawing.Size(425, 520);
@@ -68,7 +68,7 @@
             // 
             this.boardControl2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.boardControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.boardControl2.Index = 2;
+            this.boardControl2.Index = HardwareConfigBoard.Board2;
             this.boardControl2.Location = new System.Drawing.Point(0, 0);
             this.boardControl2.Name = "boardControl2";
             this.boardControl2.Size = new System.Drawing.Size(398, 520);

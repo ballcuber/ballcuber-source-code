@@ -244,9 +244,9 @@ void setup() {
 
 void loop() {
 	Sharer.run();
-	//for (int i = 0; i < STEPPER_COUNT; i++) {
+	for (int i = 0; i < STEPPER_COUNT; i++) {
 	//	//Serial.println(i);
-	//	Steppers[i]->run();
+		Steppers[i]->run();
 
-	//}
+	}
 }

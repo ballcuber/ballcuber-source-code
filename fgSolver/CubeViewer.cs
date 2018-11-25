@@ -47,7 +47,7 @@ namespace fgSolver
 
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
-           if(formerState.InitialCube != currentState.InitialCube)
+            if (formerState.InitialCube != currentState.InitialCube)
             {
                 RefreshCube(currentState.InitialCube);
             }
@@ -72,7 +72,7 @@ namespace fgSolver
 
         public void RefreshCube()
         {
-            using(var state = GlobalState.GetState())
+            using (var state = GlobalState.GetState())
             {
                 RefreshCube(state.InitialCube);
             }
@@ -101,7 +101,7 @@ namespace fgSolver
             ExecuteJS(sb.ToString());
         }
 
-        public void setColorsAndInclination(IEnumerable<Color> colors, double inclination)
+        public void setColors(IEnumerable<Color> colors)
         {
             if (colors == null)
             {
@@ -115,16 +115,25 @@ namespace fgSolver
 
             sb.Append(string.Join(",", colors.Select((color) => string.Format("0x{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B))));
 
-            sb.Append("],");
+            sb.Append("])");
 
-            sb.Append(inclination.ToString().Replace(',', '.'));
-
-            sb.Append(')');
 
             ExecuteJS(sb.ToString());
         }
 
+        public void setCameraPosition(double theta, double height)
+        {
+            var sb = new StringBuilder();
 
+            sb.Append("setCameraPosition(");
+
+            sb.Append(theta.ToString().Replace(",","."));
+            sb.Append(",");
+            sb.Append(height.ToString().Replace(",", "."));
+
+            sb.Append(")");
+            ExecuteJS(sb.ToString());
+        }
 
         public void ExecuteMachineMove(MotorMove mv)
         {

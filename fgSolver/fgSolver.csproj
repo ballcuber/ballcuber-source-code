@@ -209,6 +209,12 @@
     <Compile Include="Modele\MoveParser.cs" />
     <Compile Include="Modele\Solution.cs" />
     <Compile Include="Modele\Solver.cs" />
+    <Compile Include="MotorView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MotorView.Designer.cs">
+      <DependentUpon>MotorView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BoardsControl.cs">
@@ -236,18 +242,11 @@
       <DependentUpon>SolverControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Video\ColorClassification.cs" />
-    <Compile Include="Video\Quadrilateral.cs" />
     <Compile Include="Video\VideoScannerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Video\VideoScannerControl.Designer.cs">
       <DependentUpon>VideoScannerControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Video\VideoScannerDebugForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Video\VideoScannerDebugForm.Designer.cs">
-      <DependentUpon>VideoScannerDebugForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Alarm\AlarmControl.resx">
       <DependentUpon>AlarmControl.cs</DependentUpon>
@@ -276,6 +275,9 @@
     <EmbeddedResource Include="ManualDriving.resx">
       <DependentUpon>ManualDriving.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MotorView.resx">
+      <DependentUpon>MotorView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -300,9 +302,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Video\VideoScannerControl.resx">
       <DependentUpon>VideoScannerControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Video\VideoScannerDebugForm.resx">
-      <DependentUpon>VideoScannerDebugForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="alg.cubing.net\lib\font-awesome\fonts\fontawesome-webfont.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -578,6 +577,11 @@
     <None Include="Resources\Stop.png" />
     <None Include="Resources\fix.png" />
     <None Include="Resources\fix1.png" />
+    <None Include="Resources\View1.PNG" />
+    <None Include="Resources\View2.PNG" />
+    <None Include="Resources\View3.PNG" />
+    <None Include="Resources\stepper.png" />
+    <None Include="Resources\FixedCornerColor.bmp" />
     <Content Include="twisty.js\alg\alg.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

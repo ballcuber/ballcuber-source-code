@@ -10,14 +10,14 @@ namespace fgSolver.Hardware
 {
     public sealed class Runner
     {
-        private static Board _board1 = new Board(1);
-        private static Board _board2 = new Board(2);
+        private static Board _board1 = new Board(HardwareConfigBoard.Board1);
+        private static Board _board2 = new Board(HardwareConfigBoard.Board2);
 
         public static TimeSpan BlockingMoveTimeout { get; set; } = new TimeSpan(0, 0, 2);
 
-        public static Board GetBoard(int index)
+        public static Board GetBoard(HardwareConfigBoard index)
         {
-            return index < 2 ? _board1 : _board2;
+            return index == HardwareConfigBoard.Board1 ? _board1 : _board2;
         }
 
         public static Board Board1
@@ -146,6 +146,34 @@ namespace fgSolver.Hardware
             {
                 ResolutionSessionControl.Instance.StopTImer();
             }
+        }
+
+        public static void SetSpeedMotor(Motor m, int value)
+        {
+            if (m == null) return;
+
+            GetBoard(m.Board).SetSpeed(m.Mask, value);
+        }
+
+        public static void BeginMoveStep(Motor m, int value)
+        {
+            if (m == null) return;
+
+            GetBoard(m.Board).BeginMoveStep(m.Mask, value);
+        }
+
+        public static void EnableMotor(Motor m)
+        {
+            if (m == null) return;
+
+            GetBoard(m.Board).EnableOutputs(m.Mask);
+        }
+
+        public static void DisableMotor(Motor m)
+        {
+            if (m == null) return;
+
+            GetBoard(m.Board).DisableOutputs(m.Mask);
         }
     }
 }

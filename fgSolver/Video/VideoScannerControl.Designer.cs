@@ -1,4 +1,4 @@
-﻿namespace fgSolver
+﻿namespace fgSolver.Video
 {
     partial class VideoScannerControl
     {
@@ -28,110 +28,165 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pnlVideo = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.lblStatus = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.barProgress = new System.Windows.Forms.ProgressBar();
-            this.btnDebug = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
+            this.pnlMain = new System.Windows.Forms.Panel();
+            this.pnl1 = new System.Windows.Forms.Panel();
+            this.pnl2 = new System.Windows.Forms.Panel();
+            this.pnl3 = new System.Windows.Forms.Panel();
+            this.btnSommet1 = new System.Windows.Forms.Button();
+            this.btnSommet2 = new System.Windows.Forms.Button();
+            this.grid = new System.Windows.Forms.PropertyGrid();
+            this.btnParam = new System.Windows.Forms.Button();
+            this.btnValidateCalib = new System.Windows.Forms.Button();
+            this.btnInit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // pnlVideo
+            // pnlMain
             // 
-            this.pnlVideo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlVideo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlVideo.Location = new System.Drawing.Point(0, 0);
-            this.pnlVideo.Name = "pnlVideo";
-            this.pnlVideo.Size = new System.Drawing.Size(801, 480);
-            this.pnlVideo.TabIndex = 0;
+            this.pnlMain.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.pnlMain.Name = "pnlMain";
+            this.pnlMain.Size = new System.Drawing.Size(640, 480);
+            this.pnlMain.TabIndex = 0;
             // 
-            // panel1
+            // pnl1
             // 
-            this.panel1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.panel1.Controls.Add(this.barProgress);
-            this.panel1.Controls.Add(this.btnStop);
-            this.panel1.Controls.Add(this.lblStatus);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(157, 486);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(520, 81);
-            this.panel1.TabIndex = 2;
+            this.pnl1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.pnl1.Location = new System.Drawing.Point(0, 491);
+            this.pnl1.Name = "pnl1";
+            this.pnl1.Size = new System.Drawing.Size(100, 100);
+            this.pnl1.TabIndex = 1;
             // 
-            // btnStop
+            // pnl2
             // 
-            this.btnStop.Font = new System.Drawing.Font("Webdings", 12F);
-            this.btnStop.Location = new System.Drawing.Point(3, 3);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(30, 30);
-            this.btnStop.TabIndex = 3;
-            this.btnStop.Text = "<";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            this.pnl2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.pnl2.Location = new System.Drawing.Point(106, 491);
+            this.pnl2.Name = "pnl2";
+            this.pnl2.Size = new System.Drawing.Size(100, 100);
+            this.pnl2.TabIndex = 1;
             // 
-            // lblStatus
+            // pnl3
             // 
-            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatus.Location = new System.Drawing.Point(39, 51);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(383, 23);
-            this.lblStatus.TabIndex = 2;
-            this.lblStatus.Text = "Montrer un cube à la caméra pour démarrer...";
-            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnl3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.pnl3.Location = new System.Drawing.Point(212, 491);
+            this.pnl3.Name = "pnl3";
+            this.pnl3.Size = new System.Drawing.Size(100, 100);
+            this.pnl3.TabIndex = 1;
             // 
-            // label1
+            // btnSommet1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(57, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(380, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Gauche            Arrière             Droite            Face            Dessous  " +
-    "        Dessus";
+            this.btnSommet1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnSommet1.Image = global::fgSolver.Properties.Resources.Camera;
+            this.btnSommet1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSommet1.Location = new System.Drawing.Point(322, 491);
+            this.btnSommet1.Name = "btnSommet1";
+            this.btnSommet1.Size = new System.Drawing.Size(92, 46);
+            this.btnSommet1.TabIndex = 2;
+            this.btnSommet1.Text = "Sommet 1";
+            this.btnSommet1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSommet1.UseVisualStyleBackColor = true;
+            this.btnSommet1.Click += new System.EventHandler(this.btnSommet1_Click);
             // 
-            // barProgress
+            // btnSommet2
             // 
-            this.barProgress.Location = new System.Drawing.Point(39, 5);
-            this.barProgress.Maximum = 7;
-            this.barProgress.Name = "barProgress";
-            this.barProgress.Size = new System.Drawing.Size(430, 23);
-            this.barProgress.TabIndex = 4;
+            this.btnSommet2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnSommet2.Image = global::fgSolver.Properties.Resources.Camera;
+            this.btnSommet2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSommet2.Location = new System.Drawing.Point(322, 545);
+            this.btnSommet2.Name = "btnSommet2";
+            this.btnSommet2.Size = new System.Drawing.Size(92, 46);
+            this.btnSommet2.TabIndex = 2;
+            this.btnSommet2.Text = "Sommet 2";
+            this.btnSommet2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSommet2.UseVisualStyleBackColor = true;
+            this.btnSommet2.Click += new System.EventHandler(this.btnSommet2_Click);
             // 
-            // btnDebug
+            // grid
             // 
-            this.btnDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDebug.Font = new System.Drawing.Font("Webdings", 20F);
-            this.btnDebug.Location = new System.Drawing.Point(738, 646);
-            this.btnDebug.Name = "btnDebug";
-            this.btnDebug.Size = new System.Drawing.Size(60, 50);
-            this.btnDebug.TabIndex = 3;
-            this.btnDebug.Text = "­";
-            this.btnDebug.UseVisualStyleBackColor = true;
-            this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
+            this.grid.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.grid.HelpVisible = false;
+            this.grid.Location = new System.Drawing.Point(434, 415);
+            this.grid.Name = "grid";
+            this.grid.Size = new System.Drawing.Size(177, 176);
+            this.grid.TabIndex = 3;
+            this.grid.ToolbarVisible = false;
+            this.grid.Visible = false;
+            this.grid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.grid_PropertyValueChanged);
+            this.grid.VisibleChanged += new System.EventHandler(this.grid_VisibleChanged);
+            // 
+            // btnParam
+            // 
+            this.btnParam.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnParam.BackgroundImage = global::fgSolver.Properties.Resources.Parameters;
+            this.btnParam.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnParam.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnParam.Location = new System.Drawing.Point(616, 493);
+            this.btnParam.Name = "btnParam";
+            this.btnParam.Size = new System.Drawing.Size(24, 24);
+            this.btnParam.TabIndex = 2;
+            this.btnParam.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnParam.UseVisualStyleBackColor = true;
+            this.btnParam.Click += new System.EventHandler(this.btnParam_Click);
+            // 
+            // btnValidateCalib
+            // 
+            this.btnValidateCalib.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnValidateCalib.BackgroundImage = global::fgSolver.Properties.Resources.OK;
+            this.btnValidateCalib.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnValidateCalib.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnValidateCalib.Location = new System.Drawing.Point(616, 523);
+            this.btnValidateCalib.Name = "btnValidateCalib";
+            this.btnValidateCalib.Size = new System.Drawing.Size(24, 24);
+            this.btnValidateCalib.TabIndex = 2;
+            this.btnValidateCalib.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnValidateCalib.UseVisualStyleBackColor = true;
+            this.btnValidateCalib.Visible = false;
+            this.btnValidateCalib.Click += new System.EventHandler(this.btnValidateCalib_Click);
+            // 
+            // btnInit
+            // 
+            this.btnInit.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnInit.Image = global::fgSolver.Properties.Resources.FaceCube;
+            this.btnInit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnInit.Location = new System.Drawing.Point(419, 517);
+            this.btnInit.Name = "btnInit";
+            this.btnInit.Size = new System.Drawing.Size(122, 46);
+            this.btnInit.TabIndex = 2;
+            this.btnInit.Text = "Initialisation !";
+            this.btnInit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnInit.UseVisualStyleBackColor = true;
+            this.btnInit.Click += new System.EventHandler(this.btnInit_Click);
             // 
             // VideoScannerControl
             // 
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.btnDebug);
-            this.Controls.Add(this.pnlVideo);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.grid);
+            this.Controls.Add(this.btnInit);
+            this.Controls.Add(this.btnSommet2);
+            this.Controls.Add(this.btnValidateCalib);
+            this.Controls.Add(this.btnParam);
+            this.Controls.Add(this.btnSommet1);
+            this.Controls.Add(this.pnl3);
+            this.Controls.Add(this.pnl2);
+            this.Controls.Add(this.pnl1);
+            this.Controls.Add(this.pnlMain);
             this.Name = "VideoScannerControl";
-            this.Size = new System.Drawing.Size(801, 699);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.Size = new System.Drawing.Size(645, 603);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private CubeNets cubeNets;
-        private System.Windows.Forms.Panel pnlVideo;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Label lblStatus;
-        private System.Windows.Forms.ProgressBar barProgress;
-        private System.Windows.Forms.Button btnDebug;
+        private System.Windows.Forms.Panel pnlMain;
+        private System.Windows.Forms.Panel pnl1;
+        private System.Windows.Forms.Panel pnl2;
+        private System.Windows.Forms.Panel pnl3;
+        private System.Windows.Forms.Button btnSommet1;
+        private System.Windows.Forms.Button btnSommet2;
+        private System.Windows.Forms.PropertyGrid grid;
+        private System.Windows.Forms.Button btnParam;
+        private System.Windows.Forms.Button btnValidateCalib;
+        private System.Windows.Forms.Button btnInit;
     }
 }

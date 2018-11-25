@@ -40,8 +40,8 @@ namespace fgSolver.Hardware
             }
         }
 
-        private int _index;
-        public int Index
+        private HardwareConfigBoard _index;
+        public HardwareConfigBoard Index
         {
             get
             {
@@ -59,7 +59,7 @@ namespace fgSolver.Hardware
         }
 
 
-        public Board(int index)
+        public Board(HardwareConfigBoard index)
         {
             _index = index;
         }
@@ -112,8 +112,6 @@ namespace fgSolver.Hardware
             if (config.Simulated) throw new Exception("Carte simulée");
 
             if (!Connected) throw new Exception("Carte non connectée");
-
-            if (config.Motors == null || config.Motors.Count == 0) throw new Exception("Aucun moteur déclaré");
         }
 
 
@@ -123,15 +121,18 @@ namespace fgSolver.Hardware
 
             if (config.Simulated)
             {
-                System.Threading.Thread.Sleep(mv.QuarterNumber * GetHardwareConfig().SimulatedTime);
+                System.Threading.Thread.Sleep(mv.QuarterNumber * config.SimulatedTime);
                 return;
             }
 
             byte[] m = new byte[2] { 0xFF, 0xFF };
             int[] r = new int[2] { 0, 0 };
 
-
-            var motors = config.Motors.Where((x) => x.Axe == mv.Axe).ToArray();
+            Motor[] motors;
+            using (var state = GlobalState.GetState())
+            {
+                motors = state.Motors.Motors.Where((x) => x.Axe == mv.Axe && x.Board == this.Index).Select((x) => (Motor)x.Clone()).ToArray();
+            }
 
             if (motors.Count() == 0) return;
             else if (motors.Count() > 2) throw new Exception("Il ne peut pas y avoir plus de deux moteurs pas à pas pilotés en même temps pour des questions de performance");
@@ -163,6 +164,21 @@ namespace fgSolver.Hardware
         public SharerFunctionReturn<bool> DisableOutputs(int mask)
         {
             return _connection.Call<bool>("disableOutputs", mask);
+        }
+
+        public SharerFunctionReturn<bool> SetSpeed(int mask, int value)
+        {
+            return _connection.Call<bool>("setMaxSpeed", mask);
+        }
+
+        public void BeginMoveStep(int mask, int value)
+        {
+            Task.Factory.StartNew(() => Move(mask, value));
+        }
+
+        public SharerFunctionReturn<bool> Move(int mask, int value)
+        {
+            return _connection.Call<bool>("move", mask);
         }
 
         public SharerFunctionReturn<bool> EnableOutputs(int mask)

@@ -27,7 +27,7 @@ namespace fgSolver
             }
         }
 
-        public int Index { get; set; }
+        public HardwareConfigBoard Index { get; set; }
 
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {

@@ -33,6 +33,53 @@ namespace fgSolver
         {
             cubeNets.PeriodicUpdate(currentState.InitialCube);
             btnSolve.Enabled = !currentState.SolutionInCalculation;
+
+            if(currentState.InitialCube != formerState.InitialCube)
+            {
+                InitializeCornerCube(currentState.InitialCube);
+            }
+        }
+
+        private void InitializeCornerCube(ColorCube cube)
+        {
+            Color topColor = Color.Gray;
+            Color leftColor = Color.Gray;
+            Color rightColor = Color.Gray;
+
+            if ((object)cube != null)
+            {
+                 topColor = cube.colors[47];
+                 leftColor = cube.colors[83];
+                 rightColor = cube.colors[60];
+            }
+
+            var img = (Bitmap)Properties.Resources.FixedCornerColor.Clone();
+
+            for (int x = 0; x < img.Size.Width; x++)
+            {
+                for (int y = 0; y < img.Size.Height; y++)
+                {
+                    var pixelColor = img.GetPixel(x, y);
+
+                    if (pixelColor.R == 0 && pixelColor.G == 0 && pixelColor.B == 255)
+                    {
+                        img.SetPixel(x, y, rightColor);
+                    }
+                    if (pixelColor.R == 0 && pixelColor.G == 255 && pixelColor.B == 0)
+                    {
+                        img.SetPixel(x, y, topColor);
+                    }
+                    if (pixelColor.R == 255 && pixelColor.G == 0 && pixelColor.B == 0)
+                    { 
+                        img.SetPixel(x, y, leftColor);
+                    }
+
+
+                }
+            }
+
+            cornerPicture.Image = img;
+
         }
 
         public Image Image
@@ -97,7 +144,10 @@ namespace fgSolver
 
         public void NavigueTo()
         {
-
+            using (var state = GlobalState.GetState())
+            {
+                InitializeCornerCube(state.InitialCube);
+            }
         }
 
         private void btnSolve_Click(object sender, EventArgs e)

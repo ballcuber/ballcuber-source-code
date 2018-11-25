@@ -128,7 +128,7 @@ function reloadWithColors(colors){
 	reloadCube();
 }
 
-function setColors(colors, inclination){
+function setColorsAndInclination(colors, inclination){
 	for(let i=0;i< colors.length;i++){
 		twistyScene.debug.model.twisty["3d"].children[i].children["0"].material = new THREE.MeshBasicMaterial( { color: colors[i], overdraw: 0.5 });
 		twistyScene.debug.model.twisty["3d"].children[i].children["1"].material = new THREE.MeshBasicMaterial( { color: colors[i], overdraw: 0.5 });
@@ -137,6 +137,15 @@ function setColors(colors, inclination){
 	twistyScene.setCameraInclination(inclination);
 	twistyScene.setCameraPosition(0, 0);
 	twistyScene.redraw();
+}
+
+function setColors(colors, inclination) {
+    for (let i = 0; i < colors.length; i++) {
+        twistyScene.debug.model.twisty["3d"].children[i].children["0"].material = new THREE.MeshBasicMaterial({ color: colors[i], overdraw: 0.5 });
+        twistyScene.debug.model.twisty["3d"].children[i].children["1"].material = new THREE.MeshBasicMaterial({ color: colors[i], overdraw: 0.5 });
+    }
+    twistyScene.redraw();
+
 }
 
 function move(pBase, pStartLayer, pEndLayer, pAmount){
