@@ -56,7 +56,7 @@ namespace fgSolver
             {
                 string txt = string.Join("\r\n",currentState.Solution.MachineMoves.MotorMoves.Select(x => x.ToString()).ToArray());
 
-                txtMoves.Text = currentState.Solution.Date + " :\r\n" + txt;
+                txtMoves.Text = currentState.Solution.Date + " :\r\n" + currentState.Solution.MovesString + "\r\n\r\n" + txt;
             }
 
             btnSolve.Enabled = !currentState.SolutionInCalculation && currentState.Solution == null;
@@ -82,7 +82,7 @@ namespace fgSolver
         private void btnRun_Click(object sender, EventArgs e)
         {
             FormManager.Navigate<ResolutionSessionControl>();
-            Runner.AsyncRun();
+            Modele.ResolutionSession.Run();
         }
 
         public void LeaveFrom() { }

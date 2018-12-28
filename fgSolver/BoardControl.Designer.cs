@@ -35,13 +35,8 @@
             this.btnDisable = new System.Windows.Forms.Button();
             this.pnlFunctions = new System.Windows.Forms.FlowLayoutPanel();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.grpServos = new System.Windows.Forms.GroupBox();
-            this.btnOpenServo = new System.Windows.Forms.Button();
-            this.btnLockServo = new System.Windows.Forms.Button();
             this.grpMain = new System.Windows.Forms.GroupBox();
             this.ledConnected = new Bulb.LedBulb();
-            this.btnInit = new System.Windows.Forms.Button();
-            this.grpServos.SuspendLayout();
             this.grpMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -119,47 +114,13 @@
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // grpServos
-            // 
-            this.grpServos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpServos.Controls.Add(this.btnLockServo);
-            this.grpServos.Controls.Add(this.btnOpenServo);
-            this.grpServos.Location = new System.Drawing.Point(255, 19);
-            this.grpServos.Name = "grpServos";
-            this.grpServos.Size = new System.Drawing.Size(157, 57);
-            this.grpServos.TabIndex = 7;
-            this.grpServos.TabStop = false;
-            this.grpServos.Text = "Servos";
-            // 
-            // btnOpenServo
-            // 
-            this.btnOpenServo.Location = new System.Drawing.Point(6, 19);
-            this.btnOpenServo.Name = "btnOpenServo";
-            this.btnOpenServo.Size = new System.Drawing.Size(68, 23);
-            this.btnOpenServo.TabIndex = 3;
-            this.btnOpenServo.Text = "Ouvrir";
-            this.btnOpenServo.UseVisualStyleBackColor = true;
-            this.btnOpenServo.Click += new System.EventHandler(this.btnOpenServo_Click);
-            // 
-            // btnLockServo
-            // 
-            this.btnLockServo.Location = new System.Drawing.Point(80, 19);
-            this.btnLockServo.Name = "btnLockServo";
-            this.btnLockServo.Size = new System.Drawing.Size(68, 23);
-            this.btnLockServo.TabIndex = 3;
-            this.btnLockServo.Text = "Vérouiller";
-            this.btnLockServo.UseVisualStyleBackColor = true;
-            this.btnLockServo.Click += new System.EventHandler(this.btnLockServo_Click);
-            // 
             // grpMain
             // 
             this.grpMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpMain.Controls.Add(this.btnEnable);
-            this.grpMain.Controls.Add(this.btnInit);
             this.grpMain.Controls.Add(this.pnlFunctions);
-            this.grpMain.Controls.Add(this.grpServos);
             this.grpMain.Controls.Add(this.btnDisable);
             this.grpMain.Controls.Add(this.btnRefresh);
             this.grpMain.Location = new System.Drawing.Point(-1, 68);
@@ -177,16 +138,6 @@
             this.ledConnected.Size = new System.Drawing.Size(20, 20);
             this.ledConnected.TabIndex = 1;
             // 
-            // btnInit
-            // 
-            this.btnInit.Location = new System.Drawing.Point(126, 10);
-            this.btnInit.Name = "btnInit";
-            this.btnInit.Size = new System.Drawing.Size(84, 23);
-            this.btnInit.TabIndex = 3;
-            this.btnInit.Text = "Init. Steppers";
-            this.btnInit.UseVisualStyleBackColor = true;
-            this.btnInit.Click += new System.EventHandler(this.btnInit_Click);
-            // 
             // BoardControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -199,7 +150,6 @@
             this.Controls.Add(this.lblTitle);
             this.Name = "BoardControl";
             this.Size = new System.Drawing.Size(416, 496);
-            this.grpServos.ResumeLayout(false);
             this.grpMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -216,10 +166,6 @@
         private System.Windows.Forms.Button btnDisable;
         private System.Windows.Forms.FlowLayoutPanel pnlFunctions;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.GroupBox grpServos;
-        private System.Windows.Forms.Button btnLockServo;
-        private System.Windows.Forms.Button btnOpenServo;
         private System.Windows.Forms.GroupBox grpMain;
-        private System.Windows.Forms.Button btnInit;
     }
 }

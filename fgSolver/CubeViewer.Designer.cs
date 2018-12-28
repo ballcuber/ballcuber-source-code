@@ -40,7 +40,6 @@
             this.udCourronneMax = new System.Windows.Forms.NumericUpDown();
             this.udStartLayer = new System.Windows.Forms.NumericUpDown();
             this.txtMove = new System.Windows.Forms.TextBox();
-            this.btnSolve = new System.Windows.Forms.Button();
             this.btnTestMotorMoves = new System.Windows.Forms.Button();
             this.btnTestMoves = new System.Windows.Forms.Button();
             this.btnDebug = new System.Windows.Forms.Button();
@@ -67,7 +66,6 @@
             this.pnlDebug.Controls.Add(this.udCourronneMax);
             this.pnlDebug.Controls.Add(this.udStartLayer);
             this.pnlDebug.Controls.Add(this.txtMove);
-            this.pnlDebug.Controls.Add(this.btnSolve);
             this.pnlDebug.Controls.Add(this.btnTestMotorMoves);
             this.pnlDebug.Controls.Add(this.btnTestMoves);
             this.pnlDebug.Controls.Add(this.btnDebug);
@@ -251,16 +249,6 @@
             this.txtMove.Text = "u";
             this.toolTip.SetToolTip(this.txtMove, "base");
             // 
-            // btnSolve
-            // 
-            this.btnSolve.Location = new System.Drawing.Point(3, 33);
-            this.btnSolve.Name = "btnSolve";
-            this.btnSolve.Size = new System.Drawing.Size(75, 23);
-            this.btnSolve.TabIndex = 0;
-            this.btnSolve.Text = "Résoudre";
-            this.btnSolve.UseVisualStyleBackColor = true;
-            this.btnSolve.Click += new System.EventHandler(this.btnSolve_Click);
-            // 
             // btnTestMotorMoves
             // 
             this.btnTestMotorMoves.Location = new System.Drawing.Point(290, 32);
@@ -326,7 +314,6 @@
         private System.Windows.Forms.NumericUpDown udCourronneMidMax;
         private System.Windows.Forms.NumericUpDown udCourronneMax;
         private System.Windows.Forms.Button btnTestMotorMoves;
-        private System.Windows.Forms.Button btnSolve;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown udSpeed;
     }

@@ -51,8 +51,6 @@ namespace fgSolver
             {
                 RefreshCube(currentState.InitialCube);
             }
-
-            btnSolve.Enabled = currentState.Solution?.MachineMoves?.MotorMoves != null;
         }
 
         private void ExecuteJS(string js)
@@ -227,21 +225,6 @@ namespace fgSolver
             }
         }
 
-        private void btnSolve_Click(object sender, EventArgs e)
-        {
-            using(var state = GlobalState.GetState())
-            {
-                var moves = state.Solution?.MachineMoves?.MotorMoves;
-
-                if(moves != null)
-                {
-                    foreach(var mv in moves)
-                    {
-                        ExecuteMachineMove(mv);
-                    }
-                }
-            }
-        }
 
         public void SetSpeed(int speed)
         {

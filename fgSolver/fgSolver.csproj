@@ -207,6 +207,15 @@
     <Compile Include="Modele\Move.cs" />
     <Compile Include="Modele\MoveCalculator.cs" />
     <Compile Include="Modele\MoveParser.cs" />
+    <Compile Include="Modele\Session\BeginGroupeInstruction.cs" />
+    <Compile Include="Modele\Session\CommentInstruction.cs" />
+    <Compile Include="Modele\Session\InitializeIHMInstruction.cs" />
+    <Compile Include="Modele\Session\IHMCubeMoveInstruction.cs" />
+    <Compile Include="Modele\Session\Instruction.cs" />
+    <Compile Include="Modele\Session\MoveToKnownPositionInstruction.cs" />
+    <Compile Include="Modele\Session\ResolutionSession.cs" />
+    <Compile Include="Modele\Session\WaitInstruction.cs" />
+    <Compile Include="Modele\Session\WaitTargetReachedInstruction.cs" />
     <Compile Include="Modele\Solution.cs" />
     <Compile Include="Modele\Solver.cs" />
     <Compile Include="MotorView.cs">
@@ -214,6 +223,12 @@
     </Compile>
     <Compile Include="MotorView.Designer.cs">
       <DependentUpon>MotorView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MotorViewElement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MotorViewElement.Designer.cs">
+      <DependentUpon>MotorViewElement.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -234,6 +249,12 @@
     </Compile>
     <Compile Include="ResolutionSessionControl.Designer.cs">
       <DependentUpon>ResolutionSessionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ResolutionSessionSupervisionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ResolutionSessionSupervisionControl.Designer.cs">
+      <DependentUpon>ResolutionSessionSupervisionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SolverControl.cs">
       <SubType>UserControl</SubType>
@@ -278,6 +299,9 @@
     <EmbeddedResource Include="MotorView.resx">
       <DependentUpon>MotorView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MotorViewElement.resx">
+      <DependentUpon>MotorViewElement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -296,6 +320,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ResolutionSessionControl.resx">
       <DependentUpon>ResolutionSessionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResolutionSessionSupervisionControl.resx">
+      <DependentUpon>ResolutionSessionSupervisionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SolverControl.resx">
       <DependentUpon>SolverControl.cs</DependentUpon>
@@ -573,6 +600,8 @@
     <None Include="Resources\Warning.png" />
     <None Include="Resources\OK.png" />
     <None Include="Resources\Camera.png" />
+    <None Include="Resources\Breakpoint.png" />
+    <None Include="Resources\BreakpointStep.png" />
     <Content Include="Resources\FaceCube.ico" />
     <None Include="Resources\Stop.png" />
     <None Include="Resources\fix.png" />
@@ -582,6 +611,7 @@
     <None Include="Resources\View3.PNG" />
     <None Include="Resources\stepper.png" />
     <None Include="Resources\FixedCornerColor.bmp" />
+    <None Include="Resources\Step.png" />
     <Content Include="twisty.js\alg\alg.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

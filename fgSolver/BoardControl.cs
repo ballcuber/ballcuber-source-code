@@ -35,8 +35,6 @@ namespace fgSolver
 
             lblTitle.Text = "Carte " + Index;
 
-            grpServos.Visible = config.HasServo;
-
             if (Board.Connected)
             {
                 ledConnected.Color = Color.Lime;
@@ -218,17 +216,14 @@ namespace fgSolver
 
         private void btnLockServo_Click(object sender, EventArgs e)
         {
-            Board.LockServos();
         }
 
         private void btnOpenServo_Click(object sender, EventArgs e)
         {
-            Board.OpenServos();
         }
 
         private void btnInit_Click(object sender, EventArgs e)
         {
-            Board.InitSteppers();
         }
     }
 }

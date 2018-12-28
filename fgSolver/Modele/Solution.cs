@@ -21,16 +21,6 @@ namespace fgSolver.Modele
         public  List<Move> Moves { get; set; }
 
 
-        public bool IsRunning
-        {
-            get
-            {
-                return MachineMoves != null && MachineMoves.MotorMoves!=null && LastExecutedMotorMove >= 0 && LastExecutedMotorMove+1 < MachineMoves.MotorMoves.Count;
-            }
-        }
-
-        public int LastExecutedMotorMove { get; set; } = -1;
-
 
         // deux solution sont égaled si elles ont les mêmes MachineMoves et Moves
         public override bool Equals(object obj)
@@ -57,7 +47,7 @@ namespace fgSolver.Modele
                 if (sol.MachineMoves != MachineMoves) return false;
             }
 
-            return LastExecutedMotorMove == sol.LastExecutedMotorMove && Date == sol.Date;
+            return  Date == sol.Date;
         }
 
         public override int GetHashCode()
@@ -95,7 +85,6 @@ namespace fgSolver.Modele
                 }
             }
 
-            newSolution.LastExecutedMotorMove = LastExecutedMotorMove;
             newSolution.Date = Date;
 
             return newSolution;

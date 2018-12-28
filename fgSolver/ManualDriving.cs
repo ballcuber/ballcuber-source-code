@@ -51,7 +51,7 @@ namespace fgSolver
 
         private void cubeNets_MoveClick(object sender, MoveClickEventArgs e)
         {
-                Runner.BlockingMove(e.MotorMove);
+            //    Runner.BlockingMove(e.MotorMove);
 
         }
 

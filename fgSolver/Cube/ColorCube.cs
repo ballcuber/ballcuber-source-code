@@ -95,7 +95,12 @@ namespace RevengeCube
         {
             get
             {
-                return this == new ColorCube();
+                var solvedCube =  new ColorCube();
+                for(int i=0;i< _colors.Length; i++)
+                {
+                    if (_colors[i] != solvedCube.colors[i]) return false;
+                }
+                return true;
             }
         }
 

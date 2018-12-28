@@ -53,24 +53,26 @@ namespace fgSolver
             {
                 pgHard1.SelectedObject = state.HardwareConfig1.Clone();
                 pgHard2.SelectedObject = state.HardwareConfig2.Clone();
-                pgServo.SelectedObject = state.ServoConfig.Clone();
-                pgHardware.SelectedObject = state.HardwareConfigGlobal.Clone();
+                pgGlobal.SelectedObject = state.HardwareConfigGlobal.Clone();
             }
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+         private void Save()
         {
             using (var state = GlobalState.GetState())
             {
                 state.HardwareConfig1 = (HardwareConfig)pgHard1.SelectedObject;
                 state.HardwareConfig2 = (HardwareConfig)pgHard2.SelectedObject;
-                state.ServoConfig = (ServoConfig)pgServo.SelectedObject;
-                state.HardwareConfigGlobal = (HardwareConfigGlobal)pgHardware.SelectedObject;
+                state.HardwareConfigGlobal = (HardwareConfigGlobal)pgGlobal.SelectedObject;
                 state.SaveConfiguration();
             }
         }
 
         public void LeaveFrom() { }
 
+        private void PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            Save();
+        }
     }
 }

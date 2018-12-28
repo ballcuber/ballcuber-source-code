@@ -54,6 +54,8 @@ namespace fgSolver
             }
 
             FormManager.Navigate<ColorDefinitionControl>();
+
+            bwConnect.RunWorkerAsync();
         }
 
 
@@ -181,6 +183,26 @@ namespace fgSolver
             using (var state = GlobalState.GetState())
             {
                 state.Alarms.Clear();
+            }
+        }
+
+        private void bwConnect_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                bool connect1, connect2;
+                using (var state = GlobalState.GetState())
+                {
+                    connect1 = state.HardwareConfig1.ConnectAtStartup;
+                    connect2 = state.HardwareConfig2.ConnectAtStartup;
+                }
+
+                if (connect1) Hardware.Runner.Board1.Connect();
+                if (connect2) Hardware.Runner.Board2.Connect();
+            }
+            catch(Exception ex)
+            {
+                Logger.Log(ex);
             }
         }
     }

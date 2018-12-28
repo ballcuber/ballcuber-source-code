@@ -83,6 +83,26 @@ namespace fgSolver.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Breakpoint {
+            get {
+                object obj = ResourceManager.GetObject("Breakpoint", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap BreakpointStep {
+            get {
+                object obj = ResourceManager.GetObject("BreakpointStep", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Camera {
             get {
                 object obj = ResourceManager.GetObject("Camera", resourceCulture);
@@ -206,6 +226,16 @@ namespace fgSolver.Properties {
         internal static System.Drawing.Bitmap Solver {
             get {
                 object obj = ResourceManager.GetObject("Solver", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Step {
+            get {
+                object obj = ResourceManager.GetObject("Step", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

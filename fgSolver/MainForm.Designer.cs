@@ -40,6 +40,7 @@
             this.toolStripDropDownButtonAdvanced = new System.Windows.Forms.ToolStripDropDownButton();
             this.fenêtreDeTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugger3DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.strpAcq = new System.Windows.Forms.ToolStripButton();
             this.stripAlarm = new System.Windows.Forms.ToolStripButton();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.btnPrevious = new System.Windows.Forms.ToolStripButton();
@@ -49,7 +50,7 @@
             this.navPnl = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.tmrAlarmBlink = new System.Windows.Forms.Timer(this.components);
-            this.strpAcq = new System.Windows.Forms.ToolStripButton();
+            this.bwConnect = new System.ComponentModel.BackgroundWorker();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
@@ -149,6 +150,19 @@
             this.debugger3DToolStripMenuItem.Text = "Debugger 3D";
             this.debugger3DToolStripMenuItem.Click += new System.EventHandler(this.debugger3DToolStripMenuItem_Click);
             // 
+            // strpAcq
+            // 
+            this.strpAcq.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.strpAcq.AutoSize = false;
+            this.strpAcq.AutoToolTip = false;
+            this.strpAcq.DoubleClickEnabled = true;
+            this.strpAcq.Image = global::fgSolver.Properties.Resources.OK;
+            this.strpAcq.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.strpAcq.Name = "strpAcq";
+            this.strpAcq.Size = new System.Drawing.Size(22, 22);
+            this.strpAcq.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
+            this.strpAcq.Click += new System.EventHandler(this.strpAcq_Click);
+            // 
             // stripAlarm
             // 
             this.stripAlarm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -244,18 +258,9 @@
             this.tmrAlarmBlink.Interval = 1000;
             this.tmrAlarmBlink.Tick += new System.EventHandler(this.tmrAlarmeBlink_Tick);
             // 
-            // strpAcq
+            // bwConnect
             // 
-            this.strpAcq.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.strpAcq.AutoSize = false;
-            this.strpAcq.AutoToolTip = false;
-            this.strpAcq.DoubleClickEnabled = true;
-            this.strpAcq.Image = global::fgSolver.Properties.Resources.OK;
-            this.strpAcq.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.strpAcq.Name = "strpAcq";
-            this.strpAcq.Size = new System.Drawing.Size(22, 22);
-            this.strpAcq.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
-            this.strpAcq.Click += new System.EventHandler(this.strpAcq_Click);
+            this.bwConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwConnect_DoWork);
             // 
             // MainForm
             // 
@@ -302,5 +307,6 @@
         private System.Windows.Forms.ToolStripButton stripAlarm;
         private System.Windows.Forms.Timer tmrAlarmBlink;
         private System.Windows.Forms.ToolStripButton strpAcq;
+        private System.ComponentModel.BackgroundWorker bwConnect;
     }
 }

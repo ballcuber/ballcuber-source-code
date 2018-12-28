@@ -45,10 +45,10 @@ namespace fgSolver.Hardware
         {
             get
             {
-       
+
                 return _index;
             }
-        } 
+        }
 
         public HardwareConfig GetHardwareConfig()
         {
@@ -66,7 +66,7 @@ namespace fgSolver.Hardware
 
         public void Connect()
         {
-            if (_connection!=null && _connection.Connected) return;
+            if (_connection != null && _connection.Connected) return;
 
             var config = GetHardwareConfig();
 
@@ -75,19 +75,54 @@ namespace fgSolver.Hardware
 
             _connection.Connect();
 
-            // Armer un timer pour rafraichir la liste des fonctions, ,il faut le temps que le arduino reboot
-            Timer tmr = null;
-            tmr  = new Timer((state) => {
-                try
-                {
-                    _connection.RefreshFunctions(); tmr.Dispose();
-                }
-                catch (Exception ex){
-                    Logger.Log(ex);
-                }
-            }, null, 2000, 0);
-           
+            _tmr= new Timer((state) => PeriodicGetInfo(), null, 5000, 100);
+
         }
+
+        const int NB_MOTOR = 5;
+        string[] _variablesToRead = Enumerable.Range(0, NB_MOTOR).SelectMany((x) =>new string[] { "position[" + x + "]", "enabled[" + x + "]"}).ToArray();
+
+        private void PeriodicGetInfo()
+        {
+            try
+            {
+                if (!Connected) return;
+
+                if(_connection.Variables.Count == 0 || _connection.Functions.Count == 0)
+                {
+                    _connection.RefreshFunctions();
+                    _connection.RefreshVariables();
+                }
+
+                var values = _connection.ReadVariables(_variablesToRead);
+
+                using (var state = GlobalState.GetState())
+                {
+                    for (int i = 0; i < NB_MOTOR; i++)
+                    {
+                        var position = (int)values[2 * i].Value;
+                        var enabled = (bool)values[2 * i + 1].Value;
+
+                        var m = state.Motors.Motors.FirstOrDefault((x) => x.Board == _index && x.Index == i);
+
+                        if (m != null)
+                        {
+                            m.SetState(enabled, position);
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.Log(ex);
+            }
+
+
+        }
+
+        private Timer _tmr;
+
+
 
         public bool Connected
         {
@@ -100,6 +135,7 @@ namespace fgSolver.Hardware
         public void Disconnect()
         {
             _connection?.Disconnect();
+            _tmr.Dispose();
         }
 
         public void AssertConnectedAndConfigured()
@@ -143,7 +179,7 @@ namespace fgSolver.Hardware
                 {
                     m[i] = motors[i].Index;
                                  
-                    r[i] = state.HardwareConfigGlobal.ConvertMoveToSteps(mv.GetMoves(motors[i].Courronne), motors[i].Inverted);
+                    //r[i] = state.HardwareConfigGlobal.ConvertMoveToSteps(mv.GetMoves(motors[i].Courronne), motors[i].Inverted);
                 }
             }
 
@@ -158,57 +194,56 @@ namespace fgSolver.Hardware
 
         public SharerFunctionReturn<bool> BlockingMove(TimeSpan timeout, byte m1, long r1, byte m2, long r2)
         {
+            AssertConnectedAndConfigured();
             return _connection.Call<bool>("blockingMove", timeout, m1, r1, m2, r2);
+        }
+
+        public void Stop(int mask)
+        {
+            AssertConnectedAndConfigured();
+            _connection.Call("stop", mask);
         }
 
         public SharerFunctionReturn<bool> DisableOutputs(int mask)
         {
+            AssertConnectedAndConfigured();
             return _connection.Call<bool>("disableOutputs", mask);
         }
 
         public SharerFunctionReturn<bool> SetSpeed(int mask, int value)
         {
-            return _connection.Call<bool>("setMaxSpeed", mask);
+            AssertConnectedAndConfigured();
+            return _connection.Call<bool>("setMaxSpeed", mask, value);
         }
 
         public void BeginMoveStep(int mask, int value)
         {
+            AssertConnectedAndConfigured();
             Task.Factory.StartNew(() => Move(mask, value));
         }
 
         public SharerFunctionReturn<bool> Move(int mask, int value)
         {
-            return _connection.Call<bool>("move", mask);
+            AssertConnectedAndConfigured();
+            return _connection.Call<bool>("move", mask, value);
+        }
+        public SharerFunctionReturn<bool> MoveTo(int mask, int value)
+        {
+
+            AssertConnectedAndConfigured();
+            return _connection.Call<bool>("moveTo", mask, value);
+        }
+
+        public SharerFunctionReturn<bool> SetCurrentPosition(int mask, int value)
+        {
+            AssertConnectedAndConfigured();
+            return _connection.Call<bool>("setCurrentPosition", mask, value);
         }
 
         public SharerFunctionReturn<bool> EnableOutputs(int mask)
         {
+            AssertConnectedAndConfigured();
             return _connection.Call<bool>("enableOutputs", mask);
-        }
-
-        public void LockServos()
-        {
-            using (var state = GlobalState.GetState())
-            {
-                _connection.Call("ServoWrite", state.ServoConfig.LockedPosition0, state.ServoConfig.LockedPosition1, state.ServoConfig.LockedPosition2, state.ServoConfig.LockedPosition3);
-            }
-        }
-
-        public void OpenServos()
-        {
-            using (var state = GlobalState.GetState())
-            {
-                _connection.Call("ServoWrite", state.ServoConfig.OpenedPosition0, state.ServoConfig.OpenedPosition1, state.ServoConfig.OpenedPosition2, state.ServoConfig.OpenedPosition3);
-            }
-        }
-
-        public void InitSteppers()
-        {
-            using (var state = GlobalState.GetState())
-            {
-                _connection.Call("setMaxSpeed", 0xff, state.HardwareConfigGlobal.Speed);
-                _connection.Call("setAcceleration", 0xff, state.HardwareConfigGlobal.Acceleration);
-            }
         }
     }
 }

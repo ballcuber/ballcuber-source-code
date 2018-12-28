@@ -59,7 +59,23 @@ namespace fgSolver
 
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
-            
+            if (_selectedMotor != null)
+            {
+                txtPosition.Text = _selectedMotor.Position.ToString();
+                ledEnabled.On = _selectedMotor.Enabled;
+            }
+            else
+            {
+                txtPosition.Text = "---";
+                ledEnabled.On = false;
+            }
+
+            foreach(var led in this.Controls.OfType<Bulb.LedBulb>())
+            {
+                var m = GetByTag(currentState, led.Tag);
+
+                if (m != null) led.On = m.Enabled;
+            }
 
         }
 
@@ -68,16 +84,26 @@ namespace fgSolver
             var radio = sender as RadioButton;
 
             if (radio == null || !radio.Checked) return;
+            
+            using(var state = GlobalState.GetState())
+            {
+                SelectedMotor = GetByTag(state, radio.Tag); ;
+            }
+        }
 
-            var couronneName = radio.Tag as string;
+        private Motor GetByTag( GlobalState state, object tag)
+        {
+            var couronneName = tag as string;
 
-            if (couronneName == null || couronneName.Length != 2) return;
+            Motor m;
+
+            if (couronneName == null || couronneName.Length != 2) return null;
 
             Axe a;
-            if (!Enum.TryParse<Axe>(couronneName[0].ToString(), out a)) return;
+            if (!Enum.TryParse<Axe>(couronneName[0].ToString(), out a)) return null;
 
             int ic;
-            if (!int.TryParse(couronneName[1].ToString(),out ic)) return;
+            if (!int.TryParse(couronneName[1].ToString(), out ic)) return null;
 
             Couronne c;
 
@@ -93,15 +119,10 @@ namespace fgSolver
                     c = Couronne.Max;
                     break;
                 default:
-                    return;
+                    return null;
             }
 
-            Motor m;
-            using(var state = GlobalState.GetState())
-            {
-                m = state.Motors.Motors.FirstOrDefault((x) => x.Courronne == c && x.Axe == a);
-            }
-            SelectedMotor = m;
+            return state.Motors.Motors.FirstOrDefault((x) => x.Courronne == c && x.Axe == a);
         }
 
         private Motor _selectedMotor;
@@ -145,7 +166,7 @@ namespace fgSolver
 
         private void btnSetSpeed_Click(object sender, EventArgs e)
         {
-            Runner.SetSpeedMotor(_selectedMotor, (int)udSteps.Value);
+            Runner.SetSpeedMotor(_selectedMotor, (int)udSpeed.Value);
         }
 
         private void grid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
@@ -154,6 +175,46 @@ namespace fgSolver
             {
                 state.SaveConfiguration();
             }
+        }
+
+        private void btnMoveAbsolute_Click(object sender, EventArgs e)
+        {
+            Runner.BeginMoveAbsolute(_selectedMotor, (int)udAbsolute.Value);
+        }
+
+        private void btnSetPosition_Click(object sender, EventArgs e)
+        {
+            Runner.SetCurrentPosition(_selectedMotor, (int)udPosition.Value);
+        }
+
+        private void btnEnableAll_Click(object sender, EventArgs e)
+        {
+            Runner.EnableMotorAll();
+        }
+
+        private void btnDisableAll_Click(object sender, EventArgs e)
+        {
+            Runner.DisableMotorAll();
+        }
+
+        private void btnSetSpeedAll_Click(object sender, EventArgs e)
+        {
+            Runner.SetSpeedAll((int)udSetSpeedAll.Value);
+        }
+
+        private void btnSetPositionAll_Click(object sender, EventArgs e)
+        {
+            Runner.SetCurrentPositionAll((int)udSetPositionAll.Value);
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            Runner.Stop(_selectedMotor);
+        }
+
+        private void btnStopAll_Click(object sender, EventArgs e)
+        {
+            Runner.StopAll();
         }
     }
 }

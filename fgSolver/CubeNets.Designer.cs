@@ -363,7 +363,7 @@
             this.button23.Name = "button23";
             this.button23.Size = new System.Drawing.Size(20, 20);
             this.button23.TabIndex = 22;
-            this.button23.Tag = "X+ (Max)";
+            this.button23.Tag = "X1+ (Max)";
             this.button23.Text = "▼";
             this.button23.UseVisualStyleBackColor = true;
             this.button23.Click += new System.EventHandler(this.moveClick);

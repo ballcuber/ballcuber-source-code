@@ -29,17 +29,19 @@ namespace fgSolver.Modele
 
                     Solution solution=null;
 
-                    var task = Task.Factory.StartNew(() =>
+                    using (var task = Task.Factory.StartNew(() =>
+                     {
+                         solution = Modele.Solver.Solve(cube);
+                     }))
                     {
-                        solution = Modele.Solver.Solve(cube);
-                    });
 
-                    if (!task.Wait(TimeSpan.FromSeconds(5))) throw new Exception("Timeout à la résolution");
-
+                        if (!task.Wait(TimeSpan.FromSeconds(5))) throw new Exception("Timeout à la résolution");
+                    }
                     using (var state = GlobalState.GetState())
                     {
                         state.Solution = solution;
                     }
+                    ResolutionSession.FromSolution();
                 }
                 catch(Exception ex)
                 {

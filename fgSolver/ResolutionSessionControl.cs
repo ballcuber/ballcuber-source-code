@@ -53,73 +53,23 @@ namespace fgSolver
 
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
-            if (currentState.Solution?.MachineMoves?.MotorMoves != null)
-            {
-                /*
-                if (formerState.Solution != currentState.Solution)
-                {
-
-                    var sb = new StringBuilder();
-
-                    for (int i = 0; i < currentState.Solution.MachineMoves.MotorMoves.Count; i++)
-                    {
-                        if (currentState.Solution.LastExecutedMotorMove < i)
-                        {
-                            sb.Append("> ");
-                        }
-                        else if (currentState.Solution.LastExecutedMotorMove == i)
-                        {
-                            sb.Append("----> ");
-                        }
-                        else
-                        {
-                            sb.Append("- ");
-                        }
-                        sb.AppendLine(currentState.Solution.MachineMoves.MotorMoves[i].ToString());
-                    }
-
-                    txtMoves.SuspendLayout();
-
-                    txtMoves.Text = sb.ToString();
-
-                    if (currentState.Solution.LastExecutedMotorMove > currentState.Solution.MachineMoves.MotorMoves.Count / 2)
-                    {
-                        txtMoves.SelectionStart = sb.Length-1;
-                        txtMoves.ScrollToCaret();
-                    }
-
-                    txtMoves.ResumeLayout();
-                }
-                */
-                lblStatus.Text = (currentState.Solution.LastExecutedMotorMove + 1) + "/" + currentState.Solution.MachineMoves.MotorMoves.Count;
-
-                progressBar.Maximum = currentState.Solution.MachineMoves.MotorMoves.Count;
-                progressBar.Value = (currentState.Solution.LastExecutedMotorMove + 1);
-
-                _Taskbar.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
-                _Taskbar.ProgressValue = progressBar.Value;
-
-           }
-            else
-            {
-                lblStatus.Text = "";
-                progressBar.Value = 0;
-                _Taskbar.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
-            }
-
-            btnRun.Enabled = currentState.Solution != null && !currentState.Solution.IsRunning;
-            btnStop.Enabled = currentState.Solution != null && currentState.Solution.IsRunning;
+            resolutionSessionSupervisionControl.PeriodicUpdate(currentState);
         }
         
 
 
         private void btnRun_Click(object sender, EventArgs e)
         {
-            Runner.AsyncRun();
+            Modele.ResolutionSession.Run();
         }
 
 
-        public void NavigueTo() { }
+        public void NavigueTo() {
+            using (var state = GlobalState.GetState())
+            {
+                resolutionSessionSupervisionControl.PeriodicUpdate(state);
+            }
+        }
 
 
         private Stopwatch _stopWatch = new Stopwatch();
@@ -140,12 +90,5 @@ namespace fgSolver
 
         public void LeaveFrom() { }
 
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            using(var state = GlobalState.GetState())
-            {
-                state.Solution = null;
-            }
-        }
     }
 }

@@ -62,6 +62,25 @@ namespace fgSolver.Modele
             }
         }
 
+        // nombre de quart de tour positif pour ce mouvement
+        public int PotentialPositiveQuarters
+        {
+            get
+            {
+                return (MaxMovesCount > 0 ? MaxMovesCount : 0) + (MidMaxMovesCount > 0 ? MidMaxMovesCount : 0) + (MidMinMovesCount > 0 ? MidMinMovesCount : 0);
+            }
+        }
+
+        // nombre de quart de tour négatif pour ce mouvement (un demi tour peut potentiellement se faire dans le sens négatif)
+        public int PotentialNegativeQuarters
+        {
+            get
+            {
+                return Math.Abs((MaxMovesCount < 0 ? MaxMovesCount : 0) + (MidMaxMovesCount < 0 ? MidMaxMovesCount : 0) + (MidMinMovesCount < 0 ? MidMinMovesCount : 0)) +
+                  (MaxMovesCount == 2 ? 2 : 0) + (MidMaxMovesCount == 2 ? 2 : 0) + (MidMinMovesCount == 2 ? 2 : 0);
+            }
+        }
+
         private void increment(ref int count, Sens s)
         {
             count += (int)s;

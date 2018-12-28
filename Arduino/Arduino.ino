@@ -7,44 +7,17 @@
 
 
 #define STEPPER_COUNT	5
-#define SERVO_COUNT		4
+
 
 // définitions des steppers
-AccelStepper E0Stepper(AccelStepper::DRIVER, E0_STEP_PIN, E0_STEP_PIN);
-AccelStepper E1Stepper(AccelStepper::DRIVER, E1_STEP_PIN, E1_STEP_PIN);
+AccelStepper E0Stepper(AccelStepper::DRIVER, E0_STEP_PIN, E0_DIR_PIN);
+AccelStepper E1Stepper(AccelStepper::DRIVER, E1_STEP_PIN, E1_DIR_PIN);
 AccelStepper XStepper(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
 AccelStepper YStepper(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper ZStepper(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 
 AccelStepper * Steppers[STEPPER_COUNT] = { &E0Stepper,&E1Stepper,&XStepper,&YStepper,&ZStepper };
 
-
-// définition des servos
-Servo Servo0;
-Servo Servo1;
-Servo Servo2;
-Servo Servo3;
-
-Servo * Servos[SERVO_COUNT] = {&Servo0, &Servo1, &Servo2, &Servo3 };
-
-
-void ServoWrite(int pos0, int pos1, int pos2, int pos3) {
-	if (pos0 >= 0) {
-		Servo0.write(pos0);
-	}
-
-	if (pos1 >= 0) {
-		Servo1.write(pos1);
-	}
-
-	if (pos2 >= 0) {
-		Servo2.write(pos2);
-	}
-
-	if (pos3 >= 0) {
-		Servo3.write(pos3);
-	}
-}
 
 #define GENERIC_ALL_STEPPER(name, ...)				\
 	for (int i = 0; i < STEPPER_COUNT; i++) {		\
@@ -92,9 +65,11 @@ void setSpeed(int mask, float speed) {
 	GENERIC_ALL_STEPPER(setSpeed, speed);
 }
 
+/*
 float speed(int iStepper) {
 	GENERIC_ONE_STEPPER(speed);
 }
+*/
 
 long distanceToGo(int iStepper) {
 	GENERIC_ONE_STEPPER(distanceToGo);
@@ -154,6 +129,13 @@ void blockingMove2(long r1) {
 	}
 }
 
+volatile float speed[STEPPER_COUNT];
+volatile long position[STEPPER_COUNT];
+volatile bool enabled[STEPPER_COUNT];
+
+
+int state;
+long ellapsedMillis;
 
 
 void setup() {
@@ -166,16 +148,11 @@ void setup() {
 	YStepper.setEnablePin(Y_ENABLE_PIN);
 	ZStepper.setEnablePin(Z_ENABLE_PIN);
 
-	Servo0.attach(SERVO0_PIN);
-	Servo1.attach(SERVO1_PIN);
-	Servo2.attach(SERVO2_PIN);
-	Servo3.attach(SERVO3_PIN);
-
 	
 	for (int i = 0; i < STEPPER_COUNT; i++) {
 		Steppers[i]->setPinsInverted(false, false, true);	// invert enable pin (LOW or power on)
-		Steppers[i]->setMaxSpeed(14000);
-		Steppers[i]->setAcceleration(1400000);
+		Steppers[i]->setMaxSpeed(100);
+		Steppers[i]->setAcceleration(140000);
 		Steppers[i]->disableOutputs();
 	}
 
@@ -189,7 +166,7 @@ void setup() {
 	Sharer_ShareVoid(move, int, mask, long, relative);
 	Sharer_ShareFunction(float, maxSpeed, int, iStepper);
 	Sharer_ShareVoid(setSpeed, int, mask, float, speed);
-	Sharer_ShareFunction(float, speed, int, iStepper);
+	//Sharer_ShareFunction(float, speed, int, iStepper);
 	Sharer_ShareFunction(long, distanceToGo, int, iStepper);
 	Sharer_ShareFunction(long, targetPosition, int, iStepper);
 	Sharer_ShareFunction(long, currentPosition, int, iStepper);
@@ -198,55 +175,89 @@ void setup() {
 	Sharer_ShareVoid(enableOutputs, int, mask);
 	Sharer_ShareFunction(bool, isRunning, int, iStepper);
 	Sharer_ShareVoid(setMinPulseWidth, int, mask, uint16_t, minWidth);
-	Sharer_ShareVoid(ServoWrite, int, pos0, int, pos1, int, pos2, int, pos3);
-	/*
-	for (int i = 0; i < Sharer.functionList.count; i++) {
-		Serial.print(strlen_P(Sharer.functionList.functions[i].name));
-		Serial.print(" : ");
-		for (int c = 0; c < strlen_P(Sharer.functionList.functions[i].name);c++) {
-			char myChar = pgm_read_byte_near((int)(Sharer.functionList.functions[i].name) + c);
-			Serial.print(myChar);
-		}
-
-		Serial.println();
-
-		for (int j = 0; j < Sharer.functionList.functions[i].argumentCount; j++) {
-			Serial.print("- ");
-			Serial.print(strlen_P(Sharer.functionList.functions[i].Arguments[j].name));
-			Serial.print(" : ");
-			for (int c = 0; c < strlen_P(Sharer.functionList.functions[i].Arguments[j].name);c++) {
-				char myChar = pgm_read_byte_near((int)(Sharer.functionList.functions[i].Arguments[j].name) + c);
-				Serial.print(myChar);
-			}
-			Serial.println();
-
-		}
-	}
-	*/
 
 
 	/*
-	for (int j = 0; j < 100; j++) {
+	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("pos1");
 
-		for (int i = 0; i < 32000; i++) {
-			delayMicroseconds(100);
-			digitalWrite(Z_STEP_PIN, HIGH);
-			delayMicroseconds(1);
-			digitalWrite(Z_STEP_PIN, LOW);
-		}
+	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&pos1;
+	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
+	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typelong;
+	Sharer.variableList.count++;
 
-		delay(100);
-	}
+	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("speed1");
 
+	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&speed1;
+	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
+	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typefloat;
+	Sharer.variableList.count++;
+
+	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("test");
+
+	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&test;
+	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
+	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typefloat;
+	Sharer.variableList.count++;
+
+	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("test2");
+
+	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&test2;
+	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
+	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typefloat;
+	Sharer.variableList.count++;
+
+	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("testSum");
+
+	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&testSum;
+	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
+	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typefloat;
+	Sharer.variableList.count++;
 	*/
+	
+		
+	Sharer_ShareVariable(float, speed[0]);
+	Sharer_ShareVariable(float, speed[1]);
+	Sharer_ShareVariable(float, speed[2]);
+	Sharer_ShareVariable(float, speed[3]);
+	Sharer_ShareVariable(float, speed[4]);
 
+	Sharer_ShareVariable(long, position[0]);
+	Sharer_ShareVariable(long, position[1]);
+	Sharer_ShareVariable(long, position[2]);
+	Sharer_ShareVariable(long, position[3]);
+	Sharer_ShareVariable(long, position[4]);
+
+	Sharer_ShareVariable(bool, enabled[0]);
+	Sharer_ShareVariable(bool, enabled[1]);
+	Sharer_ShareVariable(bool, enabled[2]);
+	Sharer_ShareVariable(bool, enabled[3]);
+	Sharer_ShareVariable(bool, enabled[4]);
+	
+	pinMode(13, OUTPUT);
+
+	state = false;
+	ellapsedMillis = millis();
 }
 
-void loop() {
-	Sharer.run();
-	for (int i = 0; i < STEPPER_COUNT; i++) {
-	//	//Serial.println(i);
-		Steppers[i]->run();
 
+void loop() {
+	for (int i = 0; i < STEPPER_COUNT; i++) {
+		Steppers[i]->run();
+		speed[i] = Steppers[i]->speed();
+		position[i] = Steppers[i]->currentPosition();
+	}
+
+	enabled[0] = !digitalRead(E0_ENABLE_PIN);
+	enabled[1] = !digitalRead(E1_ENABLE_PIN);
+	enabled[2] = !digitalRead(X_ENABLE_PIN);
+	enabled[3] = !digitalRead(Y_ENABLE_PIN);
+	enabled[4] = !digitalRead(Z_ENABLE_PIN);
+
+	Sharer.run();
+
+	if ((millis() - ellapsedMillis) > 500) {
+		ellapsedMillis = millis();
+		digitalWrite(13, state);
+		state = !state;
 	}
 }

@@ -56,97 +56,97 @@ namespace fgSolver.Hardware
             _board2.Disconnect();
         }
 
-        public static void BlockingMove(MotorMove mv)
-        {
-            var task1 = System.Threading.Tasks.Task.Factory.StartNew(new Action(() => _board1.BlockingMove(mv, BlockingMoveTimeout)));
-            var task2 = System.Threading.Tasks.Task.Factory.StartNew(new Action(() => _board2.BlockingMove(mv, BlockingMoveTimeout)));
+        //public static void BlockingMove(MotorMove mv)
+        //{
+        //    var task1 = System.Threading.Tasks.Task.Factory.StartNew(new Action(() => _board1.BlockingMove(mv, BlockingMoveTimeout)));
+        //    var task2 = System.Threading.Tasks.Task.Factory.StartNew(new Action(() => _board2.BlockingMove(mv, BlockingMoveTimeout)));
 
-            MainForm.Instance.Viewer.ExecuteMachineMove(mv);
+        //    MainForm.Instance.Viewer.ExecuteMachineMove(mv);
 
-            task1.Wait(BlockingMoveTimeout + BlockingMoveTimeout);
-            task2.Wait(BlockingMoveTimeout + BlockingMoveTimeout);
+        //    task1.Wait(BlockingMoveTimeout + BlockingMoveTimeout);
+        //    task2.Wait(BlockingMoveTimeout + BlockingMoveTimeout);
 
-            if (task1.Exception != null)
-            {
-                throw task1.Exception;
-            }
-            if (task2.Exception != null)
-            {
-                throw task2.Exception;
-            }
-        }
+        //    if (task1.Exception != null)
+        //    {
+        //        throw task1.Exception.InnerException;
+        //    }
+        //    if (task2.Exception != null)
+        //    {
+        //        throw task2.Exception.InnerException;
+        //    }
+        //}
 
-        public static void AsyncRun()
-        {
-            System.Threading.Tasks.Task.Factory.StartNew(new Action(() => Run()));
-        }
+        //public static void AsyncRun()
+        //{
+        //    System.Threading.Tasks.Task.Factory.StartNew(new Action(() => Run()));
+        //}
 
-        public static void Run()
-        {
-            try
-            {
-                MotorMove currentMove;
+        //public static void Run()
+        //{
+        //    try
+        //    {
+        //        MotorMove currentMove;
 
-                MainForm.Instance.Viewer.RefreshCube();
+        //        MainForm.Instance.Viewer.RefreshCube();
 
-                DateTime startDate = DateTime.Now;
+        //        DateTime startDate = DateTime.Now;
 
-                using (var state = GlobalState.GetState())
-                {
-                    if (state.Solution?.MachineMoves != null)
-                    {
-                        state.Solution.LastExecutedMotorMove = -1;
-                        startDate = state.Solution.Date;
-                    }
-                }
+        //        using (var state = GlobalState.GetState())
+        //        {
+        //            if (state.Solution?.MachineMoves != null)
+        //            {
+        //                state.Solution.LastExecutedMotorMove = -1;
+        //                startDate = state.Solution.Date;
+        //            }
+        //        }
 
-                ResolutionSessionControl.Instance.StartTimer();
+        //        ResolutionSessionControl.Instance.StartTimer();
 
-                do
-                {
-                    currentMove = null;
+        //        do
+        //        {
+        //            currentMove = null;
 
-                    using (var state = GlobalState.GetState())
-                    {
-                        if (state.Solution?.MachineMoves?.MotorMoves != null && startDate== state.Solution.Date)
-                        {
-                            int nextStep;
-                            if (state.Solution.LastExecutedMotorMove < 0) nextStep = 0;
-                            else nextStep = state.Solution.LastExecutedMotorMove + 1;
+        //            using (var state = GlobalState.GetState())
+        //            {
+        //                if (state.Solution?.MachineMoves?.MotorMoves != null && startDate== state.Solution.Date)
+        //                {
+        //                    int nextStep;
+        //                    if (state.Solution.LastExecutedMotorMove < 0) nextStep = 0;
+        //                    else nextStep = state.Solution.LastExecutedMotorMove + 1;
 
-                            if (nextStep < state.Solution.MachineMoves.MotorMoves.Count)
-                            {
-                                state.Solution.LastExecutedMotorMove = nextStep;
-                                currentMove = state.Solution.MachineMoves.MotorMoves[nextStep];
-                            }
+        //                    if (nextStep < state.Solution.MachineMoves.MotorMoves.Count)
+        //                    {
+        //                        state.Solution.LastExecutedMotorMove = nextStep;
+        //                        currentMove = state.Solution.MachineMoves.MotorMoves[nextStep];
+        //                    }
 
 
-                        }
-                    }
+        //                }
+        //            }
 
-                    if ((object)currentMove != null)
-                    {
-                        BlockingMove(currentMove);
-                    }
+        //            if ((object)currentMove != null)
+        //            {
+        //                BlockingMove(currentMove);
+        //            }
 
-                }
-                while ((object)currentMove != null);
+        //        }
+        //        while ((object)currentMove != null);
 
-            }
-            catch(Exception ex)
-            {
-                Logger.Log(ex);
-                using (var state = GlobalState.GetState())
-                {
-                   if (state.Solution!=null) state.Solution.LastExecutedMotorMove = -1;
-                }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        Logger.Log(ex);
+        //        using (var state = GlobalState.GetState())
+        //        {
+        //           if (state.Solution!=null) state.Solution.LastExecutedMotorMove = -1;
+        //        }
 
-            }
-            finally
-            {
-                ResolutionSessionControl.Instance.StopTImer();
-            }
-        }
+        //    }
+        //    finally
+        //    {
+        //        ResolutionSessionControl.Instance.StopTImer();
+        //    }
+        //}
 
         public static void SetSpeedMotor(Motor m, int value)
         {
@@ -159,8 +159,29 @@ namespace fgSolver.Hardware
         {
             if (m == null) return;
 
+            if (m.Inverted)
+            {
+                value = -value;
+            }
+
             GetBoard(m.Board).BeginMoveStep(m.Mask, value);
         }
+
+        public static void BeginMoveAbsolute(Motor m, int value)
+        {
+            if (m == null) return;
+
+            GetBoard(m.Board).MoveTo(m.Mask, value);
+        }
+
+
+        public static void SetCurrentPosition(Motor m, int value)
+        {
+            if (m == null) return;
+
+            GetBoard(m.Board).SetCurrentPosition(m.Mask, value);
+        }
+
 
         public static void EnableMotor(Motor m)
         {
@@ -169,11 +190,52 @@ namespace fgSolver.Hardware
             GetBoard(m.Board).EnableOutputs(m.Mask);
         }
 
+        public static void Stop(Motor m)
+        {
+            if (m == null) return;
+
+            GetBoard(m.Board).Stop(m.Mask);
+        }
+
+        public static void StopAll()
+        {
+            _board1.Stop(0xff);
+            _board2.Stop(0xff);
+        }
+
         public static void DisableMotor(Motor m)
         {
             if (m == null) return;
 
             GetBoard(m.Board).DisableOutputs(m.Mask);
         }
+
+
+        public static void SetCurrentPositionAll(int value)
+        {
+            _board1.SetCurrentPosition(0xff, value);
+            _board2.SetCurrentPosition(0xff, value);
+        }
+
+        public static void SetSpeedAll(int value)
+        {
+            _board1.SetSpeed(0xff, value);
+            _board2.SetSpeed(0xff, value);
+        }
+
+
+        public static void EnableMotorAll()
+        {
+            _board1.EnableOutputs(0xff);
+            _board2.EnableOutputs(0xff);
+        }
+
+        public static void DisableMotorAll()
+        {
+            _board1.DisableOutputs(0xff);
+            _board2.DisableOutputs(0xff);
+        }
+
+
     }
 }
