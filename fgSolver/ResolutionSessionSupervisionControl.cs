@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using fgSolver.Modele;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace fgSolver
 {
@@ -21,6 +22,19 @@ namespace fgSolver
              typeof(Control).GetMethod("SetStyle", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(lst, new object[] { ControlStyles.OptimizedDoubleBuffer, true });
          }
 
+
+        public bool TimerVisible
+        {
+            get => lblTimer.Visible;
+            set => lblTimer.Visible = value;
+        }
+
+        public bool BottomVisible
+        {
+            get => pnl.Visible;
+            set { pnl.Visible = value; _lastSignature = -1; }
+        }
+
         private int _lastSignature = -1;
         public void PeriodicUpdate(GlobalState currentState)
         {
@@ -30,6 +44,23 @@ namespace fgSolver
             _lastSignature = status.Signature;
 
             lblState.Text = status.State.ToString();
+
+            switch (status.State)
+            {
+                case ResolutionSessionState.Paused:
+                    if (_sw.IsRunning) _sw.Stop();
+                    break;
+
+                case ResolutionSessionState.Running:
+                    if (!_sw.IsRunning) _sw.Start();
+                    break;
+
+                case ResolutionSessionState.Stopped:
+                    _sw.Reset();
+                    break;
+            }
+
+            if (!BottomVisible) return;
 
             ListViewItem itmToTrack = null;
 
@@ -60,7 +91,7 @@ namespace fgSolver
                 {
                     var instr = status.Instructions[i];
 
-                    if (instr.GetType() == typeof(BeginGroupeInstruction))
+                    if (instr is BeginGroupeInstruction)
                     {
                         curGrp = lst.Groups.Add(Guid.NewGuid().ToString(), instr.ToString());
                     }
@@ -202,6 +233,18 @@ namespace fgSolver
         private void lst_AfterLabelEdit(object sender, LabelEditEventArgs e)
         {
             e.CancelEdit = true;
+        }
+
+        private Stopwatch _sw = new Stopwatch();
+
+        private void tmrRefresh_Tick(object sender, EventArgs e)
+        {
+            lblTimer.Text = _sw.Elapsed.ToString(@"mm\:ss\.fff");
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            ResolutionSession.Clear();
         }
     }
 }

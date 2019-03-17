@@ -34,59 +34,8 @@ namespace fgSolver.Modele
         public override void Execute(ResolutionSessionRuntimeContext ctx)
         {
 
-            int steps;
+             Runner.MoveToKnownPosition(Axe, Couronne, KnownPosition, ctx);
 
-            Motor Motor;
-
-            using (var state = GlobalState.GetState())
-            {
-                Motor = state.Motors.Motors.FirstOrDefault((x) => x.Axe == Axe && x.Courronne == Couronne);
-
-                if (Motor == null)   throw new Exception("Unable to find motor definition for crown " + Couronne + " axe " + Axe);
-
-                var stepPerQuarter = state.HardwareConfigGlobal.StepsPerCubeQuarter;
-
-                var modPos = Motor.Position % stepPerQuarter;
-
-                switch (KnownPosition)
-                {
-
-                    case KnownPosition.NegativeQuarter:
-                        steps = -stepPerQuarter;
-                        break;
-
-                    case KnownPosition.PositiveQuarter:
-                        steps = stepPerQuarter;
-                        break;
-
-                    //case KnownPosition.UTurn:
-                    //    steps = 2 * stepPerQuarter;
-                    //    break;
-
-                    case KnownPosition.MaxStop:
-                        steps = Motor.StepsToPositivePosition - modPos;
-                        break;
-
-                    case KnownPosition.MinStop:
-                        steps = -modPos;
-                        break;
-
-                    case KnownPosition.Middle:
-                        steps = Motor.StepsToPositivePosition / 2 - modPos;
-                        break;
-
-                    default:
-                        throw new Exception("Unknow position : " + KnownPosition);
-                }
-
-                steps += Motor.Position;
-
-                ctx.SetTargetPosition(Motor.Courronne, Motor.Axe, steps);
-
-                if (state.Simulated) return;
-            }
-
-            Runner.BeginMoveAbsolute(Motor, steps);
         }
 
 

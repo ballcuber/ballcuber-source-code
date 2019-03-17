@@ -365,6 +365,7 @@
             this.button23.TabIndex = 22;
             this.button23.Tag = "X1+ (Max)";
             this.button23.Text = "▼";
+            this.toolTip.SetToolTip(this.button23, "X1+ (Max)");
             this.button23.UseVisualStyleBackColor = true;
             this.button23.Click += new System.EventHandler(this.moveClick);
             // 

@@ -46,6 +46,11 @@
             this.btnTest = new System.Windows.Forms.Button();
             this.lblState = new System.Windows.Forms.Label();
             this.chkFollow = new System.Windows.Forms.CheckBox();
+            this.pnl = new System.Windows.Forms.Panel();
+            this.lblTimer = new System.Windows.Forms.Label();
+            this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
+            this.btnClear = new System.Windows.Forms.Button();
+            this.pnl.SuspendLayout();
             this.SuspendLayout();
             // 
             // lst
@@ -73,10 +78,10 @@
             listViewItem2,
             listViewItem3});
             this.lst.LabelEdit = true;
-            this.lst.Location = new System.Drawing.Point(3, 54);
+            this.lst.Location = new System.Drawing.Point(3, 74);
             this.lst.MultiSelect = false;
             this.lst.Name = "lst";
-            this.lst.Size = new System.Drawing.Size(564, 354);
+            this.lst.Size = new System.Drawing.Size(700, 320);
             this.lst.SmallImageList = this.img;
             this.lst.TabIndex = 0;
             this.lst.UseCompatibleStateImageBehavior = false;
@@ -101,7 +106,7 @@
             // btnStart
             // 
             this.btnStart.Font = new System.Drawing.Font("Webdings", 12F);
-            this.btnStart.Location = new System.Drawing.Point(3, 4);
+            this.btnStart.Location = new System.Drawing.Point(22, 21);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 1;
@@ -112,7 +117,7 @@
             // btnNext
             // 
             this.btnNext.Font = new System.Drawing.Font("Webdings", 12F);
-            this.btnNext.Location = new System.Drawing.Point(84, 4);
+            this.btnNext.Location = new System.Drawing.Point(103, 21);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(75, 23);
             this.btnNext.TabIndex = 1;
@@ -123,7 +128,7 @@
             // btnAbort
             // 
             this.btnAbort.Font = new System.Drawing.Font("Webdings", 12F);
-            this.btnAbort.Location = new System.Drawing.Point(165, 3);
+            this.btnAbort.Location = new System.Drawing.Point(184, 20);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(75, 23);
             this.btnAbort.TabIndex = 1;
@@ -134,7 +139,7 @@
             // btnPause
             // 
             this.btnPause.Font = new System.Drawing.Font("Webdings", 12F);
-            this.btnPause.Location = new System.Drawing.Point(246, 3);
+            this.btnPause.Location = new System.Drawing.Point(265, 20);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(75, 23);
             this.btnPause.TabIndex = 1;
@@ -145,7 +150,7 @@
             // btnSetStep
             // 
             this.btnSetStep.Font = new System.Drawing.Font("Webdings", 12F);
-            this.btnSetStep.Location = new System.Drawing.Point(327, 4);
+            this.btnSetStep.Location = new System.Drawing.Point(346, 21);
             this.btnSetStep.Name = "btnSetStep";
             this.btnSetStep.Size = new System.Drawing.Size(75, 23);
             this.btnSetStep.TabIndex = 1;
@@ -155,7 +160,8 @@
             // 
             // btnTest
             // 
-            this.btnTest.Location = new System.Drawing.Point(453, 3);
+            this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTest.Location = new System.Drawing.Point(547, 19);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 23);
             this.btnTest.TabIndex = 1;
@@ -166,7 +172,7 @@
             // lblState
             // 
             this.lblState.AutoSize = true;
-            this.lblState.Location = new System.Drawing.Point(3, 38);
+            this.lblState.Location = new System.Drawing.Point(19, 55);
             this.lblState.Name = "lblState";
             this.lblState.Size = new System.Drawing.Size(16, 13);
             this.lblState.TabIndex = 2;
@@ -177,7 +183,7 @@
             this.chkFollow.AutoSize = true;
             this.chkFollow.Checked = true;
             this.chkFollow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkFollow.Location = new System.Drawing.Point(165, 34);
+            this.chkFollow.Location = new System.Drawing.Point(184, 51);
             this.chkFollow.Name = "chkFollow";
             this.chkFollow.Size = new System.Drawing.Size(142, 17);
             this.chkFollow.TabIndex = 3;
@@ -185,23 +191,66 @@
             this.chkFollow.UseVisualStyleBackColor = true;
             this.chkFollow.CheckedChanged += new System.EventHandler(this.chkFollow_CheckedChanged);
             // 
+            // pnl
+            // 
+            this.pnl.Controls.Add(this.chkFollow);
+            this.pnl.Controls.Add(this.btnTest);
+            this.pnl.Controls.Add(this.btnClear);
+            this.pnl.Controls.Add(this.btnSetStep);
+            this.pnl.Controls.Add(this.btnPause);
+            this.pnl.Controls.Add(this.btnAbort);
+            this.pnl.Controls.Add(this.btnNext);
+            this.pnl.Controls.Add(this.btnStart);
+            this.pnl.Controls.Add(this.lst);
+            this.pnl.Controls.Add(this.lblState);
+            this.pnl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnl.Location = new System.Drawing.Point(0, 140);
+            this.pnl.Name = "pnl";
+            this.pnl.Size = new System.Drawing.Size(709, 397);
+            this.pnl.TabIndex = 7;
+            // 
+            // lblTimer
+            // 
+            this.lblTimer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblTimer.Font = new System.Drawing.Font("Open Sans", 90F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTimer.ForeColor = System.Drawing.Color.Red;
+            this.lblTimer.Location = new System.Drawing.Point(0, 0);
+            this.lblTimer.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTimer.Name = "lblTimer";
+            this.lblTimer.Size = new System.Drawing.Size(709, 140);
+            this.lblTimer.TabIndex = 6;
+            this.lblTimer.Text = "00:20:123";
+            this.lblTimer.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // tmrRefresh
+            // 
+            this.tmrRefresh.Enabled = true;
+            this.tmrRefresh.Interval = 50;
+            this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClear.Font = new System.Drawing.Font("Webdings", 12F);
+            this.btnClear.Location = new System.Drawing.Point(628, 19);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 25);
+            this.btnClear.TabIndex = 1;
+            this.btnClear.Text = "r";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // ResolutionSessionSupervisionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.chkFollow);
-            this.Controls.Add(this.lblState);
-            this.Controls.Add(this.btnTest);
-            this.Controls.Add(this.btnSetStep);
-            this.Controls.Add(this.btnPause);
-            this.Controls.Add(this.btnAbort);
-            this.Controls.Add(this.btnNext);
-            this.Controls.Add(this.btnStart);
-            this.Controls.Add(this.lst);
+            this.Controls.Add(this.pnl);
+            this.Controls.Add(this.lblTimer);
             this.Name = "ResolutionSessionSupervisionControl";
-            this.Size = new System.Drawing.Size(570, 411);
+            this.Size = new System.Drawing.Size(709, 537);
+            this.pnl.ResumeLayout(false);
+            this.pnl.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -218,5 +267,9 @@
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.Label lblState;
         private System.Windows.Forms.CheckBox chkFollow;
+        private System.Windows.Forms.Panel pnl;
+        private System.Windows.Forms.Label lblTimer;
+        private System.Windows.Forms.Timer tmrRefresh;
+        private System.Windows.Forms.Button btnClear;
     }
 }

@@ -216,5 +216,111 @@ namespace fgSolver
         {
             Runner.StopAll();
         }
+
+        private void btnMoveMin_Click(object sender, EventArgs e)
+        {
+            Runner.MoveToKnownPosition(_selectedMotor.Axe, _selectedMotor.Courronne, KnownPosition.MinStop);
+        }
+
+        private void btnMoveMiddle_Click(object sender, EventArgs e)
+        {
+            Runner.MoveToKnownPosition(_selectedMotor.Axe, _selectedMotor.Courronne, KnownPosition.Middle);
+        }
+
+        private void btnMoveMaxStop_Click(object sender, EventArgs e)
+        {
+            Runner.MoveToKnownPosition(_selectedMotor.Axe, _selectedMotor.Courronne, KnownPosition.MaxStop);
+        }
+
+        private void btnMoveNegativeQuarter_Click(object sender, EventArgs e)
+        {
+            Runner.MoveToKnownPosition(_selectedMotor.Axe, _selectedMotor.Courronne, KnownPosition.NegativeQuarter);
+        }
+
+        private void btnMovePositiveQuarter_Click(object sender, EventArgs e)
+        {
+            Runner.MoveToKnownPosition(_selectedMotor.Axe, _selectedMotor.Courronne, KnownPosition.PositiveQuarter);
+        }
+
+        private void btnMoveAllMinStop_Click(object sender, EventArgs e)
+        {
+            Runner.MoveAllToKnownPosition( KnownPosition.MinStop);
+        }
+
+        private void btnMoveAllMiddle_Click(object sender, EventArgs e)
+        {
+            Runner.MoveAllToKnownPosition(KnownPosition.Middle);
+        }
+
+        private void btnMoveAllMaxStop_Click(object sender, EventArgs e)
+        {
+            Runner.MoveAllToKnownPosition(KnownPosition.MaxStop);
+        }
+
+        private void btnSetPosMinStop_Click(object sender, EventArgs e)
+        {
+            Runner.SetCurrentPosition(_selectedMotor, 0);
+        }
+
+
+        private void btnSetPosMiddle_Click(object sender, EventArgs e)
+        {
+
+            Runner.SetCurrentPosition(_selectedMotor, _selectedMotor.StepsToPositivePosition/2);
+        }
+
+        private void btnSetPosMaxStop_Click(object sender, EventArgs e)
+        {
+            Runner.SetCurrentPosition(_selectedMotor, _selectedMotor.StepsToPositivePosition );
+        }
+
+        private void btnSetAllPosMiddle_Click(object sender, EventArgs e)
+        {
+            using (var state = GlobalState.GetState())
+            {
+                foreach (var m in state.Motors.Motors)
+                {
+                    Runner.SetCurrentPosition(m, m.StepsToPositivePosition/2);
+                }
+            }
+        }
+
+        private void btnSetAllPosMinStop_Click(object sender, EventArgs e)
+        {
+            using (var state = GlobalState.GetState())
+            {
+                foreach (var m in state.Motors.Motors)
+                {
+                    Runner.SetCurrentPosition(m, 0);
+                }
+            }
+        }
+
+        private void btnSetAllPosMaxStop_Click(object sender, EventArgs e)
+        {
+            using (var state = GlobalState.GetState())
+            {
+                foreach (var m in state.Motors.Motors)
+                {
+                    Runner.SetCurrentPosition(m, m.StepsToPositivePosition);
+                }
+            }
+        }
+
+        private void btnMoveAll_Click(object sender, EventArgs e)
+        {
+            using (var state = GlobalState.GetState())
+            {
+                foreach (var m in state.Motors.Motors)
+                {
+                    Runner.BeginMoveStep(m, (int)udMoveAll.Value);
+                }
+            }
+        }
+
+        private void setAccelAll_Click(object sender, EventArgs e)
+        {
+            Runner.SetAccelerationAll((int)udAccel.Value);
+        }
     }
 }

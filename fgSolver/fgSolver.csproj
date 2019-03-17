@@ -214,6 +214,8 @@
     <Compile Include="Modele\Session\Instruction.cs" />
     <Compile Include="Modele\Session\MoveToKnownPositionInstruction.cs" />
     <Compile Include="Modele\Session\ResolutionSession.cs" />
+    <Compile Include="Modele\Session\SetAccelerationInstruction.cs" />
+    <Compile Include="Modele\Session\SetSpeedInstruction.cs" />
     <Compile Include="Modele\Session\WaitInstruction.cs" />
     <Compile Include="Modele\Session\WaitTargetReachedInstruction.cs" />
     <Compile Include="Modele\Solution.cs" />

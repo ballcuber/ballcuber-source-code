@@ -72,23 +72,6 @@ namespace fgSolver
         }
 
 
-        private Stopwatch _stopWatch = new Stopwatch();
-        private void tmrChrono_Tick(object sender, EventArgs e)
-        {
-            lblTimer.Text = _stopWatch.Elapsed.ToString(@"mm\:ss\.fff");
-        }
-
-        public void StartTimer()
-        {
-            _stopWatch.Restart();
-        }
-
-        public void StopTImer()
-        {
-            _stopWatch.Stop();
-        }
-
         public void LeaveFrom() { }
-
     }
 }

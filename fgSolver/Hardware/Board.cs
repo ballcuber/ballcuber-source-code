@@ -210,6 +210,12 @@ namespace fgSolver.Hardware
             return _connection.Call<bool>("disableOutputs", mask);
         }
 
+        public SharerFunctionReturn<bool> SetAcceleration(int mask, int value)
+        {
+            AssertConnectedAndConfigured();
+            return _connection.Call<bool>("setAcceleration", mask, value);
+        }
+
         public SharerFunctionReturn<bool> SetSpeed(int mask, int value)
         {
             AssertConnectedAndConfigured();

@@ -301,6 +301,14 @@ namespace fgSolver
             }
         }
 
+        public int EngagedAcceleration { get; set; }
+
+        public int DisengagedAcceleration { get; set; }
+
+        public int EngagedSpeed { get; set; }
+
+        public int DisengagedSpeed { get; set; }
+
     }
 
 
@@ -330,7 +338,8 @@ namespace fgSolver
         [Description("Nombre de pas pour engreiner dans le sens positif depuis la position 0")]
         public int StepsToPositivePosition { get; set; }
 
-        public bool Inverted { get; set; } // sens inverse
+        [Description("Angle pour engreiner dans le sens positif depuis la position 0")]
+        public double StepsToPositivePositionDEG { get => StepsToPositivePosition * 360/3200; }
 
         // index dans le tableau interne au code arduino
         public byte Index

@@ -157,21 +157,23 @@ namespace fgSolver.Hardware
 
         public static void BeginMoveStep(Motor m, int value)
         {
-            if (m == null) return;
+          if (m == null) return;
+            AssertMotorEnabled(m);
 
-            if (m.Inverted)
-            {
-                value = -value;
-            }
-
-            GetBoard(m.Board).BeginMoveStep(m.Mask, value);
+            GetBoard(m.Board).Move(m.Mask, value);
         }
 
         public static void BeginMoveAbsolute(Motor m, int value)
         {
             if (m == null) return;
+            AssertMotorEnabled(m);
 
             GetBoard(m.Board).MoveTo(m.Mask, value);
+        }
+
+        private static void AssertMotorEnabled(Motor m)
+        {
+           // if (!m.Enabled) throw new Exception("Can't move, motor disabled.");
         }
 
 
@@ -236,6 +238,77 @@ namespace fgSolver.Hardware
             _board2.DisableOutputs(0xff);
         }
 
+        public static void SetAccelerationAll(int value)
+        {
+            _board1.SetAcceleration(0xff, value);
+            _board2.SetAcceleration(0xff, value);
+        }
+
+        public static void MoveToKnownPosition(Axe Axe, Couronne Couronne, KnownPosition KnownPosition, ResolutionSessionRuntimeContext ctx = null)
+        {
+            int steps;
+            using (var state = GlobalState.GetState())
+            {
+              var  Motor = state.Motors.Motors.FirstOrDefault((x) => x.Axe == Axe && x.Courronne == Couronne);
+
+                if (Motor == null) throw new Exception("Unable to find motor definition for crown " + Couronne + " axe " + Axe);
+
+                var stepPerQuarter = state.HardwareConfigGlobal.StepsPerCubeQuarter;
+
+                var modPos = Motor.Position % stepPerQuarter;
+                if (modPos < 0) modPos += stepPerQuarter;
+
+                switch (KnownPosition)
+                {
+
+                    case KnownPosition.NegativeQuarter:
+                        steps= - stepPerQuarter;
+                        break;
+                    case KnownPosition.PositiveQuarter:
+                        steps = stepPerQuarter;
+                        break;
+
+                    //case KnownPosition.UTurn:
+                    //    steps = 2 * stepPerQuarter;
+                    //    break;
+
+                    case KnownPosition.MaxStop:
+                        steps = Motor.StepsToPositivePosition - modPos;
+                        break;
+                    case KnownPosition.MinStop:
+                        steps = -modPos;
+                        break;
+                    case KnownPosition.Middle:
+                        steps = Motor.StepsToPositivePosition / 2 - modPos;
+                        break;
+                    default:
+                        throw new Exception("Unknow position : " + KnownPosition);
+                }
+
+
+                steps += Motor.Position;
+
+               if(ctx!=null) ctx.SetTargetPosition(Motor.Courronne, Motor.Axe, steps);
+
+
+               if (state.Simulated) return;
+
+
+                Runner.BeginMoveAbsolute(Motor, steps);
+            }
+        }
+
+        public static void MoveAllToKnownPosition(KnownPosition knownPosition)
+        {
+            foreach(var axe in new Axe[] { Axe.X, Axe.Y, Axe.Z })
+            {
+                foreach(var courronne in new Couronne[] { Couronne.MidMin, Couronne.MidMax, Couronne.Max })
+                {
+                    MoveToKnownPosition(axe, courronne, knownPosition);
+                }
+            }
+           
+        }
 
     }
 }

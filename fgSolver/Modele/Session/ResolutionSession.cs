@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -267,7 +268,7 @@ namespace fgSolver.Modele
                             // fin de la session
                             if (_currentInstructionID >= _instructions.Count || _currentInstructionID < 0)
                             {
-                                Abort();
+                                Pause();
                                 continue;
                             }
 
@@ -335,9 +336,12 @@ namespace fgSolver.Modele
                 Add(new CommentInstruction("Moves : " + state.Solution.MachineMoves.MotorMoves.Count.ToString()));
                 Add(new CommentInstruction("Quarters : " + state.Solution.MachineMoves.MotorMoves.Sum((x) => x.QuarterNumber).ToString()));
                 Add(new InitializeIHMInstruction(state.Solution.OriginalCube));
-               
+
+                AddInitBlock();
+
                 foreach (var mv in state.Solution.MachineMoves.MotorMoves)
                 {
+                    AddAlignment();
                     Add(mv);
                 }
             }
@@ -352,6 +356,15 @@ namespace fgSolver.Modele
             using (var state = GlobalState.GetState())
             {
                 var remainQuarters = new int[] { mv.MidMinMovesCount, mv.MidMaxMovesCount, mv.MaxMovesCount };
+
+                // cas particulier de l'axe Z Max qui pour fonctionner correctement doit être après un mouvement de son voisin qui remet de l'ordre
+                if(mv.Axe== Axe.Z && mv.MaxMovesCount != 0)
+                {
+                    // Ajouter un quart de tour de ZMidMax dans un sens, puis dans l'autre en finissant par le même sens que Z mAx pour limiter le nombre de mouvement
+                    var sensZMax = Math.Sign(mv.MaxMovesCount);
+                    AddWithAnticollision(state, new int[] { 0, -sensZMax, 0 }, -sensZMax, Axe.Z);
+                    AddWithAnticollision(state, new int[] { 0, sensZMax, 0 }, sensZMax, Axe.Z);
+                }
 
                 if (mv.PotentialNegativeQuarters > mv.PotentialPositiveQuarters)
                 { // commencer par tourner dans le sens négatif car c'est ce qu'il y a de plus à faire
@@ -375,7 +388,7 @@ namespace fgSolver.Modele
                     AddWithAnticollision(state, remainQuarters, -1, mv.Axe);
                 }
 
-
+                AddInitBlock();
 
             }
 
@@ -417,8 +430,11 @@ namespace fgSolver.Modele
 
             if (couronnesToMove.Count == 0) return;
 
+            Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.DisengagedAcceleration));
+            Add(new SetSpeedInstruction(state.HardwareConfigGlobal.DisengagedSpeed));
+
             // mise en position des couronnes parallèles
-            foreach(var c in couronnesToFix)
+            foreach (var c in couronnesToFix)
             {
                 AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
             }
@@ -429,11 +445,12 @@ namespace fgSolver.Modele
                 AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.MaxStop : KnownPosition.MinStop);
             }
 
+
             //Déplacement des autres couronnes perpendiculaires
-            foreach(var motor in state.Motors.Motors)
+            foreach (var motor in state.Motors.Motors)
             {
                 if (motor.Axe == axe) continue;
-
+                /*
                 var negCollision = couronnesToMove.Any((c) => motor.NegativeCollision.HasCollision(axe, c));
                 var posCollision = couronnesToMove.Any((c) => motor.PositiveCollision.HasCollision(axe, c));
 
@@ -450,10 +467,15 @@ namespace fgSolver.Modele
                 }
 
                 AddMoveToKnowPosition(motor.Axe, motor.Courronne, pos);
+                */
+                AddMoveToKnowPosition(motor.Axe, motor.Courronne, KnownPosition.Middle);
 
             }
 
             Add(new WaitTargetReachedInstruction());
+
+            Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.EngagedAcceleration));
+            Add(new SetSpeedInstruction(state.HardwareConfigGlobal.EngagedSpeed));
 
             // faire un quart de tour
             foreach(var c in couronnesToMove)
@@ -466,6 +488,9 @@ namespace fgSolver.Modele
 
         private static void AddMoveToKnowPosition(Axe axe, Couronne couronne, KnownPosition pos)
         {
+            Add(new MoveToKnownPositionInstruction(axe, couronne, pos));
+
+            /*
             if (_designContext.GetPosition(couronne, axe) != pos)
             {
                 Add(new MoveToKnownPositionInstruction(axe, couronne, pos));
@@ -476,6 +501,52 @@ namespace fgSolver.Modele
                     _designContext.SetPosition(couronne, axe, pos);
                 }
             }
+            */
         }
+
+        public static void AddInitBlock()
+        {
+            Add(new BeginGroupeInstruction("Position initiale"));
+            using (var state = GlobalState.GetState())
+            {
+                Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.DisengagedAcceleration));
+                Add(new SetSpeedInstruction(state.HardwareConfigGlobal.DisengagedSpeed));
+            }
+            foreach (var c in new Couronne[] { Couronne.MidMin, Couronne.MidMax, Couronne.Max })
+            {
+                foreach (var a in new Axe[] { Axe.X, Axe.Y, Axe.Z })
+                {
+                    AddMoveToKnowPosition(a, c, KnownPosition.Middle);
+                }
+            }
+            Add(new WaitTargetReachedInstruction());
+        }
+
+        public static void AddAlignment()
+        {
+            Add(new BeginGroupeInstruction("Alignement"));
+            using (var state = GlobalState.GetState())
+            {
+                Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.DisengagedAcceleration));
+                Add(new SetSpeedInstruction(state.HardwareConfigGlobal.DisengagedSpeed));
+            }
+            foreach (var c in new Couronne[] { Couronne.MidMin, Couronne.MidMax, Couronne.Max })
+            {
+                foreach (var a in new Axe[] { Axe.X, Axe.Y, Axe.Z })
+                {
+                    AddMoveToKnowPosition(a, c, KnownPosition.MaxStop);
+                }
+            }
+            Add(new WaitTargetReachedInstruction());
+            foreach (var c in new Couronne[] { Couronne.MidMin, Couronne.MidMax, Couronne.Max })
+            {
+                foreach (var a in new Axe[] { Axe.X, Axe.Y, Axe.Z })
+                {
+                    AddMoveToKnowPosition(a, c, KnownPosition.MinStop);
+                }
+            }
+            Add(new WaitTargetReachedInstruction());
+        }
+
     }
 }

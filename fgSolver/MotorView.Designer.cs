@@ -45,9 +45,17 @@
             this.udSpeed = new System.Windows.Forms.NumericUpDown();
             this.udAbsolute = new System.Windows.Forms.NumericUpDown();
             this.udSteps = new System.Windows.Forms.NumericUpDown();
+            this.btnMoveNegativeQuarter = new System.Windows.Forms.Button();
+            this.btnSetPosMinStop = new System.Windows.Forms.Button();
+            this.btnMoveMin = new System.Windows.Forms.Button();
             this.btnMoveAbsolute = new System.Windows.Forms.Button();
+            this.btnMovePositiveQuarter = new System.Windows.Forms.Button();
+            this.btnSetPosMaxStop = new System.Windows.Forms.Button();
+            this.btnMoveMaxStop = new System.Windows.Forms.Button();
             this.btnSetPosition = new System.Windows.Forms.Button();
+            this.btnSetPosMiddle = new System.Windows.Forms.Button();
             this.btnSetSpeed = new System.Windows.Forms.Button();
+            this.btnMoveMiddle = new System.Windows.Forms.Button();
             this.btnMoveSteps = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnDisable = new System.Windows.Forms.Button();
@@ -55,14 +63,22 @@
             this.lblSelected = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.grp = new System.Windows.Forms.GroupBox();
             this.btnEnableAll = new System.Windows.Forms.Button();
             this.btnDisableAll = new System.Windows.Forms.Button();
+            this.btnMoveAll = new System.Windows.Forms.Button();
+            this.udMoveAll = new System.Windows.Forms.NumericUpDown();
             this.btnSetPositionAll = new System.Windows.Forms.Button();
             this.udSetPositionAll = new System.Windows.Forms.NumericUpDown();
             this.btnSetSpeedAll = new System.Windows.Forms.Button();
             this.udSetSpeedAll = new System.Windows.Forms.NumericUpDown();
             this.btnStopAll = new System.Windows.Forms.Button();
+            this.btnMoveAllMinStop = new System.Windows.Forms.Button();
+            this.btnSetAllPosMinStop = new System.Windows.Forms.Button();
+            this.btnMoveAllMiddle = new System.Windows.Forms.Button();
+            this.btnMoveAllMaxStop = new System.Windows.Forms.Button();
+            this.btnSetAllPosMaxStop = new System.Windows.Forms.Button();
+            this.btnSetAllPosMiddle = new System.Windows.Forms.Button();
             this.ledBulb9 = new Bulb.LedBulb();
             this.ledBulb8 = new Bulb.LedBulb();
             this.ledBulb7 = new Bulb.LedBulb();
@@ -73,6 +89,8 @@
             this.ledBulb2 = new Bulb.LedBulb();
             this.ledBulb1 = new Bulb.LedBulb();
             this.ledEnabled = new Bulb.LedBulb();
+            this.udAccel = new System.Windows.Forms.NumericUpDown();
+            this.setAccelAll = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udPosition)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSpeed)).BeginInit();
@@ -80,9 +98,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.udSteps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.grp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udMoveAll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSetPositionAll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSetSpeedAll)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udAccel)).BeginInit();
             this.SuspendLayout();
             // 
             // radioButton1
@@ -204,9 +224,17 @@
             this.panel1.Controls.Add(this.udSpeed);
             this.panel1.Controls.Add(this.udAbsolute);
             this.panel1.Controls.Add(this.udSteps);
+            this.panel1.Controls.Add(this.btnMoveNegativeQuarter);
+            this.panel1.Controls.Add(this.btnSetPosMinStop);
+            this.panel1.Controls.Add(this.btnMoveMin);
             this.panel1.Controls.Add(this.btnMoveAbsolute);
+            this.panel1.Controls.Add(this.btnMovePositiveQuarter);
+            this.panel1.Controls.Add(this.btnSetPosMaxStop);
+            this.panel1.Controls.Add(this.btnMoveMaxStop);
             this.panel1.Controls.Add(this.btnSetPosition);
+            this.panel1.Controls.Add(this.btnSetPosMiddle);
             this.panel1.Controls.Add(this.btnSetSpeed);
+            this.panel1.Controls.Add(this.btnMoveMiddle);
             this.panel1.Controls.Add(this.ledEnabled);
             this.panel1.Controls.Add(this.btnMoveSteps);
             this.panel1.Controls.Add(this.btnStop);
@@ -215,12 +243,12 @@
             this.panel1.Controls.Add(this.lblSelected);
             this.panel1.Location = new System.Drawing.Point(3, 322);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(675, 291);
+            this.panel1.Size = new System.Drawing.Size(706, 215);
             this.panel1.TabIndex = 5;
             // 
             // txtPosition
             // 
-            this.txtPosition.Location = new System.Drawing.Point(353, 96);
+            this.txtPosition.Location = new System.Drawing.Point(287, 39);
             this.txtPosition.Name = "txtPosition";
             this.txtPosition.ReadOnly = true;
             this.txtPosition.Size = new System.Drawing.Size(120, 20);
@@ -229,7 +257,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(300, 99);
+            this.label1.Location = new System.Drawing.Point(234, 42);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 4;
@@ -242,14 +270,14 @@
             this.grid.HelpVisible = false;
             this.grid.Location = new System.Drawing.Point(0, 29);
             this.grid.Name = "grid";
-            this.grid.Size = new System.Drawing.Size(278, 247);
+            this.grid.Size = new System.Drawing.Size(229, 171);
             this.grid.TabIndex = 3;
             this.grid.ToolbarVisible = false;
             this.grid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.grid_PropertyValueChanged);
             // 
             // udPosition
             // 
-            this.udPosition.Location = new System.Drawing.Point(353, 208);
+            this.udPosition.Location = new System.Drawing.Point(287, 151);
             this.udPosition.Maximum = new decimal(new int[] {
             -1530494977,
             232830,
@@ -266,7 +294,7 @@
             // 
             // udSpeed
             // 
-            this.udSpeed.Location = new System.Drawing.Point(353, 179);
+            this.udSpeed.Location = new System.Drawing.Point(287, 122);
             this.udSpeed.Maximum = new decimal(new int[] {
             -1530494977,
             232830,
@@ -288,7 +316,7 @@
             // 
             // udAbsolute
             // 
-            this.udAbsolute.Location = new System.Drawing.Point(353, 124);
+            this.udAbsolute.Location = new System.Drawing.Point(287, 67);
             this.udAbsolute.Maximum = new decimal(new int[] {
             -1530494977,
             232830,
@@ -305,7 +333,7 @@
             // 
             // udSteps
             // 
-            this.udSteps.Location = new System.Drawing.Point(353, 150);
+            this.udSteps.Location = new System.Drawing.Point(287, 93);
             this.udSteps.Maximum = new decimal(new int[] {
             -1530494977,
             232830,
@@ -320,9 +348,39 @@
             this.udSteps.Size = new System.Drawing.Size(120, 20);
             this.udSteps.TabIndex = 2;
             // 
+            // btnMoveNegativeQuarter
+            // 
+            this.btnMoveNegativeQuarter.Location = new System.Drawing.Point(610, 32);
+            this.btnMoveNegativeQuarter.Name = "btnMoveNegativeQuarter";
+            this.btnMoveNegativeQuarter.Size = new System.Drawing.Size(86, 23);
+            this.btnMoveNegativeQuarter.TabIndex = 1;
+            this.btnMoveNegativeQuarter.Text = "Move -1/4";
+            this.btnMoveNegativeQuarter.UseVisualStyleBackColor = true;
+            this.btnMoveNegativeQuarter.Click += new System.EventHandler(this.btnMoveNegativeQuarter_Click);
+            // 
+            // btnSetPosMinStop
+            // 
+            this.btnSetPosMinStop.Location = new System.Drawing.Point(509, 61);
+            this.btnSetPosMinStop.Name = "btnSetPosMinStop";
+            this.btnSetPosMinStop.Size = new System.Drawing.Size(97, 23);
+            this.btnSetPosMinStop.TabIndex = 1;
+            this.btnSetPosMinStop.Text = "Set pos. min stop";
+            this.btnSetPosMinStop.UseVisualStyleBackColor = true;
+            this.btnSetPosMinStop.Click += new System.EventHandler(this.btnSetPosMinStop_Click);
+            // 
+            // btnMoveMin
+            // 
+            this.btnMoveMin.Location = new System.Drawing.Point(610, 61);
+            this.btnMoveMin.Name = "btnMoveMin";
+            this.btnMoveMin.Size = new System.Drawing.Size(86, 23);
+            this.btnMoveMin.TabIndex = 1;
+            this.btnMoveMin.Text = "Move min stop";
+            this.btnMoveMin.UseVisualStyleBackColor = true;
+            this.btnMoveMin.Click += new System.EventHandler(this.btnMoveMin_Click);
+            // 
             // btnMoveAbsolute
             // 
-            this.btnMoveAbsolute.Location = new System.Drawing.Point(479, 121);
+            this.btnMoveAbsolute.Location = new System.Drawing.Point(413, 64);
             this.btnMoveAbsolute.Name = "btnMoveAbsolute";
             this.btnMoveAbsolute.Size = new System.Drawing.Size(92, 23);
             this.btnMoveAbsolute.TabIndex = 1;
@@ -330,9 +388,39 @@
             this.btnMoveAbsolute.UseVisualStyleBackColor = true;
             this.btnMoveAbsolute.Click += new System.EventHandler(this.btnMoveAbsolute_Click);
             // 
+            // btnMovePositiveQuarter
+            // 
+            this.btnMovePositiveQuarter.Location = new System.Drawing.Point(610, 148);
+            this.btnMovePositiveQuarter.Name = "btnMovePositiveQuarter";
+            this.btnMovePositiveQuarter.Size = new System.Drawing.Size(86, 23);
+            this.btnMovePositiveQuarter.TabIndex = 1;
+            this.btnMovePositiveQuarter.Text = "Move +1/4";
+            this.btnMovePositiveQuarter.UseVisualStyleBackColor = true;
+            this.btnMovePositiveQuarter.Click += new System.EventHandler(this.btnMovePositiveQuarter_Click);
+            // 
+            // btnSetPosMaxStop
+            // 
+            this.btnSetPosMaxStop.Location = new System.Drawing.Point(509, 119);
+            this.btnSetPosMaxStop.Name = "btnSetPosMaxStop";
+            this.btnSetPosMaxStop.Size = new System.Drawing.Size(97, 23);
+            this.btnSetPosMaxStop.TabIndex = 1;
+            this.btnSetPosMaxStop.Text = "Set pos max stop";
+            this.btnSetPosMaxStop.UseVisualStyleBackColor = true;
+            this.btnSetPosMaxStop.Click += new System.EventHandler(this.btnSetPosMaxStop_Click);
+            // 
+            // btnMoveMaxStop
+            // 
+            this.btnMoveMaxStop.Location = new System.Drawing.Point(610, 119);
+            this.btnMoveMaxStop.Name = "btnMoveMaxStop";
+            this.btnMoveMaxStop.Size = new System.Drawing.Size(86, 23);
+            this.btnMoveMaxStop.TabIndex = 1;
+            this.btnMoveMaxStop.Text = "Move max stop";
+            this.btnMoveMaxStop.UseVisualStyleBackColor = true;
+            this.btnMoveMaxStop.Click += new System.EventHandler(this.btnMoveMaxStop_Click);
+            // 
             // btnSetPosition
             // 
-            this.btnSetPosition.Location = new System.Drawing.Point(479, 205);
+            this.btnSetPosition.Location = new System.Drawing.Point(413, 148);
             this.btnSetPosition.Name = "btnSetPosition";
             this.btnSetPosition.Size = new System.Drawing.Size(92, 23);
             this.btnSetPosition.TabIndex = 1;
@@ -340,9 +428,19 @@
             this.btnSetPosition.UseVisualStyleBackColor = true;
             this.btnSetPosition.Click += new System.EventHandler(this.btnSetPosition_Click);
             // 
+            // btnSetPosMiddle
+            // 
+            this.btnSetPosMiddle.Location = new System.Drawing.Point(509, 90);
+            this.btnSetPosMiddle.Name = "btnSetPosMiddle";
+            this.btnSetPosMiddle.Size = new System.Drawing.Size(97, 23);
+            this.btnSetPosMiddle.TabIndex = 1;
+            this.btnSetPosMiddle.Text = "Set pos. middle";
+            this.btnSetPosMiddle.UseVisualStyleBackColor = true;
+            this.btnSetPosMiddle.Click += new System.EventHandler(this.btnSetPosMiddle_Click);
+            // 
             // btnSetSpeed
             // 
-            this.btnSetSpeed.Location = new System.Drawing.Point(479, 176);
+            this.btnSetSpeed.Location = new System.Drawing.Point(413, 119);
             this.btnSetSpeed.Name = "btnSetSpeed";
             this.btnSetSpeed.Size = new System.Drawing.Size(92, 23);
             this.btnSetSpeed.TabIndex = 1;
@@ -350,9 +448,19 @@
             this.btnSetSpeed.UseVisualStyleBackColor = true;
             this.btnSetSpeed.Click += new System.EventHandler(this.btnSetSpeed_Click);
             // 
+            // btnMoveMiddle
+            // 
+            this.btnMoveMiddle.Location = new System.Drawing.Point(610, 90);
+            this.btnMoveMiddle.Name = "btnMoveMiddle";
+            this.btnMoveMiddle.Size = new System.Drawing.Size(86, 23);
+            this.btnMoveMiddle.TabIndex = 1;
+            this.btnMoveMiddle.Text = "Move middle";
+            this.btnMoveMiddle.UseVisualStyleBackColor = true;
+            this.btnMoveMiddle.Click += new System.EventHandler(this.btnMoveMiddle_Click);
+            // 
             // btnMoveSteps
             // 
-            this.btnMoveSteps.Location = new System.Drawing.Point(479, 147);
+            this.btnMoveSteps.Location = new System.Drawing.Point(413, 90);
             this.btnMoveSteps.Name = "btnMoveSteps";
             this.btnMoveSteps.Size = new System.Drawing.Size(92, 23);
             this.btnMoveSteps.TabIndex = 1;
@@ -364,7 +472,7 @@
             // 
             this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStop.ForeColor = System.Drawing.Color.Red;
-            this.btnStop.Location = new System.Drawing.Point(450, 43);
+            this.btnStop.Location = new System.Drawing.Point(449, 6);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 1;
@@ -374,7 +482,7 @@
             // 
             // btnDisable
             // 
-            this.btnDisable.Location = new System.Drawing.Point(353, 58);
+            this.btnDisable.Location = new System.Drawing.Point(368, 6);
             this.btnDisable.Name = "btnDisable";
             this.btnDisable.Size = new System.Drawing.Size(75, 23);
             this.btnDisable.TabIndex = 1;
@@ -384,7 +492,7 @@
             // 
             // btnEnable
             // 
-            this.btnEnable.Location = new System.Drawing.Point(353, 29);
+            this.btnEnable.Location = new System.Drawing.Point(287, 6);
             this.btnEnable.Name = "btnEnable";
             this.btnEnable.Size = new System.Drawing.Size(75, 23);
             this.btnEnable.TabIndex = 1;
@@ -421,22 +529,32 @@
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
-            // groupBox1
+            // grp
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this.btnEnableAll);
-            this.groupBox1.Controls.Add(this.btnDisableAll);
-            this.groupBox1.Controls.Add(this.btnSetPositionAll);
-            this.groupBox1.Controls.Add(this.udSetPositionAll);
-            this.groupBox1.Controls.Add(this.btnSetSpeedAll);
-            this.groupBox1.Controls.Add(this.udSetSpeedAll);
-            this.groupBox1.Controls.Add(this.btnStopAll);
-            this.groupBox1.Location = new System.Drawing.Point(3, 619);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(675, 122);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Action groupée";
+            this.grp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.grp.Controls.Add(this.btnEnableAll);
+            this.grp.Controls.Add(this.btnDisableAll);
+            this.grp.Controls.Add(this.setAccelAll);
+            this.grp.Controls.Add(this.udAccel);
+            this.grp.Controls.Add(this.btnMoveAll);
+            this.grp.Controls.Add(this.udMoveAll);
+            this.grp.Controls.Add(this.btnSetPositionAll);
+            this.grp.Controls.Add(this.udSetPositionAll);
+            this.grp.Controls.Add(this.btnSetSpeedAll);
+            this.grp.Controls.Add(this.udSetSpeedAll);
+            this.grp.Controls.Add(this.btnStopAll);
+            this.grp.Controls.Add(this.btnMoveAllMinStop);
+            this.grp.Controls.Add(this.btnSetAllPosMinStop);
+            this.grp.Controls.Add(this.btnMoveAllMiddle);
+            this.grp.Controls.Add(this.btnMoveAllMaxStop);
+            this.grp.Controls.Add(this.btnSetAllPosMaxStop);
+            this.grp.Controls.Add(this.btnSetAllPosMiddle);
+            this.grp.Location = new System.Drawing.Point(3, 528);
+            this.grp.Name = "grp";
+            this.grp.Size = new System.Drawing.Size(706, 137);
+            this.grp.TabIndex = 7;
+            this.grp.TabStop = false;
+            this.grp.Text = "Action groupée";
             // 
             // btnEnableAll
             // 
@@ -457,6 +575,33 @@
             this.btnDisableAll.Text = "Disable all";
             this.btnDisableAll.UseVisualStyleBackColor = true;
             this.btnDisableAll.Click += new System.EventHandler(this.btnDisableAll_Click);
+            // 
+            // btnMoveAll
+            // 
+            this.btnMoveAll.Location = new System.Drawing.Point(137, 108);
+            this.btnMoveAll.Name = "btnMoveAll";
+            this.btnMoveAll.Size = new System.Drawing.Size(92, 23);
+            this.btnMoveAll.TabIndex = 1;
+            this.btnMoveAll.Text = "Set position all";
+            this.btnMoveAll.UseVisualStyleBackColor = true;
+            this.btnMoveAll.Click += new System.EventHandler(this.btnMoveAll_Click);
+            // 
+            // udMoveAll
+            // 
+            this.udMoveAll.Location = new System.Drawing.Point(11, 111);
+            this.udMoveAll.Maximum = new decimal(new int[] {
+            -1530494977,
+            232830,
+            0,
+            0});
+            this.udMoveAll.Minimum = new decimal(new int[] {
+            -1530494977,
+            232830,
+            0,
+            -2147483648});
+            this.udMoveAll.Name = "udMoveAll";
+            this.udMoveAll.Size = new System.Drawing.Size(120, 20);
+            this.udMoveAll.TabIndex = 2;
             // 
             // btnSetPositionAll
             // 
@@ -528,6 +673,66 @@
             this.btnStopAll.Text = "STOP ALL";
             this.btnStopAll.UseVisualStyleBackColor = true;
             this.btnStopAll.Click += new System.EventHandler(this.btnStopAll_Click);
+            // 
+            // btnMoveAllMinStop
+            // 
+            this.btnMoveAllMinStop.Location = new System.Drawing.Point(413, 19);
+            this.btnMoveAllMinStop.Name = "btnMoveAllMinStop";
+            this.btnMoveAllMinStop.Size = new System.Drawing.Size(97, 23);
+            this.btnMoveAllMinStop.TabIndex = 1;
+            this.btnMoveAllMinStop.Text = "Move min stop";
+            this.btnMoveAllMinStop.UseVisualStyleBackColor = true;
+            this.btnMoveAllMinStop.Click += new System.EventHandler(this.btnMoveAllMinStop_Click);
+            // 
+            // btnSetAllPosMinStop
+            // 
+            this.btnSetAllPosMinStop.Location = new System.Drawing.Point(310, 20);
+            this.btnSetAllPosMinStop.Name = "btnSetAllPosMinStop";
+            this.btnSetAllPosMinStop.Size = new System.Drawing.Size(97, 23);
+            this.btnSetAllPosMinStop.TabIndex = 1;
+            this.btnSetAllPosMinStop.Text = "Set pos. min stop";
+            this.btnSetAllPosMinStop.UseVisualStyleBackColor = true;
+            this.btnSetAllPosMinStop.Click += new System.EventHandler(this.btnSetAllPosMinStop_Click);
+            // 
+            // btnMoveAllMiddle
+            // 
+            this.btnMoveAllMiddle.Location = new System.Drawing.Point(413, 48);
+            this.btnMoveAllMiddle.Name = "btnMoveAllMiddle";
+            this.btnMoveAllMiddle.Size = new System.Drawing.Size(97, 23);
+            this.btnMoveAllMiddle.TabIndex = 1;
+            this.btnMoveAllMiddle.Text = "Move middle";
+            this.btnMoveAllMiddle.UseVisualStyleBackColor = true;
+            this.btnMoveAllMiddle.Click += new System.EventHandler(this.btnMoveAllMiddle_Click);
+            // 
+            // btnMoveAllMaxStop
+            // 
+            this.btnMoveAllMaxStop.Location = new System.Drawing.Point(413, 77);
+            this.btnMoveAllMaxStop.Name = "btnMoveAllMaxStop";
+            this.btnMoveAllMaxStop.Size = new System.Drawing.Size(97, 23);
+            this.btnMoveAllMaxStop.TabIndex = 1;
+            this.btnMoveAllMaxStop.Text = "Move max stop";
+            this.btnMoveAllMaxStop.UseVisualStyleBackColor = true;
+            this.btnMoveAllMaxStop.Click += new System.EventHandler(this.btnMoveAllMaxStop_Click);
+            // 
+            // btnSetAllPosMaxStop
+            // 
+            this.btnSetAllPosMaxStop.Location = new System.Drawing.Point(310, 78);
+            this.btnSetAllPosMaxStop.Name = "btnSetAllPosMaxStop";
+            this.btnSetAllPosMaxStop.Size = new System.Drawing.Size(97, 23);
+            this.btnSetAllPosMaxStop.TabIndex = 1;
+            this.btnSetAllPosMaxStop.Text = "Set pos max stop";
+            this.btnSetAllPosMaxStop.UseVisualStyleBackColor = true;
+            this.btnSetAllPosMaxStop.Click += new System.EventHandler(this.btnSetAllPosMaxStop_Click);
+            // 
+            // btnSetAllPosMiddle
+            // 
+            this.btnSetAllPosMiddle.Location = new System.Drawing.Point(310, 49);
+            this.btnSetAllPosMiddle.Name = "btnSetAllPosMiddle";
+            this.btnSetAllPosMiddle.Size = new System.Drawing.Size(97, 23);
+            this.btnSetAllPosMiddle.TabIndex = 1;
+            this.btnSetAllPosMiddle.Text = "Set pos. middle";
+            this.btnSetAllPosMiddle.UseVisualStyleBackColor = true;
+            this.btnSetAllPosMiddle.Click += new System.EventHandler(this.btnSetAllPosMiddle_Click);
             // 
             // ledBulb9
             // 
@@ -631,7 +836,7 @@
             // ledEnabled
             // 
             this.ledEnabled.BackColor = System.Drawing.SystemColors.Control;
-            this.ledEnabled.Location = new System.Drawing.Point(321, 43);
+            this.ledEnabled.Location = new System.Drawing.Point(255, 6);
             this.ledEnabled.Name = "ledEnabled";
             this.ledEnabled.On = true;
             this.ledEnabled.Size = new System.Drawing.Size(26, 26);
@@ -639,9 +844,36 @@
             this.ledEnabled.Tag = "Z1";
             this.ledEnabled.Text = "ledBulb1";
             // 
+            // udAccel
+            // 
+            this.udAccel.Location = new System.Drawing.Point(311, 109);
+            this.udAccel.Maximum = new decimal(new int[] {
+            -1530494977,
+            232830,
+            0,
+            0});
+            this.udAccel.Minimum = new decimal(new int[] {
+            -1530494977,
+            232830,
+            0,
+            -2147483648});
+            this.udAccel.Name = "udAccel";
+            this.udAccel.Size = new System.Drawing.Size(120, 20);
+            this.udAccel.TabIndex = 2;
+            // 
+            // setAccelAll
+            // 
+            this.setAccelAll.Location = new System.Drawing.Point(437, 106);
+            this.setAccelAll.Name = "setAccelAll";
+            this.setAccelAll.Size = new System.Drawing.Size(92, 23);
+            this.setAccelAll.TabIndex = 1;
+            this.setAccelAll.Text = "Set position all";
+            this.setAccelAll.UseVisualStyleBackColor = true;
+            this.setAccelAll.Click += new System.EventHandler(this.setAccelAll_Click);
+            // 
             // MotorView
             // 
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.grp);
             this.Controls.Add(this.ledBulb9);
             this.Controls.Add(this.ledBulb8);
             this.Controls.Add(this.ledBulb7);
@@ -664,7 +896,7 @@
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Name = "MotorView";
-            this.Size = new System.Drawing.Size(745, 744);
+            this.Size = new System.Drawing.Size(746, 668);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udPosition)).EndInit();
@@ -673,9 +905,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.udSteps)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
+            this.grp.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.udMoveAll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSetPositionAll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSetSpeedAll)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udAccel)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -717,7 +951,7 @@
         private System.Windows.Forms.TextBox txtPosition;
         private System.Windows.Forms.NumericUpDown udPosition;
         private System.Windows.Forms.Button btnSetPosition;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox grp;
         private System.Windows.Forms.Button btnEnableAll;
         private System.Windows.Forms.Button btnDisableAll;
         private System.Windows.Forms.Button btnSetPositionAll;
@@ -726,5 +960,23 @@
         private System.Windows.Forms.NumericUpDown udSetSpeedAll;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnStopAll;
+        private System.Windows.Forms.Button btnMoveMin;
+        private System.Windows.Forms.Button btnMoveMaxStop;
+        private System.Windows.Forms.Button btnMoveMiddle;
+        private System.Windows.Forms.Button btnMoveNegativeQuarter;
+        private System.Windows.Forms.Button btnMovePositiveQuarter;
+        private System.Windows.Forms.Button btnMoveAllMinStop;
+        private System.Windows.Forms.Button btnMoveAllMiddle;
+        private System.Windows.Forms.Button btnMoveAllMaxStop;
+        private System.Windows.Forms.Button btnSetPosMinStop;
+        private System.Windows.Forms.Button btnSetPosMaxStop;
+        private System.Windows.Forms.Button btnSetPosMiddle;
+        private System.Windows.Forms.Button btnSetAllPosMinStop;
+        private System.Windows.Forms.Button btnSetAllPosMaxStop;
+        private System.Windows.Forms.Button btnSetAllPosMiddle;
+        private System.Windows.Forms.Button btnMoveAll;
+        private System.Windows.Forms.NumericUpDown udMoveAll;
+        private System.Windows.Forms.Button setAccelAll;
+        private System.Windows.Forms.NumericUpDown udAccel;
     }
 }

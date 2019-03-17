@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using fgSolver.Hardware;
+using fgSolver.Modele;
 
 namespace fgSolver
 {
@@ -46,6 +47,7 @@ namespace fgSolver
 
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
+            resolutionSessionSupervisionControl.PeriodicUpdate(currentState);
             
         }
 
@@ -53,10 +55,21 @@ namespace fgSolver
         {
             //    Runner.BlockingMove(e.MotorMove);
 
+            ResolutionSession.Add(e.MotorMove);
         }
 
         public void NavigueTo() { }
 
         public void LeaveFrom() { }
+
+        private void btnInit_Click(object sender, EventArgs e)
+        {
+            ResolutionSession.AddInitBlock();
+        }
+
+        private void btnAlign_Click(object sender, EventArgs e)
+        {
+            ResolutionSession.AddAlignment();
+        }
     }
 }
