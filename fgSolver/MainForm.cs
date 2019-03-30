@@ -205,5 +205,22 @@ namespace fgSolver
                 Logger.Log(ex);
             }
         }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            Hardware.Runner.StopAll();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Space)
+            {
+                Hardware.Runner.StopAll();
+                return true;    // indicate that you handled this keystroke
+            }
+
+            // Call the base class
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }

@@ -49,6 +49,9 @@
             this.button24 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tableCube.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -56,7 +59,7 @@
             // 
             // tableCube
             // 
-            this.tableCube.ColumnCount = 18;
+            this.tableCube.ColumnCount = 20;
             this.tableCube.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableCube.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableCube.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -75,6 +78,8 @@
             this.tableCube.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableCube.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableCube.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableCube.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableCube.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableCube.Controls.Add(this.button1, 4, 12);
             this.tableCube.Controls.Add(this.button2, 4, 13);
             this.tableCube.Controls.Add(this.button3, 5, 12);
@@ -94,10 +99,13 @@
             this.tableCube.Controls.Add(this.button24, 10, 9);
             this.tableCube.Controls.Add(this.button23, 11, 9);
             this.tableCube.Controls.Add(this.pictureBox1, 8, 8);
+            this.tableCube.Controls.Add(this.label1, 10, 10);
+            this.tableCube.Controls.Add(this.label2, 18, 5);
+            this.tableCube.Controls.Add(this.label3, 5, 14);
             this.tableCube.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableCube.Location = new System.Drawing.Point(0, 0);
             this.tableCube.Name = "tableCube";
-            this.tableCube.RowCount = 14;
+            this.tableCube.RowCount = 15;
             this.tableCube.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableCube.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableCube.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -114,7 +122,8 @@
             this.tableCube.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableCube.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableCube.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableCube.Size = new System.Drawing.Size(360, 280);
+            this.tableCube.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableCube.Size = new System.Drawing.Size(380, 300);
             this.tableCube.TabIndex = 4;
             // 
             // button1
@@ -363,7 +372,7 @@
             this.button23.Name = "button23";
             this.button23.Size = new System.Drawing.Size(20, 20);
             this.button23.TabIndex = 22;
-            this.button23.Tag = "X1+ (Max)";
+            this.button23.Tag = "X1+";
             this.button23.Text = "▼";
             this.toolTip.SetToolTip(this.button23, "X1+ (Max)");
             this.button23.UseVisualStyleBackColor = true;
@@ -381,14 +390,51 @@
             this.pictureBox1.TabStop = false;
             this.toolTip.SetToolTip(this.pictureBox1, "Immobile");
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(203, 200);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(14, 20);
+            this.label1.TabIndex = 25;
+            this.label1.Text = "X";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(363, 100);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(14, 20);
+            this.label2.TabIndex = 27;
+            this.label2.Text = "Z";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(103, 280);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(14, 20);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Y";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // CubeNets
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableCube);
             this.Name = "CubeNets";
-            this.Size = new System.Drawing.Size(360, 280);
+            this.Size = new System.Drawing.Size(380, 300);
             this.tableCube.ResumeLayout(false);
+            this.tableCube.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -417,5 +463,8 @@
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

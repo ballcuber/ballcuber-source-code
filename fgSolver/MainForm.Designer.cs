@@ -51,6 +51,7 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.tmrAlarmBlink = new System.Windows.Forms.Timer(this.components);
             this.bwConnect = new System.ComponentModel.BackgroundWorker();
+            this.btnStop = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
@@ -70,10 +71,11 @@
             this.toolStripDropDownButton2,
             this.toolStripDropDownButtonAdvanced,
             this.strpAcq,
-            this.stripAlarm});
+            this.stripAlarm,
+            this.btnStop});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1108, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1108, 28);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -85,7 +87,7 @@
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(55, 22);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(55, 25);
             this.toolStripDropDownButton1.Text = "Fichier";
             // 
             // sauvegarderToolStripMenuItem
@@ -104,7 +106,7 @@
             this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(57, 22);
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(57, 25);
             this.toolStripDropDownButton2.Text = "Edition";
             // 
             // précédentToolStripMenuItem
@@ -132,7 +134,7 @@
             this.toolStripDropDownButtonAdvanced.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonAdvanced.Image")));
             this.toolStripDropDownButtonAdvanced.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButtonAdvanced.Name = "toolStripDropDownButtonAdvanced";
-            this.toolStripDropDownButtonAdvanced.Size = new System.Drawing.Size(59, 22);
+            this.toolStripDropDownButtonAdvanced.Size = new System.Drawing.Size(59, 25);
             this.toolStripDropDownButtonAdvanced.Text = "Avancé";
             // 
             // fenêtreDeTestToolStripMenuItem
@@ -183,7 +185,7 @@
             this.btnPrevious,
             this.btnNext,
             this.toolStripButton3});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 25);
+            this.toolStrip2.Location = new System.Drawing.Point(0, 28);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(1108, 25);
             this.toolStrip2.TabIndex = 3;
@@ -218,14 +220,14 @@
             // 
             this.splitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitter.Location = new System.Drawing.Point(0, 50);
+            this.splitter.Location = new System.Drawing.Point(0, 53);
             this.splitter.Name = "splitter";
             // 
             // splitter.Panel1
             // 
             this.splitter.Panel1.Controls.Add(this.navPnl);
             this.splitter.Panel1.Controls.Add(this.lblTitle);
-            this.splitter.Size = new System.Drawing.Size(1108, 493);
+            this.splitter.Size = new System.Drawing.Size(1108, 490);
             this.splitter.SplitterDistance = 549;
             this.splitter.TabIndex = 4;
             // 
@@ -235,7 +237,7 @@
             this.navPnl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.navPnl.Location = new System.Drawing.Point(0, 42);
             this.navPnl.Name = "navPnl";
-            this.navPnl.Size = new System.Drawing.Size(547, 449);
+            this.navPnl.Size = new System.Drawing.Size(547, 446);
             this.navPnl.TabIndex = 3;
             // 
             // lblTitle
@@ -261,6 +263,22 @@
             // bwConnect
             // 
             this.bwConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwConnect_DoWork);
+            // 
+            // btnStop
+            // 
+            this.btnStop.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnStop.BackColor = System.Drawing.Color.Red;
+            this.btnStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnStop.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStop.ForeColor = System.Drawing.Color.White;
+            this.btnStop.Image = ((System.Drawing.Image)(resources.GetObject("btnStop.Image")));
+            this.btnStop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStop.Margin = new System.Windows.Forms.Padding(0, 1, 100, 2);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(171, 25);
+            this.btnStop.Text = "! EMERGENCY STOP !";
+            this.btnStop.ToolTipText = "Immediate stop motors";
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // MainForm
             // 
@@ -308,5 +326,6 @@
         private System.Windows.Forms.Timer tmrAlarmBlink;
         private System.Windows.Forms.ToolStripButton strpAcq;
         private System.ComponentModel.BackgroundWorker bwConnect;
+        private System.Windows.Forms.ToolStripButton btnStop;
     }
 }

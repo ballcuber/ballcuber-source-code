@@ -200,8 +200,7 @@ namespace fgSolver.Hardware
 
         public void Stop(int mask)
         {
-            AssertConnectedAndConfigured();
-            _connection.Call("stop", mask);
+            Move(mask, 0);
         }
 
         public SharerFunctionReturn<bool> DisableOutputs(int mask)

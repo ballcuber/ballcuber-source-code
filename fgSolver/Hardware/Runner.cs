@@ -201,6 +201,12 @@ namespace fgSolver.Hardware
 
         public static void StopAll()
         {
+            if (ResolutionSession.GetStatus().State==ResolutionSessionState.Running)
+            {
+                ResolutionSession.Pause();
+            }
+            _board1.SetAcceleration(0xFF, 140000);
+            _board2.SetAcceleration(0xFF, 140000);
             _board1.Stop(0xff);
             _board2.Stop(0xff);
         }

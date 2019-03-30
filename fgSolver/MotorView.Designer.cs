@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
@@ -37,7 +38,7 @@
             this.radioButton7 = new System.Windows.Forms.RadioButton();
             this.radioButton8 = new System.Windows.Forms.RadioButton();
             this.radioButton9 = new System.Windows.Forms.RadioButton();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlDrive = new System.Windows.Forms.Panel();
             this.txtPosition = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.grid = new System.Windows.Forms.PropertyGrid();
@@ -61,11 +62,11 @@
             this.btnDisable = new System.Windows.Forms.Button();
             this.btnEnable = new System.Windows.Forms.Button();
             this.lblSelected = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.grp = new System.Windows.Forms.GroupBox();
             this.btnEnableAll = new System.Windows.Forms.Button();
             this.btnDisableAll = new System.Windows.Forms.Button();
+            this.setAccelAll = new System.Windows.Forms.Button();
+            this.udAccel = new System.Windows.Forms.NumericUpDown();
             this.btnMoveAll = new System.Windows.Forms.Button();
             this.udMoveAll = new System.Windows.Forms.NumericUpDown();
             this.btnSetPositionAll = new System.Windows.Forms.Button();
@@ -79,6 +80,19 @@
             this.btnMoveAllMaxStop = new System.Windows.Forms.Button();
             this.btnSetAllPosMaxStop = new System.Windows.Forms.Button();
             this.btnSetAllPosMiddle = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.pnlImg = new System.Windows.Forms.Panel();
+            this.chkIdent = new System.Windows.Forms.CheckBox();
+            this.pnlIdent = new System.Windows.Forms.Panel();
+            this.cbStepper = new System.Windows.Forms.ComboBox();
+            this.cbBoard = new System.Windows.Forms.ComboBox();
+            this.btnDisableStepper = new System.Windows.Forms.Button();
+            this.btnAssociate = new System.Windows.Forms.Button();
+            this.btnEnableStepper = new System.Windows.Forms.Button();
+            this.lblSelected2 = new System.Windows.Forms.Label();
+            this.ledEnabled = new Bulb.LedBulb();
             this.ledBulb9 = new Bulb.LedBulb();
             this.ledBulb8 = new Bulb.LedBulb();
             this.ledBulb7 = new Bulb.LedBulb();
@@ -88,21 +102,20 @@
             this.ledBulb3 = new Bulb.LedBulb();
             this.ledBulb2 = new Bulb.LedBulb();
             this.ledBulb1 = new Bulb.LedBulb();
-            this.ledEnabled = new Bulb.LedBulb();
-            this.udAccel = new System.Windows.Forms.NumericUpDown();
-            this.setAccelAll = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
+            this.pnlDrive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udPosition)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udAbsolute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSteps)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.grp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udAccel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udMoveAll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSetPositionAll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSetSpeedAll)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udAccel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pnlImg.SuspendLayout();
+            this.pnlIdent.SuspendLayout();
             this.SuspendLayout();
             // 
             // radioButton1
@@ -116,6 +129,7 @@
             this.radioButton1.Tag = "Z2";
             this.radioButton1.UseVisualStyleBackColor = false;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton1.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // radioButton2
             // 
@@ -128,6 +142,7 @@
             this.radioButton2.Tag = "Z1";
             this.radioButton2.UseVisualStyleBackColor = false;
             this.radioButton2.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton2.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // radioButton3
             // 
@@ -140,6 +155,7 @@
             this.radioButton3.Tag = "Y2";
             this.radioButton3.UseVisualStyleBackColor = false;
             this.radioButton3.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton3.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // radioButton4
             // 
@@ -152,6 +168,7 @@
             this.radioButton4.Tag = "Y3";
             this.radioButton4.UseVisualStyleBackColor = false;
             this.radioButton4.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton4.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // radioButton5
             // 
@@ -164,30 +181,33 @@
             this.radioButton5.Tag = "Y1";
             this.radioButton5.UseVisualStyleBackColor = false;
             this.radioButton5.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton5.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // radioButton6
             // 
             this.radioButton6.BackColor = System.Drawing.Color.Red;
             this.radioButton6.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButton6.Location = new System.Drawing.Point(536, 126);
+            this.radioButton6.Location = new System.Drawing.Point(536, 137);
             this.radioButton6.Name = "radioButton6";
             this.radioButton6.Size = new System.Drawing.Size(16, 16);
             this.radioButton6.TabIndex = 4;
             this.radioButton6.Tag = "X2";
             this.radioButton6.UseVisualStyleBackColor = false;
             this.radioButton6.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton6.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // radioButton7
             // 
             this.radioButton7.BackColor = System.Drawing.Color.Red;
             this.radioButton7.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButton7.Location = new System.Drawing.Point(536, 94);
+            this.radioButton7.Location = new System.Drawing.Point(536, 74);
             this.radioButton7.Name = "radioButton7";
             this.radioButton7.Size = new System.Drawing.Size(16, 16);
             this.radioButton7.TabIndex = 4;
             this.radioButton7.Tag = "X1";
             this.radioButton7.UseVisualStyleBackColor = false;
             this.radioButton7.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton7.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // radioButton8
             // 
@@ -200,6 +220,7 @@
             this.radioButton8.Tag = "X3";
             this.radioButton8.UseVisualStyleBackColor = false;
             this.radioButton8.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton8.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // radioButton9
             // 
@@ -212,39 +233,40 @@
             this.radioButton9.Tag = "Z3";
             this.radioButton9.UseVisualStyleBackColor = false;
             this.radioButton9.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
+            this.radioButton9.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
-            // panel1
+            // pnlDrive
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel1.Controls.Add(this.txtPosition);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.grid);
-            this.panel1.Controls.Add(this.udPosition);
-            this.panel1.Controls.Add(this.udSpeed);
-            this.panel1.Controls.Add(this.udAbsolute);
-            this.panel1.Controls.Add(this.udSteps);
-            this.panel1.Controls.Add(this.btnMoveNegativeQuarter);
-            this.panel1.Controls.Add(this.btnSetPosMinStop);
-            this.panel1.Controls.Add(this.btnMoveMin);
-            this.panel1.Controls.Add(this.btnMoveAbsolute);
-            this.panel1.Controls.Add(this.btnMovePositiveQuarter);
-            this.panel1.Controls.Add(this.btnSetPosMaxStop);
-            this.panel1.Controls.Add(this.btnMoveMaxStop);
-            this.panel1.Controls.Add(this.btnSetPosition);
-            this.panel1.Controls.Add(this.btnSetPosMiddle);
-            this.panel1.Controls.Add(this.btnSetSpeed);
-            this.panel1.Controls.Add(this.btnMoveMiddle);
-            this.panel1.Controls.Add(this.ledEnabled);
-            this.panel1.Controls.Add(this.btnMoveSteps);
-            this.panel1.Controls.Add(this.btnStop);
-            this.panel1.Controls.Add(this.btnDisable);
-            this.panel1.Controls.Add(this.btnEnable);
-            this.panel1.Controls.Add(this.lblSelected);
-            this.panel1.Location = new System.Drawing.Point(3, 322);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(706, 215);
-            this.panel1.TabIndex = 5;
+            this.pnlDrive.AutoScroll = true;
+            this.pnlDrive.Controls.Add(this.txtPosition);
+            this.pnlDrive.Controls.Add(this.label1);
+            this.pnlDrive.Controls.Add(this.grid);
+            this.pnlDrive.Controls.Add(this.udPosition);
+            this.pnlDrive.Controls.Add(this.udSpeed);
+            this.pnlDrive.Controls.Add(this.udAbsolute);
+            this.pnlDrive.Controls.Add(this.udSteps);
+            this.pnlDrive.Controls.Add(this.btnMoveNegativeQuarter);
+            this.pnlDrive.Controls.Add(this.btnSetPosMinStop);
+            this.pnlDrive.Controls.Add(this.btnMoveMin);
+            this.pnlDrive.Controls.Add(this.btnMoveAbsolute);
+            this.pnlDrive.Controls.Add(this.btnMovePositiveQuarter);
+            this.pnlDrive.Controls.Add(this.btnSetPosMaxStop);
+            this.pnlDrive.Controls.Add(this.btnMoveMaxStop);
+            this.pnlDrive.Controls.Add(this.btnSetPosition);
+            this.pnlDrive.Controls.Add(this.btnSetPosMiddle);
+            this.pnlDrive.Controls.Add(this.btnSetSpeed);
+            this.pnlDrive.Controls.Add(this.btnMoveMiddle);
+            this.pnlDrive.Controls.Add(this.ledEnabled);
+            this.pnlDrive.Controls.Add(this.btnMoveSteps);
+            this.pnlDrive.Controls.Add(this.btnStop);
+            this.pnlDrive.Controls.Add(this.btnDisable);
+            this.pnlDrive.Controls.Add(this.btnEnable);
+            this.pnlDrive.Controls.Add(this.lblSelected);
+            this.pnlDrive.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlDrive.Location = new System.Drawing.Point(0, 416);
+            this.pnlDrive.Name = "pnlDrive";
+            this.pnlDrive.Size = new System.Drawing.Size(746, 174);
+            this.pnlDrive.TabIndex = 5;
             // 
             // txtPosition
             // 
@@ -270,7 +292,7 @@
             this.grid.HelpVisible = false;
             this.grid.Location = new System.Drawing.Point(0, 29);
             this.grid.Name = "grid";
-            this.grid.Size = new System.Drawing.Size(229, 171);
+            this.grid.Size = new System.Drawing.Size(229, 139);
             this.grid.TabIndex = 3;
             this.grid.ToolbarVisible = false;
             this.grid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.grid_PropertyValueChanged);
@@ -509,29 +531,8 @@
             this.lblSelected.TabIndex = 0;
             this.lblSelected.Text = "label1";
             // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::fgSolver.Properties.Resources.View3;
-            this.pictureBox2.Location = new System.Drawing.Point(420, 1);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(258, 315);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 3;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::fgSolver.Properties.Resources.View2;
-            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(418, 315);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-            // 
             // grp
             // 
-            this.grp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.grp.Controls.Add(this.btnEnableAll);
             this.grp.Controls.Add(this.btnDisableAll);
             this.grp.Controls.Add(this.setAccelAll);
@@ -549,9 +550,10 @@
             this.grp.Controls.Add(this.btnMoveAllMaxStop);
             this.grp.Controls.Add(this.btnSetAllPosMaxStop);
             this.grp.Controls.Add(this.btnSetAllPosMiddle);
-            this.grp.Location = new System.Drawing.Point(3, 528);
+            this.grp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grp.Location = new System.Drawing.Point(0, 590);
             this.grp.Name = "grp";
-            this.grp.Size = new System.Drawing.Size(706, 137);
+            this.grp.Size = new System.Drawing.Size(746, 208);
             this.grp.TabIndex = 7;
             this.grp.TabStop = false;
             this.grp.Text = "Action groupée";
@@ -575,6 +577,33 @@
             this.btnDisableAll.Text = "Disable all";
             this.btnDisableAll.UseVisualStyleBackColor = true;
             this.btnDisableAll.Click += new System.EventHandler(this.btnDisableAll_Click);
+            // 
+            // setAccelAll
+            // 
+            this.setAccelAll.Location = new System.Drawing.Point(437, 106);
+            this.setAccelAll.Name = "setAccelAll";
+            this.setAccelAll.Size = new System.Drawing.Size(92, 23);
+            this.setAccelAll.TabIndex = 1;
+            this.setAccelAll.Text = "Set position all";
+            this.setAccelAll.UseVisualStyleBackColor = true;
+            this.setAccelAll.Click += new System.EventHandler(this.setAccelAll_Click);
+            // 
+            // udAccel
+            // 
+            this.udAccel.Location = new System.Drawing.Point(311, 109);
+            this.udAccel.Maximum = new decimal(new int[] {
+            -1530494977,
+            232830,
+            0,
+            0});
+            this.udAccel.Minimum = new decimal(new int[] {
+            -1530494977,
+            232830,
+            0,
+            -2147483648});
+            this.udAccel.Name = "udAccel";
+            this.udAccel.Size = new System.Drawing.Size(120, 20);
+            this.udAccel.TabIndex = 2;
             // 
             // btnMoveAll
             // 
@@ -734,6 +763,152 @@
             this.btnSetAllPosMiddle.UseVisualStyleBackColor = true;
             this.btnSetAllPosMiddle.Click += new System.EventHandler(this.btnSetAllPosMiddle_Click);
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::fgSolver.Properties.Resources.View3;
+            this.pictureBox2.Location = new System.Drawing.Point(420, 1);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(258, 315);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 3;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::fgSolver.Properties.Resources.View2;
+            this.pictureBox1.Location = new System.Drawing.Point(1, 1);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(418, 315);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pnlImg
+            // 
+            this.pnlImg.Controls.Add(this.chkIdent);
+            this.pnlImg.Controls.Add(this.ledBulb9);
+            this.pnlImg.Controls.Add(this.ledBulb8);
+            this.pnlImg.Controls.Add(this.ledBulb7);
+            this.pnlImg.Controls.Add(this.ledBulb6);
+            this.pnlImg.Controls.Add(this.ledBulb5);
+            this.pnlImg.Controls.Add(this.ledBulb4);
+            this.pnlImg.Controls.Add(this.ledBulb3);
+            this.pnlImg.Controls.Add(this.ledBulb2);
+            this.pnlImg.Controls.Add(this.ledBulb1);
+            this.pnlImg.Controls.Add(this.radioButton9);
+            this.pnlImg.Controls.Add(this.radioButton8);
+            this.pnlImg.Controls.Add(this.radioButton7);
+            this.pnlImg.Controls.Add(this.radioButton6);
+            this.pnlImg.Controls.Add(this.radioButton5);
+            this.pnlImg.Controls.Add(this.radioButton4);
+            this.pnlImg.Controls.Add(this.radioButton3);
+            this.pnlImg.Controls.Add(this.radioButton2);
+            this.pnlImg.Controls.Add(this.radioButton1);
+            this.pnlImg.Controls.Add(this.pictureBox2);
+            this.pnlImg.Controls.Add(this.pictureBox1);
+            this.pnlImg.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlImg.Location = new System.Drawing.Point(0, 0);
+            this.pnlImg.Name = "pnlImg";
+            this.pnlImg.Size = new System.Drawing.Size(746, 316);
+            this.pnlImg.TabIndex = 8;
+            // 
+            // chkIdent
+            // 
+            this.chkIdent.AutoSize = true;
+            this.chkIdent.BackColor = System.Drawing.Color.White;
+            this.chkIdent.Location = new System.Drawing.Point(11, 293);
+            this.chkIdent.Name = "chkIdent";
+            this.chkIdent.Size = new System.Drawing.Size(94, 17);
+            this.chkIdent.TabIndex = 0;
+            this.chkIdent.Text = "Identify motors";
+            this.chkIdent.UseVisualStyleBackColor = false;
+            this.chkIdent.CheckedChanged += new System.EventHandler(this.chkIdent_CheckedChanged);
+            // 
+            // pnlIdent
+            // 
+            this.pnlIdent.Controls.Add(this.cbStepper);
+            this.pnlIdent.Controls.Add(this.cbBoard);
+            this.pnlIdent.Controls.Add(this.btnDisableStepper);
+            this.pnlIdent.Controls.Add(this.btnAssociate);
+            this.pnlIdent.Controls.Add(this.btnEnableStepper);
+            this.pnlIdent.Controls.Add(this.lblSelected2);
+            this.pnlIdent.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlIdent.Location = new System.Drawing.Point(0, 316);
+            this.pnlIdent.Name = "pnlIdent";
+            this.pnlIdent.Size = new System.Drawing.Size(746, 100);
+            this.pnlIdent.TabIndex = 9;
+            this.pnlIdent.Visible = false;
+            // 
+            // cbStepper
+            // 
+            this.cbStepper.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStepper.FormattingEnabled = true;
+            this.cbStepper.Location = new System.Drawing.Point(10, 49);
+            this.cbStepper.Name = "cbStepper";
+            this.cbStepper.Size = new System.Drawing.Size(74, 21);
+            this.cbStepper.TabIndex = 0;
+            this.cbStepper.SelectedIndexChanged += new System.EventHandler(this.cbBoard_SelectedIndexChanged);
+            // 
+            // cbBoard
+            // 
+            this.cbBoard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBoard.FormattingEnabled = true;
+            this.cbBoard.Location = new System.Drawing.Point(11, 22);
+            this.cbBoard.Name = "cbBoard";
+            this.cbBoard.Size = new System.Drawing.Size(74, 21);
+            this.cbBoard.TabIndex = 0;
+            this.cbBoard.SelectedIndexChanged += new System.EventHandler(this.cbBoard_SelectedIndexChanged);
+            // 
+            // btnDisableStepper
+            // 
+            this.btnDisableStepper.Location = new System.Drawing.Point(102, 47);
+            this.btnDisableStepper.Name = "btnDisableStepper";
+            this.btnDisableStepper.Size = new System.Drawing.Size(75, 23);
+            this.btnDisableStepper.TabIndex = 1;
+            this.btnDisableStepper.Text = "Disable";
+            this.btnDisableStepper.UseVisualStyleBackColor = true;
+            this.btnDisableStepper.Click += new System.EventHandler(this.btnDisableStepper_Click);
+            // 
+            // btnAssociate
+            // 
+            this.btnAssociate.Location = new System.Drawing.Point(255, 41);
+            this.btnAssociate.Name = "btnAssociate";
+            this.btnAssociate.Size = new System.Drawing.Size(75, 23);
+            this.btnAssociate.TabIndex = 1;
+            this.btnAssociate.Text = "Associer";
+            this.btnAssociate.UseVisualStyleBackColor = true;
+            this.btnAssociate.Click += new System.EventHandler(this.btnAssociate_Click);
+            // 
+            // btnEnableStepper
+            // 
+            this.btnEnableStepper.Location = new System.Drawing.Point(102, 20);
+            this.btnEnableStepper.Name = "btnEnableStepper";
+            this.btnEnableStepper.Size = new System.Drawing.Size(75, 23);
+            this.btnEnableStepper.TabIndex = 1;
+            this.btnEnableStepper.Text = "Enable";
+            this.btnEnableStepper.UseVisualStyleBackColor = true;
+            this.btnEnableStepper.Click += new System.EventHandler(this.btnEnableStepper_Click);
+            // 
+            // lblSelected2
+            // 
+            this.lblSelected2.AutoSize = true;
+            this.lblSelected2.Location = new System.Drawing.Point(275, 25);
+            this.lblSelected2.Name = "lblSelected2";
+            this.lblSelected2.Size = new System.Drawing.Size(35, 13);
+            this.lblSelected2.TabIndex = 0;
+            this.lblSelected2.Text = "label1";
+            // 
+            // ledEnabled
+            // 
+            this.ledEnabled.BackColor = System.Drawing.SystemColors.Control;
+            this.ledEnabled.Location = new System.Drawing.Point(255, 6);
+            this.ledEnabled.Name = "ledEnabled";
+            this.ledEnabled.On = true;
+            this.ledEnabled.Size = new System.Drawing.Size(26, 26);
+            this.ledEnabled.TabIndex = 6;
+            this.ledEnabled.Tag = "";
+            this.ledEnabled.Text = "ledBulb1";
+            // 
             // ledBulb9
             // 
             this.ledBulb9.BackColor = System.Drawing.Color.White;
@@ -744,6 +919,7 @@
             this.ledBulb9.TabIndex = 6;
             this.ledBulb9.Tag = "Y3";
             this.ledBulb9.Text = "ledBulb1";
+            this.ledBulb9.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb8
             // 
@@ -755,6 +931,7 @@
             this.ledBulb8.TabIndex = 6;
             this.ledBulb8.Tag = "Z3";
             this.ledBulb8.Text = "ledBulb1";
+            this.ledBulb8.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb7
             // 
@@ -766,6 +943,7 @@
             this.ledBulb7.TabIndex = 6;
             this.ledBulb7.Tag = "X3";
             this.ledBulb7.Text = "ledBulb1";
+            this.ledBulb7.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb6
             // 
@@ -777,6 +955,7 @@
             this.ledBulb6.TabIndex = 6;
             this.ledBulb6.Tag = "X2";
             this.ledBulb6.Text = "ledBulb1";
+            this.ledBulb6.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb5
             // 
@@ -788,6 +967,7 @@
             this.ledBulb5.TabIndex = 6;
             this.ledBulb5.Tag = "X1";
             this.ledBulb5.Text = "ledBulb1";
+            this.ledBulb5.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb4
             // 
@@ -799,6 +979,7 @@
             this.ledBulb4.TabIndex = 6;
             this.ledBulb4.Tag = "Z2";
             this.ledBulb4.Text = "ledBulb1";
+            this.ledBulb4.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb3
             // 
@@ -810,6 +991,7 @@
             this.ledBulb3.TabIndex = 6;
             this.ledBulb3.Tag = "Y1";
             this.ledBulb3.Text = "ledBulb1";
+            this.ledBulb3.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb2
             // 
@@ -821,6 +1003,7 @@
             this.ledBulb2.TabIndex = 6;
             this.ledBulb2.Tag = "Z1";
             this.ledBulb2.Text = "ledBulb1";
+            this.ledBulb2.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb1
             // 
@@ -832,84 +1015,33 @@
             this.ledBulb1.TabIndex = 6;
             this.ledBulb1.Tag = "Y2";
             this.ledBulb1.Text = "ledBulb1";
-            // 
-            // ledEnabled
-            // 
-            this.ledEnabled.BackColor = System.Drawing.SystemColors.Control;
-            this.ledEnabled.Location = new System.Drawing.Point(255, 6);
-            this.ledEnabled.Name = "ledEnabled";
-            this.ledEnabled.On = true;
-            this.ledEnabled.Size = new System.Drawing.Size(26, 26);
-            this.ledEnabled.TabIndex = 6;
-            this.ledEnabled.Tag = "Z1";
-            this.ledEnabled.Text = "ledBulb1";
-            // 
-            // udAccel
-            // 
-            this.udAccel.Location = new System.Drawing.Point(311, 109);
-            this.udAccel.Maximum = new decimal(new int[] {
-            -1530494977,
-            232830,
-            0,
-            0});
-            this.udAccel.Minimum = new decimal(new int[] {
-            -1530494977,
-            232830,
-            0,
-            -2147483648});
-            this.udAccel.Name = "udAccel";
-            this.udAccel.Size = new System.Drawing.Size(120, 20);
-            this.udAccel.TabIndex = 2;
-            // 
-            // setAccelAll
-            // 
-            this.setAccelAll.Location = new System.Drawing.Point(437, 106);
-            this.setAccelAll.Name = "setAccelAll";
-            this.setAccelAll.Size = new System.Drawing.Size(92, 23);
-            this.setAccelAll.TabIndex = 1;
-            this.setAccelAll.Text = "Set position all";
-            this.setAccelAll.UseVisualStyleBackColor = true;
-            this.setAccelAll.Click += new System.EventHandler(this.setAccelAll_Click);
+            this.ledBulb1.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // MotorView
             // 
             this.Controls.Add(this.grp);
-            this.Controls.Add(this.ledBulb9);
-            this.Controls.Add(this.ledBulb8);
-            this.Controls.Add(this.ledBulb7);
-            this.Controls.Add(this.ledBulb6);
-            this.Controls.Add(this.ledBulb5);
-            this.Controls.Add(this.ledBulb4);
-            this.Controls.Add(this.ledBulb3);
-            this.Controls.Add(this.ledBulb2);
-            this.Controls.Add(this.ledBulb1);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.radioButton9);
-            this.Controls.Add(this.radioButton8);
-            this.Controls.Add(this.radioButton7);
-            this.Controls.Add(this.radioButton6);
-            this.Controls.Add(this.radioButton5);
-            this.Controls.Add(this.radioButton4);
-            this.Controls.Add(this.radioButton3);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pnlDrive);
+            this.Controls.Add(this.pnlIdent);
+            this.Controls.Add(this.pnlImg);
             this.Name = "MotorView";
-            this.Size = new System.Drawing.Size(746, 668);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.Size = new System.Drawing.Size(746, 798);
+            this.pnlDrive.ResumeLayout(false);
+            this.pnlDrive.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udPosition)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udAbsolute)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSteps)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.grp.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.udAccel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udMoveAll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSetPositionAll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSetSpeedAll)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udAccel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.pnlImg.ResumeLayout(false);
+            this.pnlImg.PerformLayout();
+            this.pnlIdent.ResumeLayout(false);
+            this.pnlIdent.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -926,7 +1058,7 @@
         private System.Windows.Forms.RadioButton radioButton7;
         private System.Windows.Forms.RadioButton radioButton8;
         private System.Windows.Forms.RadioButton radioButton9;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlDrive;
         private System.Windows.Forms.Label lblSelected;
         private System.Windows.Forms.Button btnDisable;
         private System.Windows.Forms.Button btnEnable;
@@ -978,5 +1110,15 @@
         private System.Windows.Forms.NumericUpDown udMoveAll;
         private System.Windows.Forms.Button setAccelAll;
         private System.Windows.Forms.NumericUpDown udAccel;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Panel pnlImg;
+        private System.Windows.Forms.Panel pnlIdent;
+        private System.Windows.Forms.CheckBox chkIdent;
+        private System.Windows.Forms.ComboBox cbStepper;
+        private System.Windows.Forms.ComboBox cbBoard;
+        private System.Windows.Forms.Button btnDisableStepper;
+        private System.Windows.Forms.Button btnAssociate;
+        private System.Windows.Forms.Button btnEnableStepper;
+        private System.Windows.Forms.Label lblSelected2;
     }
 }

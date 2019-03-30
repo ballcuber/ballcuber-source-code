@@ -19,6 +19,17 @@ namespace fgSolver
             InitializeComponent();
 
             radioButton3.Checked = true;
+
+            cbBoard.Items.Add(HardwareConfigBoard.Board1);
+            cbBoard.Items.Add(HardwareConfigBoard.Board2);
+            cbBoard.SelectedItem = HardwareConfigBoard.Board1;
+
+            cbStepper.Items.Add(RampsSteppers.E0);
+            cbStepper.Items.Add(RampsSteppers.E1);
+            cbStepper.Items.Add(RampsSteppers.X);
+            cbStepper.Items.Add(RampsSteppers.Y);
+            cbStepper.Items.Add(RampsSteppers.Z);
+            cbStepper.SelectedItem = RampsSteppers.E0;
         }
 
         public string FormName
@@ -70,7 +81,7 @@ namespace fgSolver
                 ledEnabled.On = false;
             }
 
-            foreach(var led in this.Controls.OfType<Bulb.LedBulb>())
+            foreach(var led in this.pnlImg.Controls.OfType<Bulb.LedBulb>())
             {
                 var m = GetByTag(currentState, led.Tag);
 
@@ -89,6 +100,8 @@ namespace fgSolver
             {
                 SelectedMotor = GetByTag(state, radio.Tag); ;
             }
+
+
         }
 
         private Motor GetByTag( GlobalState state, object tag)
@@ -145,6 +158,8 @@ namespace fgSolver
                 {
                     lblSelected.Text = _selectedMotor.ToString();
                 }
+
+                lblSelected2.Text = lblSelected.Text;
             }
         }
 
@@ -321,6 +336,67 @@ namespace fgSolver
         private void setAccelAll_Click(object sender, EventArgs e)
         {
             Runner.SetAccelerationAll((int)udAccel.Value);
+        }
+
+        private void MouseEnter(object sender, EventArgs e)
+        {
+            if (sender is Control) {
+                var ctrl = sender as Control;
+                toolTip.SetToolTip(ctrl, ctrl.Tag as string);
+             }
+        }
+
+        private void chkIdent_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlIdent.Visible = chkIdent.Checked;
+            pnlDrive.Visible = !chkIdent.Checked;
+            SelectedMotor = _selectedMotor;//rafraichir ihm
+            cbBoard_SelectedIndexChanged(sender, e);
+        }
+
+        private void btnEnableStepper_Click(object sender, EventArgs e)
+        {
+            Runner.GetBoard((HardwareConfigBoard)cbBoard.SelectedItem).EnableOutputs(1 << (int)(RampsSteppers)cbStepper.SelectedItem);
+        }
+
+        private void btnDisableStepper_Click(object sender, EventArgs e)
+        {
+            Runner.GetBoard((HardwareConfigBoard)cbBoard.SelectedItem).DisableOutputs(1 << (int)(RampsSteppers)cbStepper.SelectedItem);
+        }
+
+        private void btnAssociate_Click(object sender, EventArgs e)
+        {
+            if (_selectedMotor == null) return;
+            _selectedMotor.Stepper = (RampsSteppers)cbStepper.SelectedItem;
+            _selectedMotor.Board = (HardwareConfigBoard)cbBoard.SelectedItem;
+            using(var state = GlobalState.GetState())
+            {
+                state.SaveConfiguration();
+            }
+        }
+
+        private void cbBoard_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!chkIdent.Checked) return;
+
+            var Stepper = (RampsSteppers)cbStepper.SelectedItem;
+            var Board = (HardwareConfigBoard)cbBoard.SelectedItem;
+            using (var state = GlobalState.GetState())
+            {
+              var motor=  state.Motors.Motors.FirstOrDefault((x) => x.Stepper == Stepper && x.Board == Board);
+                if (motor == null) return;
+
+                foreach (var radio in pnlImg.Controls.OfType<RadioButton>())
+                {
+                    var radioMotor = GetByTag(state, radio.Tag);
+                    if (radioMotor == null) continue;
+                    else if (radioMotor.Board == Board && radioMotor.Stepper == Stepper)
+                    {
+                        radio.Checked = true;
+                        return;
+                    }
+                }
+            }
         }
     }
 }

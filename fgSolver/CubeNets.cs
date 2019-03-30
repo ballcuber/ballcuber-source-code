@@ -17,6 +17,7 @@ namespace fgSolver
         private List<CubePartControl> _parts = new List<CubePartControl>();
 
         private IEnumerable<Button> _ctrlButtons;
+        private IEnumerable<Label> _ctrlLabels;
 
 
         public CubeNets()
@@ -24,6 +25,7 @@ namespace fgSolver
             InitializeComponent();
 
             _ctrlButtons = tableCube.Controls.OfType<Button>().ToList();
+            _ctrlLabels = tableCube.Controls.OfType<Label>().ToList();
 
 
             CreateFacePart(4, 0);
@@ -119,9 +121,13 @@ namespace fgSolver
             }
             set
             {
-                foreach(var btn in _ctrlButtons)
+                foreach (var btn in _ctrlButtons)
                 {
                     btn.Visible = value;
+                }
+                foreach (var lbl in _ctrlLabels)
+                {
+                    lbl.Visible = value;
                 }
                 _showControlButtons = value;
             }

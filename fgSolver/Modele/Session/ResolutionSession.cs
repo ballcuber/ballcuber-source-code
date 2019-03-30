@@ -506,6 +506,7 @@ namespace fgSolver.Modele
 
         public static void AddInitBlock()
         {
+            Add(new EnableMotorInstruction(true));
             Add(new BeginGroupeInstruction("Position initiale"));
             using (var state = GlobalState.GetState())
             {

@@ -39,7 +39,7 @@
             this.cubeNets.Clickable = false;
             this.cubeNets.Location = new System.Drawing.Point(3, 28);
             this.cubeNets.Name = "cubeNets";
-            this.cubeNets.Size = new System.Drawing.Size(370, 284);
+            this.cubeNets.Size = new System.Drawing.Size(387, 306);
             this.cubeNets.TabIndex = 0;
             this.cubeNets.MoveClick += new fgSolver.CubeNets.MoveClickEventHandler(this.cubeNets_MoveClick);
             // 
@@ -49,9 +49,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.resolutionSessionSupervisionControl.BottomVisible = true;
-            this.resolutionSessionSupervisionControl.Location = new System.Drawing.Point(0, 318);
+            this.resolutionSessionSupervisionControl.Location = new System.Drawing.Point(0, 340);
             this.resolutionSessionSupervisionControl.Name = "resolutionSessionSupervisionControl";
-            this.resolutionSessionSupervisionControl.Size = new System.Drawing.Size(911, 408);
+            this.resolutionSessionSupervisionControl.Size = new System.Drawing.Size(907, 398);
             this.resolutionSessionSupervisionControl.TabIndex = 1;
             this.resolutionSessionSupervisionControl.TimerVisible = false;
             // 
@@ -84,7 +84,7 @@
             this.Controls.Add(this.resolutionSessionSupervisionControl);
             this.Controls.Add(this.cubeNets);
             this.Name = "ManualDriving";
-            this.Size = new System.Drawing.Size(911, 726);
+            this.Size = new System.Drawing.Size(907, 738);
             this.ResumeLayout(false);
 
         }
