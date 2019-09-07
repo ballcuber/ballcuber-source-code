@@ -14,7 +14,14 @@ namespace fgSolver.Modele
         Middle, // position intermédiare débrayée
         PositiveQuarter, // un quart de tour positif
         NegativeQuarter, // un quart de tour négatif
-       // UTurn // demi tour de la couronne
+        NegativeQuarterFromMinStop,
+        PositiveQuarterFromMaxStop,
+        UTurnFromMaxStop,
+        UTurn, // demi tour de la couronne
+        PositiveSmallAmount,
+        NegativeSmallAmount,
+        MaxStopIntermediaire,
+        MinStopIntermediaire
     }
     public class MoveToKnownPositionInstruction : Instruction
     {

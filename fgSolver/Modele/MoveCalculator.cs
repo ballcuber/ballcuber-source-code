@@ -32,13 +32,13 @@ namespace fgSolver.Modele
             switch (c)
             {
                 case Couronne.Max:
-                    increment(ref MaxMovesCount ,s);
+                    Increment(ref MaxMovesCount ,s);
                     break;
                 case Couronne.MidMax:
-                    increment(ref MidMaxMovesCount, s);
+                    Increment(ref MidMaxMovesCount, s);
                     break;
                 case Couronne.MidMin:
-                    increment(ref MidMinMovesCount, s);
+                    Increment(ref MidMinMovesCount, s);
                     break;
             }
         }
@@ -81,7 +81,7 @@ namespace fgSolver.Modele
             }
         }
 
-        private void increment(ref int count, Sens s)
+        private void Increment(ref int count, Sens s)
         {
             count += (int)s;
 
@@ -224,6 +224,9 @@ namespace fgSolver.Modele
 
         public static bool operator ==(MotorMove m1, MotorMove m2)
         {
+            if ((object)m1 == null && (object)m2 == null) return true;
+            if ((object)m1 != null && (object)m2 == null || (object)m1 == null && (object)m2 != null) return false;
+
             return m1.Axe == m2.Axe && m1.MaxMovesCount == m2.MaxMovesCount && m1.MidMaxMovesCount == m2.MidMaxMovesCount && m1.MidMinMovesCount == m2.MidMinMovesCount;
         }
 

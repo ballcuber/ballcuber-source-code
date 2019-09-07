@@ -358,77 +358,55 @@ namespace fgSolver.Modele
                 var remainQuarters = new int[] { mv.MidMinMovesCount, mv.MidMaxMovesCount, mv.MaxMovesCount };
 
                 // cas particulier de l'axe Z Max qui pour fonctionner correctement doit être après un mouvement de son voisin qui remet de l'ordre
-                if(mv.Axe== Axe.Z && mv.MaxMovesCount != 0)
-                {
-                    // Ajouter un quart de tour de ZMidMax dans un sens, puis dans l'autre en finissant par le même sens que Z mAx pour limiter le nombre de mouvement
-                    var sensZMax = Math.Sign(mv.MaxMovesCount);
-                    AddWithAnticollision(state, new int[] { 0, -sensZMax, 0 }, -sensZMax, Axe.Z);
-                    AddWithAnticollision(state, new int[] { 0, sensZMax, 0 }, sensZMax, Axe.Z);
-                }
+                //if(mv.Axe== Axe.Z && mv.MaxMovesCount != 0)
+                //{
+                //    // Ajouter un quart de tour de ZMidMax dans un sens, puis dans l'autre en finissant par le même sens que Z mAx pour limiter le nombre de mouvement
+                //    var sensZMax = Math.Sign(mv.MaxMovesCount);
+                //    AddWithAnticollision(state, new int[] { 0, -sensZMax, 0 }, -sensZMax, Axe.Z);
+                //    AddWithAnticollision(state, new int[] { 0, sensZMax, 0 }, sensZMax, Axe.Z);
+                //}
 
-                if (mv.PotentialNegativeQuarters > mv.PotentialPositiveQuarters)
-                { // commencer par tourner dans le sens négatif car c'est ce qu'il y a de plus à faire
+                // Mouvement de multiple courronnes simultanée
+                //if (mv.PotentialNegativeQuarters > mv.PotentialPositiveQuarters)
+                //{ // commencer par tourner dans le sens négatif car c'est ce qu'il y a de plus à faire
 
-                    // dans le cas d'un sens négatif, faire les demi tour dans l'autre sens
-                    for (int i = 0; i < remainQuarters.Length; i++)
-                    {
-                        if (remainQuarters[i] == 2) remainQuarters[i] = -2;
-                    }
+                //    // dans le cas d'un sens négatif, faire les demi tour dans l'autre sens
+                //    for (int i = 0; i < remainQuarters.Length; i++)
+                //    {
+                //        if (remainQuarters[i] == 2) remainQuarters[i] = -2;
+                //    }
 
-                    AddWithAnticollision(state, remainQuarters, -1, mv.Axe);
-                    AddWithAnticollision(state, remainQuarters, -1, mv.Axe);// il y a au plus 2 quarts de tour à faire pour chanque sens
-                    AddWithAnticollision(state, remainQuarters, 1, mv.Axe);
-                    AddWithAnticollision(state, remainQuarters, 1, mv.Axe);
-                }
-                else
-                {
-                    AddWithAnticollision(state, remainQuarters, 1, mv.Axe);
-                    AddWithAnticollision(state, remainQuarters, 1, mv.Axe);
-                    AddWithAnticollision(state, remainQuarters, -1, mv.Axe);
-                    AddWithAnticollision(state, remainQuarters, -1, mv.Axe);
-                }
+                //    AddWithAnticollision(state, remainQuarters, -1, mv.Axe);
+                //    AddWithAnticollision(state, remainQuarters, -1, mv.Axe);// il y a au plus 2 quarts de tour à faire pour chanque sens
+                //    AddWithAnticollision(state, remainQuarters, 1, mv.Axe);
+                //    AddWithAnticollision(state, remainQuarters, 1, mv.Axe);
+                //}
+                //else
+                //{
+                //    AddWithAnticollision(state, remainQuarters, 1, mv.Axe);
+                //    AddWithAnticollision(state, remainQuarters, 1, mv.Axe);
+                //    AddWithAnticollision(state, remainQuarters, -1, mv.Axe);
+                //    AddWithAnticollision(state, remainQuarters, -1, mv.Axe);
+                //}
 
-                AddInitBlock();
+                // mouvement couronne par courrone
+                AddWithAnticollision(state, mv.MidMinMovesCount, Couronne.MidMin, mv.Axe);
+                AddWithAnticollision(state, mv.MidMaxMovesCount, Couronne.MidMax, mv.Axe);
+                AddWithAnticollision(state, mv.MaxMovesCount, Couronne.Max, mv.Axe);
+
+                //AddInitBlock();
 
             }
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="remainQuarters"></param>
-        /// <param name="sens">1 ou -1</param>
-        /// <param name="axe"></param>
-        private static void AddWithAnticollision(GlobalState state,int[] remainQuarters, int sens, Axe axe)
+        private static void AddWithAnticollision(GlobalState state, int quarters, Couronne couronne, Axe axe)
         {
-            var couronnesToMove = new List<Couronne>();
-            var couronnesToFix = new List<Couronne>();
+            if (quarters == 0) return;
 
-            if (Math.Sign(remainQuarters[0]) == sens)
-            {
-                couronnesToMove.Add(Couronne.MidMin);
-                remainQuarters[0] -= sens ;
-            }
-            else couronnesToFix.Add(Couronne.MidMin);
+            var couronnesToFix = new Couronne[] { Couronne.MidMin, Couronne.MidMax, Couronne.Max }.Except(new Couronne[] { couronne }).ToArray();
 
-            if (Math.Sign(remainQuarters[1]) == sens)
-            {
-                couronnesToMove.Add(Couronne.MidMax);
-            remainQuarters[1] -= sens;
-            }
-            else couronnesToFix.Add(Couronne.MidMax);
-
-            if (Math.Sign(remainQuarters[2]) == sens)
-            {
-                couronnesToMove.Add(Couronne.Max);
-                remainQuarters[2]-= sens;
-            }
-            else couronnesToFix.Add(Couronne.Max);
-
-
-            if (couronnesToMove.Count == 0) return;
+            var sens = Math.Sign(quarters);
 
             Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.DisengagedAcceleration));
             Add(new SetSpeedInstruction(state.HardwareConfigGlobal.DisengagedSpeed));
@@ -436,38 +414,42 @@ namespace fgSolver.Modele
             // mise en position des couronnes parallèles
             foreach (var c in couronnesToFix)
             {
-                AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
+                if (couronne == Couronne.Max)
+                {
+                    AddMoveToKnowPosition(axe, c, sens < 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
+                }
+                else
+                {
+                    AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
+                }
             }
 
-            // mise en position des couronnes motrices
-            foreach (var c in couronnesToMove)
-            {
-                AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.MaxStop : KnownPosition.MinStop);
-            }
+            // moteur en position
+            AddMoveToKnowPosition(axe, couronne, sens > 0 ? KnownPosition.MaxStop : KnownPosition.MinStop);
 
 
             //Déplacement des autres couronnes perpendiculaires
             foreach (var motor in state.Motors.Motors)
             {
                 if (motor.Axe == axe) continue;
-                /*
-                var negCollision = couronnesToMove.Any((c) => motor.NegativeCollision.HasCollision(axe, c));
-                var posCollision = couronnesToMove.Any((c) => motor.PositiveCollision.HasCollision(axe, c));
+                
+                //var negCollision = motor.NegativeCollision.HasCollision(axe, couronne);
+                //var posCollision = motor.PositiveCollision.HasCollision(axe, couronne);
 
-                KnownPosition pos;
+                //KnownPosition pos;
 
-                if (negCollision && posCollision) pos = KnownPosition.Middle;
-                else if (negCollision) pos = KnownPosition.MaxStop;
-                else if (posCollision) pos = KnownPosition.MinStop;
-                else
-                {
-                    // si pas de collision, ne pas toucher au moteur sauf s'il est en position middle non engreiné
-                    if (_designContext.GetPosition(motor.Courronne, motor.Axe) == KnownPosition.Middle) pos = KnownPosition.MinStop;
-                    else continue;
-                }
+                //if (negCollision && posCollision) pos = KnownPosition.Middle;
+                //else if (negCollision) pos = KnownPosition.MaxStopIntermediaire;
+                //else if (posCollision) pos = KnownPosition.MinStopIntermediaire;
+                //else
+                //{
+                //    // si pas de collision, ne pas toucher au moteur sauf s'il est en position middle non engreiné
+                //    if (_designContext.GetPosition(motor.Courronne, motor.Axe) == KnownPosition.Middle) pos = KnownPosition.MinStopIntermediaire;
+                //    else continue;
+                //}
 
-                AddMoveToKnowPosition(motor.Axe, motor.Courronne, pos);
-                */
+                //AddMoveToKnowPosition(motor.Axe, motor.Courronne, pos);
+                
                 AddMoveToKnowPosition(motor.Axe, motor.Courronne, KnownPosition.Middle);
 
             }
@@ -477,14 +459,121 @@ namespace fgSolver.Modele
             Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.EngagedAcceleration));
             Add(new SetSpeedInstruction(state.HardwareConfigGlobal.EngagedSpeed));
 
-            // faire un quart de tour
-            foreach(var c in couronnesToMove)
+           if(couronne == Couronne.Max)
             {
-                AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.PositiveQuarter : KnownPosition.NegativeQuarter);
+                AddMoveToKnowPosition(axe, Couronne.MidMin, sens > 0 ? KnownPosition.PositiveSmallAmount : KnownPosition.NegativeSmallAmount);
+                AddMoveToKnowPosition(axe, Couronne.MidMax, sens > 0 ? KnownPosition.PositiveSmallAmount : KnownPosition.NegativeSmallAmount);
+                Add(new WaitTargetReachedInstruction());
+                Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.DisengagedAcceleration));
+                Add(new SetSpeedInstruction(state.HardwareConfigGlobal.DisengagedSpeed));
+                AddMoveToKnowPosition(axe, Couronne.MidMin, sens < 0 ? KnownPosition.PositiveSmallAmount : KnownPosition.NegativeSmallAmount);
+                AddMoveToKnowPosition(axe, Couronne.MidMax, sens < 0 ? KnownPosition.PositiveSmallAmount : KnownPosition.NegativeSmallAmount);
+                Add(new WaitTargetReachedInstruction());
+                AddMoveToKnowPosition(axe, Couronne.MidMin, sens > 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
+                AddMoveToKnowPosition(axe, Couronne.MidMax, sens > 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
+                Add(new WaitTargetReachedInstruction());
+                Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.EngagedAcceleration));
+                Add(new SetSpeedInstruction(state.HardwareConfigGlobal.EngagedSpeed));
             }
+
+            // faire les quarts de tour
+            AddMoveToKnowPosition(axe, couronne, quarters==-1 ? KnownPosition.NegativeQuarterFromMinStop : (quarters==1 ? KnownPosition.PositiveQuarterFromMaxStop : KnownPosition.UTurnFromMaxStop));
 
             Add(new WaitTargetReachedInstruction());
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="remainQuarters"></param>
+        /// <param name="sens">1 ou -1</param>
+        /// <param name="axe"></param>
+        //private static void AddWithAnticollision(GlobalState state,int[] remainQuarters, int sens, Axe axe)
+        //{
+        //    var couronnesToMove = new List<Couronne>();
+        //    var couronnesToFix = new List<Couronne>();
+
+        //    if (Math.Sign(remainQuarters[0]) == sens)
+        //    {
+        //        couronnesToMove.Add(Couronne.MidMin);
+        //        remainQuarters[0] -= sens ;
+        //    }
+        //    else couronnesToFix.Add(Couronne.MidMin);
+
+        //    if (Math.Sign(remainQuarters[1]) == sens)
+        //    {
+        //        couronnesToMove.Add(Couronne.MidMax);
+        //    remainQuarters[1] -= sens;
+        //    }
+        //    else couronnesToFix.Add(Couronne.MidMax);
+
+        //    if (Math.Sign(remainQuarters[2]) == sens)
+        //    {
+        //        couronnesToMove.Add(Couronne.Max);
+        //        remainQuarters[2]-= sens;
+        //    }
+        //    else couronnesToFix.Add(Couronne.Max);
+
+
+        //    if (couronnesToMove.Count == 0) return;
+
+        //    Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.DisengagedAcceleration));
+        //    Add(new SetSpeedInstruction(state.HardwareConfigGlobal.DisengagedSpeed));
+
+        //    // mise en position des couronnes parallèles
+        //    foreach (var c in couronnesToFix)
+        //    {
+        //        AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
+        //    }
+
+        //    // mise en position des couronnes motrices
+        //    foreach (var c in couronnesToMove)
+        //    {
+        //        AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.MaxStop : KnownPosition.MinStop);
+        //    }
+
+
+        //    //Déplacement des autres couronnes perpendiculaires
+        //    foreach (var motor in state.Motors.Motors)
+        //    {
+        //        if (motor.Axe == axe) continue;
+        //        /*
+        //        var negCollision = couronnesToMove.Any((c) => motor.NegativeCollision.HasCollision(axe, c));
+        //        var posCollision = couronnesToMove.Any((c) => motor.PositiveCollision.HasCollision(axe, c));
+
+        //        KnownPosition pos;
+
+        //        if (negCollision && posCollision) pos = KnownPosition.Middle;
+        //        else if (negCollision) pos = KnownPosition.MaxStop;
+        //        else if (posCollision) pos = KnownPosition.MinStop;
+        //        else
+        //        {
+        //            // si pas de collision, ne pas toucher au moteur sauf s'il est en position middle non engreiné
+        //            if (_designContext.GetPosition(motor.Courronne, motor.Axe) == KnownPosition.Middle) pos = KnownPosition.MinStop;
+        //            else continue;
+        //        }
+
+        //        AddMoveToKnowPosition(motor.Axe, motor.Courronne, pos);
+        //        */
+        //        AddMoveToKnowPosition(motor.Axe, motor.Courronne, KnownPosition.Middle);
+
+        //    }
+
+        //    Add(new WaitTargetReachedInstruction());
+
+        //    Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.EngagedAcceleration));
+        //    Add(new SetSpeedInstruction(state.HardwareConfigGlobal.EngagedSpeed));
+
+        //    // faire un quart de tour
+        //    foreach(var c in couronnesToMove)
+        //    {
+        //        AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.PositiveQuarterFromMaxStop : KnownPosition.NegativeQuarterFromMinStop);
+        //    }
+
+        //    Add(new WaitTargetReachedInstruction());
+        //}
 
         private static void AddMoveToKnowPosition(Axe axe, Couronne couronne, KnownPosition pos)
         {
@@ -506,8 +595,8 @@ namespace fgSolver.Modele
 
         public static void AddInitBlock()
         {
-            Add(new EnableMotorInstruction(true));
             Add(new BeginGroupeInstruction("Position initiale"));
+            Add(new EnableMotorInstruction(true));
             using (var state = GlobalState.GetState())
             {
                 Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.DisengagedAcceleration));

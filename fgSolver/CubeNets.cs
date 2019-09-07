@@ -70,25 +70,26 @@ namespace fgSolver
                     return;
             }
 
+            Couronne couronne;
             switch (txt[1])
             {
                 case '1':
                     mv.MaxMovesCount = sens;
+                    couronne = Couronne.Max;
                     break;
                 case '2':
                     mv.MidMaxMovesCount = sens;
+                    couronne = Couronne.MidMax;
                     break;
                 case '3':
                     mv.MidMinMovesCount = sens;
+                    couronne = Couronne.MidMin;
                     break;
                 default:
                     return;
             }
 
-            System.Threading.Tasks.Task.Factory.StartNew(new Action(() =>
-            {
-                if (MoveClick != null) MoveClick(sender, new MoveClickEventArgs(mv));
-            }));
+             MoveClick(sender, new MoveClickEventArgs(mv, axe, (Sens)sens, couronne));
         }
 
 
@@ -161,18 +162,17 @@ namespace fgSolver
 
     public class MoveClickEventArgs : EventArgs
     {
-        private MotorMove _motorMove;
-        public MotorMove MotorMove
-        {
-            get
-            {
-                return _motorMove;
-            }
-        }
+        public MotorMove MotorMove { get; }
+        public Sens Sens { get; }
+        public Couronne Couronne { get; }
+        public Axe Axe { get; }
 
-        public MoveClickEventArgs(MotorMove mv)
+        public MoveClickEventArgs(MotorMove mv, Axe a, Sens s, Couronne c)
         {
-            _motorMove = mv;
+            MotorMove = mv;
+            Axe = a;
+            Sens = s;
+            Couronne = c;
         }
     }
 }

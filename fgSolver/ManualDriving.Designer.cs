@@ -32,6 +32,8 @@
             this.resolutionSessionSupervisionControl = new fgSolver.ResolutionSessionSupervisionControl();
             this.btnInit = new System.Windows.Forms.Button();
             this.btnAlign = new System.Windows.Forms.Button();
+            this.lblMv = new System.Windows.Forms.Label();
+            this.btnAddMv = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cubeNets
@@ -75,10 +77,31 @@
             this.btnAlign.UseVisualStyleBackColor = true;
             this.btnAlign.Click += new System.EventHandler(this.btnAlign_Click);
             // 
+            // lblMv
+            // 
+            this.lblMv.Location = new System.Drawing.Point(289, 225);
+            this.lblMv.Name = "lblMv";
+            this.lblMv.Size = new System.Drawing.Size(101, 15);
+            this.lblMv.TabIndex = 3;
+            this.lblMv.Text = "label1";
+            this.lblMv.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnAddMv
+            // 
+            this.btnAddMv.Location = new System.Drawing.Point(289, 243);
+            this.btnAddMv.Name = "btnAddMv";
+            this.btnAddMv.Size = new System.Drawing.Size(101, 23);
+            this.btnAddMv.TabIndex = 2;
+            this.btnAddMv.Text = "Ajouter";
+            this.btnAddMv.UseVisualStyleBackColor = true;
+            this.btnAddMv.Click += new System.EventHandler(this.btnAddMv_Click);
+            // 
             // ManualDriving
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblMv);
+            this.Controls.Add(this.btnAddMv);
             this.Controls.Add(this.btnAlign);
             this.Controls.Add(this.btnInit);
             this.Controls.Add(this.resolutionSessionSupervisionControl);
@@ -95,5 +118,7 @@
         private ResolutionSessionSupervisionControl resolutionSessionSupervisionControl;
         private System.Windows.Forms.Button btnInit;
         private System.Windows.Forms.Button btnAlign;
+        private System.Windows.Forms.Label lblMv;
+        private System.Windows.Forms.Button btnAddMv;
     }
 }

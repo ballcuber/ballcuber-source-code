@@ -88,6 +88,7 @@ void setCurrentPosition(int mask, long position) {
 }
 
 void disableOutputs(int mask) {
+	stop(mask);
 	GENERIC_ALL_STEPPER(disableOutputs);
 }
 
@@ -139,7 +140,6 @@ long ellapsedMillis;
 
 
 void setup() {
-
 	Sharer.init(115200);
 
 	E0Stepper.setEnablePin(E0_ENABLE_PIN);
@@ -237,6 +237,65 @@ void setup() {
 
 	state = false;
 	ellapsedMillis = millis();
+
+
+	attachInterrupt(digitalPinToInterrupt(2), OnChange2, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(3), OnChange3, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(18), OnChange18, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(19), OnChange19, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(20), OnChange20, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(21), OnChange21, CHANGE);
+
+}
+
+
+
+volatile long int _lastUpMicros;
+volatile int _encoderSteps;
+volatile int _lastAbsoluteSteps;
+volatile int _turns = 0;
+
+#define STEPS_PER_MOTOR_ROTATION 3200
+#define ENCODER_CLAMP_MICROS 68
+#define ENCODER_PERIOD_MICROS 2174
+
+void OnChange2() {
+	OnChange(2);
+}
+
+void OnChange3() {
+	OnChange(3);
+}
+
+void OnChange18() {
+	OnChange(18);
+}
+
+void OnChange19() {
+	OnChange(19);
+}
+
+void OnChange20() {
+	OnChange(20);
+}
+
+void OnChange21() {
+	OnChange(21);
+}
+
+void OnChange(int pin) {
+	if (digitalRead(pin)) {
+		_lastUpMicros = micros();
+	}
+	else {
+		int absoluteSteps = constrain(STEPS_PER_MOTOR_ROTATION * (micros() - _lastUpMicros - ENCODER_CLAMP_MICROS) / (ENCODER_PERIOD_MICROS - 2 * ENCODER_CLAMP_MICROS), 0, STEPS_PER_MOTOR_ROTATION);
+
+		int diff = _lastAbsoluteSteps - absoluteSteps;
+		if (abs(diff) > STEPS_PER_MOTOR_ROTATION / 4) _turns += (diff > 0) ? 1 : -1;
+		_lastAbsoluteSteps = absoluteSteps;
+
+		_encoderSteps = _turns * STEPS_PER_MOTOR_ROTATION + absoluteSteps;
+	}
 }
 
 
@@ -255,7 +314,7 @@ void loop() {
 
 	Sharer.run();
 
-	if ((millis() - ellapsedMillis) > 500) {
+	if ((millis() - ellapsedMillis) > 1000) {
 		ellapsedMillis = millis();
 		digitalWrite(13, state);
 		state = !state;

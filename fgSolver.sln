@@ -13,8 +13,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Arduino", "Arduino\Arduino.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestStepper", "TestStepper\TestStepper.vcxproj", "{280CB34B-FEBD-4F3E-9B7C-77D41F388D0A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TeensyStep", "..\..\..\..\..\..\Program Files (x86)\Arduino\libraries\TeensyStep\TeensyStep.vcxitems", "{E206DA60-72A3-4853-AEDD-5ED7D855471E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestImageProcessing", "TestImageProcessing\TestImageProcessing.csproj", "{83EFCC04-D0C9-4A92-B7CE-8BD2EEC86031}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAlgoClassification", "TestAlgoClassification\TestAlgoClassification.csproj", "{00B39A9B-F022-4D9A-BB55-6755D835D923}"
@@ -22,6 +20,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Servo", "..\..\..\..\..\..\Program Files (x86)\Arduino\libraries\Servo\Servo.vcxitems", "{4CC8CD46-A759-4EC6-9562-83CBE350FA37}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharerDev", "..\..\..\..\..\..\Program Files (x86)\Arduino\libraries\Sharer\SharerDev.vcxproj", "{A23077AE-9F21-47CA-B94C-28F05DE0558C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestAbsoluteEncoder", "TestAbsoluteEncoder\TestAbsoluteEncoder.vcxproj", "{03D1EC62-659B-40E2-8234-170FBB01C071}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -118,6 +118,14 @@ Global
 		{A23077AE-9F21-47CA-B94C-28F05DE0558C}.Release|x64.ActiveCfg = Release|Win32
 		{A23077AE-9F21-47CA-B94C-28F05DE0558C}.Release|x86.ActiveCfg = Release|Win32
 		{A23077AE-9F21-47CA-B94C-28F05DE0558C}.Release|x86.Build.0 = Release|Win32
+		{03D1EC62-659B-40E2-8234-170FBB01C071}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{03D1EC62-659B-40E2-8234-170FBB01C071}.Debug|x64.ActiveCfg = Debug|Win32
+		{03D1EC62-659B-40E2-8234-170FBB01C071}.Debug|x86.ActiveCfg = Debug|Win32
+		{03D1EC62-659B-40E2-8234-170FBB01C071}.Debug|x86.Build.0 = Debug|Win32
+		{03D1EC62-659B-40E2-8234-170FBB01C071}.Release|Any CPU.ActiveCfg = Release|Win32
+		{03D1EC62-659B-40E2-8234-170FBB01C071}.Release|x64.ActiveCfg = Release|Win32
+		{03D1EC62-659B-40E2-8234-170FBB01C071}.Release|x86.ActiveCfg = Release|Win32
+		{03D1EC62-659B-40E2-8234-170FBB01C071}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

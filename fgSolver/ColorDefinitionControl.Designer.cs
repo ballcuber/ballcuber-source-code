@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cubeNets = new fgSolver.CubeNets();
             this.btnImport = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
@@ -37,17 +36,9 @@
             this.btnSolve = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnRand = new System.Windows.Forms.Button();
+            this.cubeNets = new fgSolver.CubeNets();
             ((System.ComponentModel.ISupportInitialize)(this.cornerPicture)).BeginInit();
             this.SuspendLayout();
-            // 
-            // cubeNets
-            // 
-            this.cubeNets.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cubeNets.Location = new System.Drawing.Point(69, 63);
-            this.cubeNets.Name = "cubeNets";
-            this.cubeNets.ShowControlButtons = false;
-            this.cubeNets.Size = new System.Drawing.Size(326, 245);
-            this.cubeNets.TabIndex = 5;
             // 
             // btnImport
             // 
@@ -56,7 +47,7 @@
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(75, 23);
             this.btnImport.TabIndex = 7;
-            this.btnImport.Text = "Importer";
+            this.btnImport.Text = "Import";
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
@@ -67,7 +58,7 @@
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(75, 23);
             this.btnExport.TabIndex = 8;
-            this.btnExport.Text = "Exporter";
+            this.btnExport.Text = "Export";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
@@ -102,7 +93,7 @@
             this.btnSolve.Name = "btnSolve";
             this.btnSolve.Size = new System.Drawing.Size(439, 110);
             this.btnSolve.TabIndex = 6;
-            this.btnSolve.Text = "Obtenir solution ";
+            this.btnSolve.Text = "Get solution ";
             this.btnSolve.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSolve.UseVisualStyleBackColor = true;
             this.btnSolve.Click += new System.EventHandler(this.btnSolve_Click);
@@ -130,10 +121,19 @@
             this.btnRand.Name = "btnRand";
             this.btnRand.Size = new System.Drawing.Size(160, 80);
             this.btnRand.TabIndex = 4;
-            this.btnRand.Text = "Hasard";
+            this.btnRand.Text = "Random";
             this.btnRand.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnRand.UseVisualStyleBackColor = true;
             this.btnRand.Click += new System.EventHandler(this.btnRand_Click);
+            // 
+            // cubeNets
+            // 
+            this.cubeNets.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cubeNets.Location = new System.Drawing.Point(69, 63);
+            this.cubeNets.Name = "cubeNets";
+            this.cubeNets.ShowControlButtons = false;
+            this.cubeNets.Size = new System.Drawing.Size(326, 245);
+            this.cubeNets.TabIndex = 5;
             // 
             // ColorDefinitionControl
             // 

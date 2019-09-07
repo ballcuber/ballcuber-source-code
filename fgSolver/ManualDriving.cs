@@ -45,17 +45,28 @@ namespace fgSolver
             }
         }
 
+        private MotorMove _mvToAdd;
+
         public void PeriodicUpdate(GlobalState formerState, GlobalState currentState)
         {
+            lblMv.Text = _mvToAdd == null ? "..." : _mvToAdd.ToString();
             resolutionSessionSupervisionControl.PeriodicUpdate(currentState);
             
         }
 
         private void cubeNets_MoveClick(object sender, MoveClickEventArgs e)
         {
-            //    Runner.BlockingMove(e.MotorMove);
+            if (_mvToAdd == null || _mvToAdd.Axe != e.Axe) _mvToAdd = e.MotorMove;
+            else _mvToAdd.Add(e.Couronne, e.Sens);
 
-            ResolutionSession.Add(e.MotorMove);
+            if (_mvToAdd.QuarterNumber == 0) _mvToAdd = null;
+        }
+
+       
+        private void btnAddMv_Click(object sender, EventArgs e)
+        {
+            if (_mvToAdd == null) return;
+            ResolutionSession.Add(_mvToAdd);
         }
 
         public void NavigueTo() { }
@@ -71,5 +82,7 @@ namespace fgSolver
         {
             ResolutionSession.AddAlignment();
         }
+
+
     }
 }

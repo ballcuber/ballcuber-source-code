@@ -268,15 +268,27 @@ namespace fgSolver.Hardware
                 {
 
                     case KnownPosition.NegativeQuarter:
-                        steps= - stepPerQuarter;
+                        steps = -stepPerQuarter;
                         break;
                     case KnownPosition.PositiveQuarter:
                         steps = stepPerQuarter;
                         break;
 
-                    //case KnownPosition.UTurn:
-                    //    steps = 2 * stepPerQuarter;
-                    //    break;
+                    case KnownPosition.NegativeQuarterFromMinStop:
+                        steps = -stepPerQuarter+ Motor.StepsToPositivePosition / 2;
+                        break;
+
+                    case KnownPosition.PositiveQuarterFromMaxStop:
+                        steps = stepPerQuarter - Motor.StepsToPositivePosition / 2;
+                        break;
+
+                    case KnownPosition.UTurnFromMaxStop:
+                        steps = 2 * stepPerQuarter - Motor.StepsToPositivePosition / 2; ;
+                        break;
+
+                    case KnownPosition.UTurn:
+                        steps = 2 * stepPerQuarter;
+                        break;
 
                     case KnownPosition.MaxStop:
                         steps = Motor.StepsToPositivePosition - modPos;
@@ -286,6 +298,19 @@ namespace fgSolver.Hardware
                         break;
                     case KnownPosition.Middle:
                         steps = Motor.StepsToPositivePosition / 2 - modPos;
+                        break;
+                    case KnownPosition.PositiveSmallAmount:
+                        steps = stepPerQuarter / 6;
+                        break;
+                    case KnownPosition.NegativeSmallAmount:
+                        steps = -stepPerQuarter / 6;
+                        break;
+
+                    case KnownPosition.MaxStopIntermediaire:
+                        steps = Motor.StepsToPositivePosition - modPos- stepPerQuarter / 10;
+                        break;
+                    case KnownPosition.MinStopIntermediaire:
+                        steps = -modPos+ stepPerQuarter/10;
                         break;
                     default:
                         throw new Exception("Unknow position : " + KnownPosition);

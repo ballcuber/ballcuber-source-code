@@ -440,5 +440,32 @@ namespace fgSolver.Video
                 state.InitialCube = ColorClassification.GetCube(colors);
             }
         }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            if(dlgSave.ShowDialog() == DialogResult.OK)
+            {
+                var colors = GetColorList();
+
+                var cube = ColorClassification.GetCube(colors);
+
+                var sb = new StringBuilder("R;G;B;Name");
+
+                for(int i=0;i<colors.Count;i++)
+                {
+                    var color = colors[i];
+                    sb.AppendLine();
+                    sb.Append(color.R);
+                    sb.Append(";");
+                    sb.Append(color.G);
+                    sb.Append(";");
+                    sb.Append(color.B);
+                    sb.Append(";");
+                    sb.Append(cube.colors[i].Name);
+                }
+
+                System.IO.File.WriteAllText(dlgSave.FileName, sb.ToString());
+            }
+        }
     }
 }

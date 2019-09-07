@@ -38,6 +38,8 @@
             this.btnParam = new System.Windows.Forms.Button();
             this.btnValidateCalib = new System.Windows.Forms.Button();
             this.btnInit = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
+            this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -104,7 +106,7 @@
             // 
             this.grid.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.grid.HelpVisible = false;
-            this.grid.Location = new System.Drawing.Point(434, 415);
+            this.grid.Location = new System.Drawing.Point(433, 335);
             this.grid.Name = "grid";
             this.grid.Size = new System.Drawing.Size(177, 176);
             this.grid.TabIndex = 3;
@@ -156,11 +158,30 @@
             this.btnInit.UseVisualStyleBackColor = true;
             this.btnInit.Click += new System.EventHandler(this.btnInit_Click);
             // 
+            // btnExport
+            // 
+            this.btnExport.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExport.Location = new System.Drawing.Point(494, 571);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(47, 20);
+            this.btnExport.TabIndex = 2;
+            this.btnExport.Text = "Export";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // dlgSave
+            // 
+            this.dlgSave.DefaultExt = "cube";
+            this.dlgSave.FileName = "export.csv";
+            this.dlgSave.Title = "Save colors";
+            // 
             // VideoScannerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.grid);
+            this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnInit);
             this.Controls.Add(this.btnSommet2);
             this.Controls.Add(this.btnValidateCalib);
@@ -188,5 +209,7 @@
         private System.Windows.Forms.Button btnParam;
         private System.Windows.Forms.Button btnValidateCalib;
         private System.Windows.Forms.Button btnInit;
+        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.SaveFileDialog dlgSave;
     }
 }
