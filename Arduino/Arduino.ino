@@ -1,3 +1,4 @@
+#include "EncoderStepper.h"
 #include <Servo.h>
 #include <MultiStepper.h>
 #include <AccelStepper.h>
@@ -238,14 +239,14 @@ void setup() {
 	state = false;
 	ellapsedMillis = millis();
 
-
+	/*
 	attachInterrupt(digitalPinToInterrupt(2), OnChange2, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(3), OnChange3, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(18), OnChange18, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(19), OnChange19, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(20), OnChange20, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(21), OnChange21, CHANGE);
-
+	*/
 }
 
 

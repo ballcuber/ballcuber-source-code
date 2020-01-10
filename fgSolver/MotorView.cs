@@ -88,6 +88,8 @@ namespace fgSolver
                 if (m != null) led.On = m.Enabled;
             }
 
+            grpCalibration.Visible = chkCalibration.Checked;
+
         }
 
         private void radio_CheckedChanged(object sender, EventArgs e)
@@ -397,6 +399,45 @@ namespace fgSolver
                     }
                 }
             }
+        }
+
+        private void LED_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            using (var state = GlobalState.GetState())
+            {
+                var m = GetByTag(state, (sender as Control)?.Tag);
+
+                if (m != null)
+                {
+                    if (m.Enabled) Runner.DisableMotor(m);
+                    else Runner.EnableMotor(m);
+                }
+            }
+
+        }
+
+        private void ledEnabled_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (_selectedMotor == null) return;
+
+            if (_selectedMotor.Enabled) Runner.DisableMotor(_selectedMotor);
+            else Runner.EnableMotor(_selectedMotor);
+        }
+
+        private void btnMoveStepsNeg_Click(object sender, EventArgs e)
+        {
+            Runner.BeginMoveStep(_selectedMotor, -(int)udSteps.Value);
+        }
+
+        private void btnCalculateAngle_Click(object sender, EventArgs e)
+        {
+            if (_selectedMotor == null) return;
+            
+            using(var state = GlobalState.GetState())
+            {
+                _selectedMotor.DegreesFromMiddleToContact = _selectedMotor.Position * 360.0 / state.HardwareConfigGlobal.StepsPerMotorRotation / state.HardwareConfigGlobal.StepperDriverSubSteps / state.HardwareConfigGlobal.MotorReduction;
+            }
+            grid.Refresh();
         }
     }
 }

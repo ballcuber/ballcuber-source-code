@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GlobalState xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<GlobalState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <HardwareConfig1>
     <Index>Board1</Index>
-    <COMPort>COM17</COMPort>
+    <COMPort>COM6</COMPort>
     <BaudRate>115200</BaudRate>
     <Simulated>false</Simulated>
     <SimulatedTime>500</SimulatedTime>
@@ -10,19 +10,21 @@
   </HardwareConfig1>
   <HardwareConfig2>
     <Index>Board2</Index>
-    <COMPort>COM18</COMPort>
+    <COMPort>COM5</COMPort>
     <BaudRate>115200</BaudRate>
     <Simulated>false</Simulated>
     <SimulatedTime>500</SimulatedTime>
     <ConnectAtStartup>true</ConnectAtStartup>
   </HardwareConfig2>
   <HardwareConfigGlobal>
-    <StepsPerRotation>14400</StepsPerRotation>
+    <StepsPerMotorRotation>200</StepsPerMotorRotation>
+    <StepperDriverSubSteps>16</StepperDriverSubSteps>
+    <MotorReduction>4</MotorReduction>
     <WaitTargetReachedInstructionTimeoutMilliseconds>5000000</WaitTargetReachedInstructionTimeoutMilliseconds>
-    <EngagedAcceleration>100</EngagedAcceleration>
+    <EngagedAcceleration>1000</EngagedAcceleration>
     <DisengagedAcceleration>140000</DisengagedAcceleration>
     <EngagedSpeed>600</EngagedSpeed>
-    <DisengagedSpeed>1000</DisengagedSpeed>
+    <DisengagedSpeed>1400</DisengagedSpeed>
   </HardwareConfigGlobal>
   <VideoParameters>
     <CaptureID>0</CaptureID>
@@ -70,183 +72,190 @@
       <Motor>
         <Axe>X</Axe>
         <Courronne>MidMax</Courronne>
-        <Stepper>X</Stepper>
-        <StepsToPositivePosition>1596</StepsToPositivePosition>
-        <Board>Board1</Board>
-        <PositiveCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>false</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>true</Y_Max>
-          <Z_MidMin>true</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>false</Z_Max>
-        </PositiveCollision>
-        <NegativeCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>false</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>true</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>true</Z_MidMax>
-          <Z_Max>true</Z_Max>
-        </NegativeCollision>
-      </Motor>
-      <Motor>
-        <Axe>X</Axe>
-        <Courronne>Max</Courronne>
-        <Stepper>Y</Stepper>
-        <StepsToPositivePosition>2209</StepsToPositivePosition>
-        <Board>Board2</Board>
-        <PositiveCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>false</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>true</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>true</Z_Max>
-        </PositiveCollision>
-        <NegativeCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>false</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>true</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>true</Z_Max>
-        </NegativeCollision>
-      </Motor>
-      <Motor>
-        <Axe>X</Axe>
-        <Courronne>MidMin</Courronne>
-        <Stepper>Y</Stepper>
-        <StepsToPositivePosition>1596</StepsToPositivePosition>
-        <Board>Board1</Board>
-        <PositiveCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>false</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>true</Y_Max>
-          <Z_MidMin>true</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>false</Z_Max>
-        </PositiveCollision>
-        <NegativeCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>false</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>true</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>true</Z_MidMax>
-          <Z_Max>true</Z_Max>
-        </NegativeCollision>
-      </Motor>
-      <Motor>
-        <Axe>Y</Axe>
-        <Courronne>MidMax</Courronne>
-        <Stepper>E1</Stepper>
-        <StepsToPositivePosition>1596</StepsToPositivePosition>
-        <Board>Board1</Board>
-        <PositiveCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>true</X_MidMax>
-          <X_Max>true</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>false</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>false</Z_Max>
-        </PositiveCollision>
-        <NegativeCollision>
-          <X_MidMin>true</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>false</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>false</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>false</Z_Max>
-        </NegativeCollision>
-      </Motor>
-      <Motor>
-        <Axe>Y</Axe>
-        <Courronne>Max</Courronne>
         <Stepper>E0</Stepper>
-        <StepsToPositivePosition>2209</StepsToPositivePosition>
+        <Inverted>false</Inverted>
+        <DegreesFromMiddleToContact>44</DegreesFromMiddleToContact>
         <Board>Board2</Board>
         <PositiveCollision>
           <X_MidMin>false</X_MidMin>
           <X_MidMax>false</X_MidMax>
-          <X_Max>true</X_Max>
+          <X_Max>false</X_Max>
           <Y_MidMin>false</Y_MidMin>
           <Y_MidMax>false</Y_MidMax>
-          <Y_Max>false</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
+          <Y_Max>true</Y_Max>
+          <Z_MidMin>true</Z_MidMin>
           <Z_MidMax>false</Z_MidMax>
           <Z_Max>false</Z_Max>
         </PositiveCollision>
         <NegativeCollision>
           <X_MidMin>false</X_MidMin>
           <X_MidMax>false</X_MidMax>
-          <X_Max>true</X_Max>
+          <X_Max>false</X_Max>
           <Y_MidMin>false</Y_MidMin>
           <Y_MidMax>false</Y_MidMax>
-          <Y_Max>false</Y_Max>
+          <Y_Max>true</Y_Max>
           <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>false</Z_Max>
+          <Z_MidMax>true</Z_MidMax>
+          <Z_Max>true</Z_Max>
         </NegativeCollision>
       </Motor>
       <Motor>
-        <Axe>Y</Axe>
-        <Courronne>MidMin</Courronne>
-        <Stepper>X</Stepper>
-        <StepsToPositivePosition>2591</StepsToPositivePosition>
-        <Board>Board2</Board>
-        <PositiveCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>true</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>false</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>false</Z_Max>
-        </PositiveCollision>
-        <NegativeCollision>
-          <X_MidMin>false</X_MidMin>
-          <X_MidMax>false</X_MidMax>
-          <X_Max>true</X_Max>
-          <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>false</Y_MidMax>
-          <Y_Max>false</Y_Max>
-          <Z_MidMin>false</Z_MidMin>
-          <Z_MidMax>false</Z_MidMax>
-          <Z_Max>false</Z_Max>
-        </NegativeCollision>
-      </Motor>
-      <Motor>
-        <Axe>Z</Axe>
-        <Courronne>MidMax</Courronne>
+        <Axe>X</Axe>
+        <Courronne>Max</Courronne>
         <Stepper>Z</Stepper>
-        <StepsToPositivePosition>1596</StepsToPositivePosition>
+        <Inverted>false</Inverted>
+        <DegreesFromMiddleToContact>60.5</DegreesFromMiddleToContact>
+        <Board>Board1</Board>
+        <PositiveCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>false</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>true</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>true</Z_Max>
+        </PositiveCollision>
+        <NegativeCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>false</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>true</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>true</Z_Max>
+        </NegativeCollision>
+      </Motor>
+      <Motor>
+        <Axe>X</Axe>
+        <Courronne>MidMin</Courronne>
+        <Stepper>E1</Stepper>
+        <Inverted>true</Inverted>
+        <DegreesFromMiddleToContact>44</DegreesFromMiddleToContact>
+        <Board>Board1</Board>
+        <PositiveCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>false</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>true</Y_Max>
+          <Z_MidMin>true</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>false</Z_Max>
+        </PositiveCollision>
+        <NegativeCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>false</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>true</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>true</Z_MidMax>
+          <Z_Max>true</Z_Max>
+        </NegativeCollision>
+      </Motor>
+      <Motor>
+        <Axe>Y</Axe>
+        <Courronne>MidMax</Courronne>
+        <Stepper>E0</Stepper>
+        <Inverted>false</Inverted>
+        <DegreesFromMiddleToContact>42.975</DegreesFromMiddleToContact>
+        <Board>Board1</Board>
+        <PositiveCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>true</X_MidMax>
+          <X_Max>true</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>false</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>false</Z_Max>
+        </PositiveCollision>
+        <NegativeCollision>
+          <X_MidMin>true</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>false</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>false</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>false</Z_Max>
+        </NegativeCollision>
+      </Motor>
+      <Motor>
+        <Axe>Y</Axe>
+        <Courronne>Max</Courronne>
+        <Stepper>Z</Stepper>
+        <Inverted>false</Inverted>
+        <DegreesFromMiddleToContact>55.3</DegreesFromMiddleToContact>
         <Board>Board2</Board>
+        <PositiveCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>true</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>false</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>false</Z_Max>
+        </PositiveCollision>
+        <NegativeCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>true</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>false</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>false</Z_Max>
+        </NegativeCollision>
+      </Motor>
+      <Motor>
+        <Axe>Y</Axe>
+        <Courronne>MidMin</Courronne>
+        <Stepper>X</Stepper>
+        <Inverted>true</Inverted>
+        <DegreesFromMiddleToContact>67</DegreesFromMiddleToContact>
+        <Board>Board2</Board>
+        <PositiveCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>true</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>false</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>false</Z_Max>
+        </PositiveCollision>
+        <NegativeCollision>
+          <X_MidMin>false</X_MidMin>
+          <X_MidMax>false</X_MidMax>
+          <X_Max>true</X_Max>
+          <Y_MidMin>false</Y_MidMin>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>false</Y_Max>
+          <Z_MidMin>false</Z_MidMin>
+          <Z_MidMax>false</Z_MidMax>
+          <Z_Max>false</Z_Max>
+        </NegativeCollision>
+      </Motor>
+      <Motor>
+        <Axe>Z</Axe>
+        <Courronne>MidMax</Courronne>
+        <Stepper>X</Stepper>
+        <Inverted>false</Inverted>
+        <DegreesFromMiddleToContact>42.8625</DegreesFromMiddleToContact>
+        <Board>Board1</Board>
         <PositiveCollision>
           <X_MidMin>true</X_MidMin>
           <X_MidMax>false</X_MidMax>
@@ -273,14 +282,15 @@
       <Motor>
         <Axe>Z</Axe>
         <Courronne>Max</Courronne>
-        <Stepper>E1</Stepper>
-        <StepsToPositivePosition>1382</StepsToPositivePosition>
-        <Board>Board2</Board>
+        <Stepper>Y</Stepper>
+        <Inverted>true</Inverted>
+        <DegreesFromMiddleToContact>55.29375</DegreesFromMiddleToContact>
+        <Board>Board1</Board>
         <PositiveCollision>
           <X_MidMin>false</X_MidMin>
           <X_MidMax>false</X_MidMax>
           <X_Max>true</X_Max>
-          <Y_MidMin>true</Y_MidMin>
+          <Y_MidMin>false</Y_MidMin>
           <Y_MidMax>false</Y_MidMax>
           <Y_Max>false</Y_Max>
           <Z_MidMin>false</Z_MidMin>
@@ -292,8 +302,8 @@
           <X_MidMax>false</X_MidMax>
           <X_Max>true</X_Max>
           <Y_MidMin>false</Y_MidMin>
-          <Y_MidMax>true</Y_MidMax>
-          <Y_Max>true</Y_Max>
+          <Y_MidMax>false</Y_MidMax>
+          <Y_Max>false</Y_Max>
           <Z_MidMin>false</Z_MidMin>
           <Z_MidMax>false</Z_MidMax>
           <Z_Max>false</Z_Max>
@@ -302,9 +312,10 @@
       <Motor>
         <Axe>Z</Axe>
         <Courronne>MidMin</Courronne>
-        <Stepper>E0</Stepper>
-        <StepsToPositivePosition>1596</StepsToPositivePosition>
-        <Board>Board1</Board>
+        <Stepper>Y</Stepper>
+        <Inverted>true</Inverted>
+        <DegreesFromMiddleToContact>42.58125</DegreesFromMiddleToContact>
+        <Board>Board2</Board>
         <PositiveCollision>
           <X_MidMin>true</X_MidMin>
           <X_MidMax>false</X_MidMax>

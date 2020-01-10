@@ -414,18 +414,45 @@ namespace fgSolver.Modele
             // mise en position des couronnes parallèles
             foreach (var c in couronnesToFix)
             {
+                /*
                 if (couronne == Couronne.Max)
                 {
                     AddMoveToKnowPosition(axe, c, sens < 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
                 }
                 else
                 {
+                */
+                if (axe == Axe.Z && couronne == Couronne.Max)
+                {
+                    AddMoveToKnowPosition(axe, c, KnownPosition.MinStop);
+                }
+                else if (axe == Axe.Y && couronne == Couronne.Max)
+                {
+                    AddMoveToKnowPosition(axe, c, KnownPosition.MaxStop);
+                }
+                else
+                {
                     AddMoveToKnowPosition(axe, c, sens > 0 ? KnownPosition.MinStop : KnownPosition.MaxStop);
                 }
+               // }
             }
 
+            if (axe == Axe.Z && couronne == Couronne.Max)
+            {
+                AddMoveToKnowPosition(axe, couronne, KnownPosition.MaxStop);
+            }
+            else if (axe == Axe.Y && couronne == Couronne.Max)
+            {
+                AddMoveToKnowPosition(axe, couronne, KnownPosition.MinStop);
+            }
+            else
+            {
             // moteur en position
             AddMoveToKnowPosition(axe, couronne, sens > 0 ? KnownPosition.MaxStop : KnownPosition.MinStop);
+
+            }
+
+
 
 
             //Déplacement des autres couronnes perpendiculaires
@@ -459,6 +486,7 @@ namespace fgSolver.Modele
             Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.EngagedAcceleration));
             Add(new SetSpeedInstruction(state.HardwareConfigGlobal.EngagedSpeed));
 
+            /*
            if(couronne == Couronne.Max)
             {
                 AddMoveToKnowPosition(axe, Couronne.MidMin, sens > 0 ? KnownPosition.PositiveSmallAmount : KnownPosition.NegativeSmallAmount);
@@ -475,9 +503,27 @@ namespace fgSolver.Modele
                 Add(new SetAccelerationInstruction(state.HardwareConfigGlobal.EngagedAcceleration));
                 Add(new SetSpeedInstruction(state.HardwareConfigGlobal.EngagedSpeed));
             }
+            */
 
-            // faire les quarts de tour
-            AddMoveToKnowPosition(axe, couronne, quarters==-1 ? KnownPosition.NegativeQuarterFromMinStop : (quarters==1 ? KnownPosition.PositiveQuarterFromMaxStop : KnownPosition.UTurnFromMaxStop));
+            if (axe == Axe.Z && couronne == Couronne.Max && quarters == -1)
+            {
+                AddMoveToKnowPosition(axe, couronne, KnownPosition.UTurnPositive);
+                AddMoveToKnowPosition(axe, couronne, KnownPosition.PositiveQuarter);
+            }
+            else if (axe == Axe.Y && couronne == Couronne.Max && quarters == 1)
+            {
+                AddMoveToKnowPosition(axe, couronne, KnownPosition.UTurnNegative);
+                AddMoveToKnowPosition(axe, couronne, KnownPosition.NegativeQuarter);
+            }
+            else if (axe == Axe.Y && couronne == Couronne.Max && quarters == 2)
+            {
+                AddMoveToKnowPosition(axe, couronne, KnownPosition.UTurnNegative);
+            }
+            else
+            {
+                // faire les quarts de tour
+                AddMoveToKnowPosition(axe, couronne, quarters == -1 ? KnownPosition.NegativeQuarter : (quarters == 1 ? KnownPosition.PositiveQuarter : KnownPosition.UTurnPositive));
+            }
 
             Add(new WaitTargetReachedInstruction());
         }

@@ -269,7 +269,18 @@ namespace fgSolver
 
     public class HardwareConfigGlobal : ApplicationState
     {
-        public int StepsPerRotation { get; set; }
+        [Description("Nombre natif de pas du moteur")]
+        public int StepsPerMotorRotation { get; set; } = 200;
+
+        [Description("Pilotage en quart (4)/huitième (8)/seizième (16)/... de pas")]
+        public int StepperDriverSubSteps { get; set; } = 16;
+
+        [Description("Rapport de réduction du réducteur du moteur")]
+        public int MotorReduction { get; set; } = 4;
+
+        [Description("Nombre de pas par tour de bielle")]
+        public int StepsPerRotation => StepsPerMotorRotation * StepperDriverSubSteps * MotorReduction;
+
 
         [Description("Nombre de doigt de la croix/bielle")]
         public int MotorTeeth
@@ -329,17 +340,28 @@ namespace fgSolver
         [Browsable(false), XmlIgnore()]
         public int Position { get; private set; }
 
-        public void SetState(bool enabled, int position)
+        public void SetState(bool enabled, int rawPosition)
         {
             this.Enabled = enabled;
-            this.Position = position;
+            this.Position = Inverted ? -rawPosition : rawPosition;
         }
 
-        [Description("Nombre de pas pour engreiner dans le sens positif depuis la position 0")]
-        public int StepsToPositivePosition { get; set; }
+        [Description("Le sens positif de rotation du moteur est inversé par rapport au sens conventionnel du cube")]
+        public bool Inverted { get; set; }
 
-        [Description("Angle pour engreiner dans le sens positif depuis la position 0")]
-        public double StepsToPositivePositionDEG { get => StepsToPositivePosition * 360/3200; }
+        public double DegreesFromMiddleToContact { get; set; }
+
+
+
+        [Description("Nombre de pas pour engreiner dans le sens positif depuis la position 0")]
+        public int StepsToPositivePosition {
+            get {
+                using (var state = GlobalState.GetState()) {
+                    return (int)(DegreesFromMiddleToContact * state.HardwareConfigGlobal.StepsPerMotorRotation * state.HardwareConfigGlobal.StepperDriverSubSteps * state.HardwareConfigGlobal.MotorReduction / 360.0);
+
+                }
+            }
+        }
 
         // index dans le tableau interne au code arduino
         public byte Index

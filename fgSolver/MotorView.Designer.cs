@@ -92,6 +92,11 @@
             this.btnAssociate = new System.Windows.Forms.Button();
             this.btnEnableStepper = new System.Windows.Forms.Button();
             this.lblSelected2 = new System.Windows.Forms.Label();
+            this.btnMoveStepsNeg = new System.Windows.Forms.Button();
+            this.chkCalibration = new System.Windows.Forms.CheckBox();
+            this.grpCalibration = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnCalculateAngle = new System.Windows.Forms.Button();
             this.ledEnabled = new Bulb.LedBulb();
             this.ledBulb9 = new Bulb.LedBulb();
             this.ledBulb8 = new Bulb.LedBulb();
@@ -116,6 +121,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlImg.SuspendLayout();
             this.pnlIdent.SuspendLayout();
+            this.grpCalibration.SuspendLayout();
             this.SuspendLayout();
             // 
             // radioButton1
@@ -238,6 +244,8 @@
             // pnlDrive
             // 
             this.pnlDrive.AutoScroll = true;
+            this.pnlDrive.Controls.Add(this.grpCalibration);
+            this.pnlDrive.Controls.Add(this.chkCalibration);
             this.pnlDrive.Controls.Add(this.txtPosition);
             this.pnlDrive.Controls.Add(this.label1);
             this.pnlDrive.Controls.Add(this.grid);
@@ -257,6 +265,7 @@
             this.pnlDrive.Controls.Add(this.btnSetSpeed);
             this.pnlDrive.Controls.Add(this.btnMoveMiddle);
             this.pnlDrive.Controls.Add(this.ledEnabled);
+            this.pnlDrive.Controls.Add(this.btnMoveStepsNeg);
             this.pnlDrive.Controls.Add(this.btnMoveSteps);
             this.pnlDrive.Controls.Add(this.btnStop);
             this.pnlDrive.Controls.Add(this.btnDisable);
@@ -265,7 +274,7 @@
             this.pnlDrive.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlDrive.Location = new System.Drawing.Point(0, 416);
             this.pnlDrive.Name = "pnlDrive";
-            this.pnlDrive.Size = new System.Drawing.Size(746, 174);
+            this.pnlDrive.Size = new System.Drawing.Size(872, 174);
             this.pnlDrive.TabIndex = 5;
             // 
             // txtPosition
@@ -369,6 +378,11 @@
             this.udSteps.Name = "udSteps";
             this.udSteps.Size = new System.Drawing.Size(120, 20);
             this.udSteps.TabIndex = 2;
+            this.udSteps.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             // 
             // btnMoveNegativeQuarter
             // 
@@ -482,11 +496,11 @@
             // 
             // btnMoveSteps
             // 
-            this.btnMoveSteps.Location = new System.Drawing.Point(413, 90);
+            this.btnMoveSteps.Location = new System.Drawing.Point(461, 90);
             this.btnMoveSteps.Name = "btnMoveSteps";
-            this.btnMoveSteps.Size = new System.Drawing.Size(92, 23);
+            this.btnMoveSteps.Size = new System.Drawing.Size(44, 23);
             this.btnMoveSteps.TabIndex = 1;
-            this.btnMoveSteps.Text = "Move relative";
+            this.btnMoveSteps.Text = "+";
             this.btnMoveSteps.UseVisualStyleBackColor = true;
             this.btnMoveSteps.Click += new System.EventHandler(this.btnMoveSteps_Click);
             // 
@@ -553,7 +567,7 @@
             this.grp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grp.Location = new System.Drawing.Point(0, 590);
             this.grp.Name = "grp";
-            this.grp.Size = new System.Drawing.Size(746, 208);
+            this.grp.Size = new System.Drawing.Size(872, 208);
             this.grp.TabIndex = 7;
             this.grp.TabStop = false;
             this.grp.Text = "Action groupée";
@@ -686,7 +700,7 @@
             this.udSetSpeedAll.Size = new System.Drawing.Size(120, 20);
             this.udSetSpeedAll.TabIndex = 2;
             this.udSetSpeedAll.Value = new decimal(new int[] {
-            100,
+            1000,
             0,
             0,
             0});
@@ -809,7 +823,7 @@
             this.pnlImg.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlImg.Location = new System.Drawing.Point(0, 0);
             this.pnlImg.Name = "pnlImg";
-            this.pnlImg.Size = new System.Drawing.Size(746, 316);
+            this.pnlImg.Size = new System.Drawing.Size(872, 316);
             this.pnlImg.TabIndex = 8;
             // 
             // chkIdent
@@ -835,7 +849,7 @@
             this.pnlIdent.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlIdent.Location = new System.Drawing.Point(0, 316);
             this.pnlIdent.Name = "pnlIdent";
-            this.pnlIdent.Size = new System.Drawing.Size(746, 100);
+            this.pnlIdent.Size = new System.Drawing.Size(872, 100);
             this.pnlIdent.TabIndex = 9;
             this.pnlIdent.Visible = false;
             // 
@@ -898,6 +912,57 @@
             this.lblSelected2.TabIndex = 0;
             this.lblSelected2.Text = "label1";
             // 
+            // btnMoveStepsNeg
+            // 
+            this.btnMoveStepsNeg.Location = new System.Drawing.Point(413, 90);
+            this.btnMoveStepsNeg.Name = "btnMoveStepsNeg";
+            this.btnMoveStepsNeg.Size = new System.Drawing.Size(44, 23);
+            this.btnMoveStepsNeg.TabIndex = 1;
+            this.btnMoveStepsNeg.Text = "-";
+            this.btnMoveStepsNeg.UseVisualStyleBackColor = true;
+            this.btnMoveStepsNeg.Click += new System.EventHandler(this.btnMoveStepsNeg_Click);
+            // 
+            // chkCalibration
+            // 
+            this.chkCalibration.AutoSize = true;
+            this.chkCalibration.Location = new System.Drawing.Point(554, 9);
+            this.chkCalibration.Name = "chkCalibration";
+            this.chkCalibration.Size = new System.Drawing.Size(155, 17);
+            this.chkCalibration.TabIndex = 0;
+            this.chkCalibration.Text = "Show calibration procedure";
+            this.chkCalibration.UseVisualStyleBackColor = false;
+            // 
+            // grpCalibration
+            // 
+            this.grpCalibration.Controls.Add(this.btnCalculateAngle);
+            this.grpCalibration.Controls.Add(this.label2);
+            this.grpCalibration.Location = new System.Drawing.Point(715, 6);
+            this.grpCalibration.Name = "grpCalibration";
+            this.grpCalibration.Size = new System.Drawing.Size(154, 159);
+            this.grpCalibration.TabIndex = 8;
+            this.grpCalibration.TabStop = false;
+            this.grpCalibration.Text = "Calibration";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(145, 78);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "1. Move motor to min position\r\n2. Set pos. min stop\r\n3. Enable motor\r\n4. Jog +/- " +
+    "to max position \r\n\r\n5.";
+            // 
+            // btnCalculateAngle
+            // 
+            this.btnCalculateAngle.Location = new System.Drawing.Point(23, 78);
+            this.btnCalculateAngle.Name = "btnCalculateAngle";
+            this.btnCalculateAngle.Size = new System.Drawing.Size(97, 34);
+            this.btnCalculateAngle.TabIndex = 1;
+            this.btnCalculateAngle.Text = "Calculate angle to max stop";
+            this.btnCalculateAngle.UseVisualStyleBackColor = true;
+            this.btnCalculateAngle.Click += new System.EventHandler(this.btnCalculateAngle_Click);
+            // 
             // ledEnabled
             // 
             this.ledEnabled.BackColor = System.Drawing.SystemColors.Control;
@@ -908,6 +973,7 @@
             this.ledEnabled.TabIndex = 6;
             this.ledEnabled.Tag = "";
             this.ledEnabled.Text = "ledBulb1";
+            this.ledEnabled.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ledEnabled_MouseDoubleClick);
             // 
             // ledBulb9
             // 
@@ -919,6 +985,7 @@
             this.ledBulb9.TabIndex = 6;
             this.ledBulb9.Tag = "Y3";
             this.ledBulb9.Text = "ledBulb1";
+            this.ledBulb9.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb9.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb8
@@ -931,6 +998,7 @@
             this.ledBulb8.TabIndex = 6;
             this.ledBulb8.Tag = "Z3";
             this.ledBulb8.Text = "ledBulb1";
+            this.ledBulb8.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb8.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb7
@@ -943,6 +1011,7 @@
             this.ledBulb7.TabIndex = 6;
             this.ledBulb7.Tag = "X3";
             this.ledBulb7.Text = "ledBulb1";
+            this.ledBulb7.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb7.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb6
@@ -955,6 +1024,7 @@
             this.ledBulb6.TabIndex = 6;
             this.ledBulb6.Tag = "X2";
             this.ledBulb6.Text = "ledBulb1";
+            this.ledBulb6.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb6.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb5
@@ -967,6 +1037,7 @@
             this.ledBulb5.TabIndex = 6;
             this.ledBulb5.Tag = "X1";
             this.ledBulb5.Text = "ledBulb1";
+            this.ledBulb5.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb5.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb4
@@ -979,6 +1050,7 @@
             this.ledBulb4.TabIndex = 6;
             this.ledBulb4.Tag = "Z2";
             this.ledBulb4.Text = "ledBulb1";
+            this.ledBulb4.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb4.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb3
@@ -991,6 +1063,7 @@
             this.ledBulb3.TabIndex = 6;
             this.ledBulb3.Tag = "Y1";
             this.ledBulb3.Text = "ledBulb1";
+            this.ledBulb3.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb3.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb2
@@ -1003,6 +1076,7 @@
             this.ledBulb2.TabIndex = 6;
             this.ledBulb2.Tag = "Z1";
             this.ledBulb2.Text = "ledBulb1";
+            this.ledBulb2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb2.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // ledBulb1
@@ -1015,6 +1089,7 @@
             this.ledBulb1.TabIndex = 6;
             this.ledBulb1.Tag = "Y2";
             this.ledBulb1.Text = "ledBulb1";
+            this.ledBulb1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LED_MouseDoubleClick);
             this.ledBulb1.MouseEnter += new System.EventHandler(this.MouseEnter);
             // 
             // MotorView
@@ -1024,7 +1099,7 @@
             this.Controls.Add(this.pnlIdent);
             this.Controls.Add(this.pnlImg);
             this.Name = "MotorView";
-            this.Size = new System.Drawing.Size(746, 798);
+            this.Size = new System.Drawing.Size(872, 798);
             this.pnlDrive.ResumeLayout(false);
             this.pnlDrive.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udPosition)).EndInit();
@@ -1042,6 +1117,8 @@
             this.pnlImg.PerformLayout();
             this.pnlIdent.ResumeLayout(false);
             this.pnlIdent.PerformLayout();
+            this.grpCalibration.ResumeLayout(false);
+            this.grpCalibration.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1120,5 +1197,10 @@
         private System.Windows.Forms.Button btnAssociate;
         private System.Windows.Forms.Button btnEnableStepper;
         private System.Windows.Forms.Label lblSelected2;
+        private System.Windows.Forms.Button btnMoveStepsNeg;
+        private System.Windows.Forms.GroupBox grpCalibration;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chkCalibration;
+        private System.Windows.Forms.Button btnCalculateAngle;
     }
 }

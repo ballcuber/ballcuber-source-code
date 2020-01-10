@@ -160,7 +160,7 @@ namespace fgSolver.Hardware
           if (m == null) return;
             AssertMotorEnabled(m);
 
-            GetBoard(m.Board).Move(m.Mask, value);
+            GetBoard(m.Board).Move(m.Mask,m.Inverted ? -value : value);
         }
 
         public static void BeginMoveAbsolute(Motor m, int value)
@@ -168,7 +168,7 @@ namespace fgSolver.Hardware
             if (m == null) return;
             AssertMotorEnabled(m);
 
-            GetBoard(m.Board).MoveTo(m.Mask, value);
+            GetBoard(m.Board).MoveTo(m.Mask, m.Inverted ? -value : value);
         }
 
         private static void AssertMotorEnabled(Motor m)
@@ -181,7 +181,7 @@ namespace fgSolver.Hardware
         {
             if (m == null) return;
 
-            GetBoard(m.Board).SetCurrentPosition(m.Mask, value);
+            GetBoard(m.Board).SetCurrentPosition(m.Mask,m.Inverted ? -value : value);
         }
 
 
@@ -221,8 +221,12 @@ namespace fgSolver.Hardware
 
         public static void SetCurrentPositionAll(int value)
         {
-            _board1.SetCurrentPosition(0xff, value);
-            _board2.SetCurrentPosition(0xff, value);
+            using (var state = GlobalState.GetState())
+            {
+                foreach (var m in state.Motors.Motors) {
+                    SetCurrentPosition(m, value);
+                }
+            }
         }
 
         public static void SetSpeedAll(int value)
@@ -286,8 +290,12 @@ namespace fgSolver.Hardware
                         steps = 2 * stepPerQuarter - Motor.StepsToPositivePosition / 2; ;
                         break;
 
-                    case KnownPosition.UTurn:
+                    case KnownPosition.UTurnPositive:
                         steps = 2 * stepPerQuarter;
+                        break;
+
+                    case KnownPosition.UTurnNegative:
+                        steps = - 2 * stepPerQuarter;
                         break;
 
                     case KnownPosition.MaxStop:
@@ -325,7 +333,7 @@ namespace fgSolver.Hardware
                if (state.Simulated) return;
 
 
-                Runner.BeginMoveAbsolute(Motor, steps);
+                Runner.BeginMoveAbsolute(Motor,steps);
             }
         }
 

@@ -94,6 +94,7 @@ namespace fgSolver.Hardware
                     _connection.RefreshVariables();
                 }
 
+
                 var values = _connection.ReadVariables(_variablesToRead);
 
                 using (var state = GlobalState.GetState())

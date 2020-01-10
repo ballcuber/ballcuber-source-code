@@ -51,6 +51,8 @@ namespace fgSolver
                 tooltip.Text = form.Value.FormName;
                 toolStrip2.Items.Add(tooltip);
                 tooltip.Click += (object o, EventArgs e) => FormManager.Navigate(form.Value);
+                tooltip.DragOver += (object o, DragEventArgs e) => { };
+                tooltip.DragLeave += (object o, EventArgs e) => { };
             }
 
             FormManager.Navigate<ColorDefinitionControl>();
@@ -77,7 +79,7 @@ namespace fgSolver
             formCtrl.Dock = DockStyle.Fill;
             lblTitle.Text = form.FormName;
             lblTitle.Image = form.Image;
-            this.Text = "fgSolver - " + form.FormName;
+            this.Text = "BallCuber Solver - " + form.FormName;
 
             form.NavigueTo();
 

@@ -17,7 +17,8 @@ namespace fgSolver.Modele
         NegativeQuarterFromMinStop,
         PositiveQuarterFromMaxStop,
         UTurnFromMaxStop,
-        UTurn, // demi tour de la couronne
+        UTurnPositive, // demi tour de la couronne
+        UTurnNegative,
         PositiveSmallAmount,
         NegativeSmallAmount,
         MaxStopIntermediaire,
