@@ -1,11 +1,13 @@
+#include <GPIO.h>
 #include "EncoderStepper.h"
 #include <Servo.h>
 #include <MultiStepper.h>
 #include <AccelStepper.h>
 #include <Sharer.h>
 #include "RAMPS.h"
+#include <Wire.h>
 
-
+#define AMS5600_I2C_ADDRESS 0x36
 
 #define STEPPER_COUNT	5
 
@@ -37,7 +39,6 @@ else {												\
 }													\
 
 
-
 void stop(int mask) {
 	GENERIC_ALL_STEPPER(stop)
 }
@@ -64,6 +65,10 @@ float maxSpeed(int iStepper) {
 
 void setSpeed(int mask, float speed) {
 	GENERIC_ALL_STEPPER(setSpeed, speed);
+}
+
+void setCurrentPositionAndContinue(int mask, long newPosition) {
+	GENERIC_ALL_STEPPER(setCurrentPosition, newPosition, false);
 }
 
 /*
@@ -93,8 +98,37 @@ void disableOutputs(int mask) {
 	GENERIC_ALL_STEPPER(disableOutputs);
 }
 
+#define MIN   0
+#define MAX  3200
+
+#define TH_MIN	(MIN+MAX)/3
+
+#define TH_MAX	2*TH_MIN
+
+volatile int long _encoderOffset = 0;
+
+volatile long nbTurn = 0;
+volatile long EncoderPositionInTurn;
+
+volatile int errors = 0;
+
+volatile int A5Value;
+volatile int A5ValueErr;
+
+int A5ValueS[3];
+int idx = 0;
+
 void enableOutputs(int mask) {
 	GENERIC_ALL_STEPPER(enableOutputs);
+
+	/*
+	delay(500);
+
+	if (mask && (1 << 4)) {
+		_encoderOffset = Steppers[4]->currentPosition() - EncoderPositionInTurn;
+		nbTurn = 0;
+	}
+	*/
 }
 
 bool isRunning(int iStepper) {
@@ -103,6 +137,37 @@ bool isRunning(int iStepper) {
 
 void setMinPulseWidth(int mask, unsigned int minWidth) {
 	GENERIC_ALL_STEPPER(setMinPulseWidth, minWidth);
+}
+
+
+// Registre 0x08 recoit 160 (PWM 460Hz)
+// Registre 0xFF recoit 0x40 pour le burn des settings
+// les autres registres sont à 0
+// reboot pour prise en compte des valeurs
+int readAMSRegister(byte reg) {
+	Wire.beginTransmission(AMS5600_I2C_ADDRESS);
+	Wire.write(reg);
+	Wire.endTransmission();
+
+	Wire.requestFrom(AMS5600_I2C_ADDRESS, 1);
+
+//if (Wire.available() <= 1) {
+		return Wire.read();
+//	}
+
+	if (Wire.available() == 0) {
+		return -1;
+	}
+	else {
+		return Wire.read();
+	}
+}
+
+uint8_t writeAMSRegister(byte reg, byte val) {
+	Wire.beginTransmission(AMS5600_I2C_ADDRESS);
+	Wire.write(reg);
+	Wire.write(val);
+	return Wire.endTransmission();
 }
 
 
@@ -135,9 +200,20 @@ volatile float speed[STEPPER_COUNT];
 volatile long position[STEPPER_COUNT];
 volatile bool enabled[STEPPER_COUNT];
 
-
 int state;
 long ellapsedMillis;
+/*
+
+volatile unsigned long _lastUpMicros;
+volatile int _cnt;
+
+volatile long EncoderPosition;
+
+float AEncoder = 1.556;
+int BEncoder = 0; // 143;
+
+volatile long _prevEncoderPosition;
+*/
 
 
 void setup() {
@@ -177,6 +253,10 @@ void setup() {
 	Sharer_ShareFunction(bool, isRunning, int, iStepper);
 	Sharer_ShareVoid(setMinPulseWidth, int, mask, uint16_t, minWidth);
 
+	Sharer_ShareFunction(int, readAMSRegister, byte, reg);
+	Sharer_ShareFunction(int, writeAMSRegister, byte, reg, byte, val);
+
+	Sharer_ShareVoid(setCurrentPositionAndContinue, int, mask, long, newPosition);
 
 	/*
 	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("pos1");
@@ -233,11 +313,33 @@ void setup() {
 	Sharer_ShareVariable(bool, enabled[2]);
 	Sharer_ShareVariable(bool, enabled[3]);
 	Sharer_ShareVariable(bool, enabled[4]);
+	/*
+	Sharer_ShareVariable(int, A5Value);
+
+
+	//Sharer_ShareVariable(int, _currentEncoderPose);
+
+	Sharer_ShareVariable(long, EncoderPosition);
+	Sharer_ShareVariable(long, EncoderPositionInTurn);
+	Sharer_ShareVariable(long, nbTurn);
+	Sharer_ShareVariable(int, errors);
+	Sharer_ShareVariable(long, _prevEncoderPosition);
+	Sharer_ShareVariable(int, A5ValueErr);
+	*/
+
+	
+	//Sharer_ShareVariable(int, MIN);
+	//Sharer_ShareVariable(int, MAX);
+
+	//Sharer_ShareVariable(float, AEncoder);
+	//Sharer_ShareVariable(int, BEncoder);
 	
 	pinMode(13, OUTPUT);
 
 	state = false;
 	ellapsedMillis = millis();
+
+	//pinMode(18, INPUT_PULLUP);
 
 	/*
 	attachInterrupt(digitalPinToInterrupt(2), OnChange2, CHANGE);
@@ -246,17 +348,20 @@ void setup() {
 	attachInterrupt(digitalPinToInterrupt(19), OnChange19, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(20), OnChange20, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(21), OnChange21, CHANGE);
+
+	Wire.begin();
 	*/
 }
 
 
 
-volatile long int _lastUpMicros;
 volatile int _encoderSteps;
 volatile int _lastAbsoluteSteps;
 volatile int _turns = 0;
 
 #define STEPS_PER_MOTOR_ROTATION 3200
+
+/*
 #define ENCODER_CLAMP_MICROS 68
 #define ENCODER_PERIOD_MICROS 2174
 
@@ -268,8 +373,17 @@ void OnChange3() {
 	OnChange(3);
 }
 
+GPIO<BOARD::D18> sng;
+
+
 void OnChange18() {
-	OnChange(18);
+	if (sng) {
+		_lastUpMicros = micros();
+	}
+	else {
+		_currentEncoderPose = micros() - _lastUpMicros;
+	}
+	//OnChange(18);
 }
 
 void OnChange19() {
@@ -284,7 +398,11 @@ void OnChange21() {
 	OnChange(21);
 }
 
+
+
 void OnChange(int pin) {
+
+	/*
 	if (digitalRead(pin)) {
 		_lastUpMicros = micros();
 	}
@@ -297,8 +415,12 @@ void OnChange(int pin) {
 
 		_encoderSteps = _turns * STEPS_PER_MOTOR_ROTATION + absoluteSteps;
 	}
+	
 }
+*/
 
+
+#define STEPS_PER_ROTATION	(200 * 16 )
 
 void loop() {
 	for (int i = 0; i < STEPPER_COUNT; i++) {
@@ -320,4 +442,45 @@ void loop() {
 		digitalWrite(13, state);
 		state = !state;
 	}
+
+	/*
+
+	A5ValueS[idx] =  analogRead(A5);
+
+	A5Value = (A5ValueS[0] + A5ValueS[1] + A5ValueS[2]) / 3;
+
+
+
+	//EncoderPositionInTurn = ((double)(constrain(_currentEncoderPose, MIN, MAX) - MIN) * STEPS_PER_ROTATION) / ((double)(MAX - MIN));
+	EncoderPositionInTurn = (long)(3199.0F * (float)A5Value / 1023.0F);
+	
+
+	if ((_prevEncoderPosition < 340) && (A5ValueS[(idx + 1) % 3] >680)) {
+		nbTurn = nbTurn -1 ;
+	}
+	else if ((_prevEncoderPosition > 680) && (A5ValueS[(idx + 1) % 3] < 340)) {
+		nbTurn = nbTurn + 1;
+	}
+
+	EncoderPosition = nbTurn * STEPS_PER_ROTATION + EncoderPositionInTurn + _encoderOffset;
+	
+	if (enabled[4] /*&& Steppers[4]->speed() != 0.0f) {
+		int err = position[4] - EncoderPosition;
+		if (err > 3*16) {
+			//Steppers[4]->setCurrentPosition(Steppers[4]->currentPosition() - 64 * (int)(err/64), false);
+			errors++;
+			A5ValueErr = A5Value;
+		}
+		else if (err < -3*16) {
+			//Steppers[4]->setCurrentPosition(Steppers[4]->currentPosition() + 64 * (int)((-err) / 64), false);
+			errors++;
+			A5ValueErr = A5Value;
+		}
+	}
+
+
+	_prevEncoderPosition = A5ValueS[idx];
+	idx = (idx + 1) % 3;
+
+	*/
 }
