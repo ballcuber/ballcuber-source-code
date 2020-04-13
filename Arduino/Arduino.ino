@@ -1,6 +1,24 @@
-#include <GPIO.h>
+/*
+  Main program for the 2 Arduino MEGA boards of the BallCuber
+  Created by Rufus31415
+  Released into the public domain.
+
+ 
+ __________   ___________  _            _            ___________  _         _  __________   ___________  ___________ 
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½_______ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_______ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_______ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_________ ï¿½ï¿½ï¿½_______ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½  
+ï¿½ï¿½ï¿½_______ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_________ ï¿½ï¿½ï¿½_________ ï¿½ï¿½ï¿½_________ ï¿½ï¿½ï¿½_______ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_______ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_________ ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½ 
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½
+ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½         ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½         ï¿½ 
+                                                                                                                     
+*/
+
 #include "EncoderStepper.h"
-#include <Servo.h>
 #include <MultiStepper.h>
 #include <AccelStepper.h>
 #include <Sharer.h>
@@ -12,16 +30,17 @@
 #define STEPPER_COUNT	5
 
 
-// définitions des steppers
+// Steppers
 AccelStepper E0Stepper(AccelStepper::DRIVER, E0_STEP_PIN, E0_DIR_PIN);
 AccelStepper E1Stepper(AccelStepper::DRIVER, E1_STEP_PIN, E1_DIR_PIN);
 AccelStepper XStepper(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
 AccelStepper YStepper(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper ZStepper(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 
+// Stepper array
 AccelStepper * Steppers[STEPPER_COUNT] = { &E0Stepper,&E1Stepper,&XStepper,&YStepper,&ZStepper };
 
-
+// A generic macro to encapsulate a stepper command for all steppers
 #define GENERIC_ALL_STEPPER(name, ...)				\
 	for (int i = 0; i < STEPPER_COUNT; i++) {		\
 		if (((1<<i) & mask)) {						\
@@ -30,6 +49,7 @@ AccelStepper * Steppers[STEPPER_COUNT] = { &E0Stepper,&E1Stepper,&XStepper,&YSte
 	}												\
 
 
+// A generic macro to encapsulate a stepper command for one stepper
 #define GENERIC_ONE_STEPPER(name, ...)				\
 if ((iStepper < 0) || (iStepper >= STEPPER_COUNT)) {	\
 	return 0;										\
@@ -38,10 +58,13 @@ else {												\
 	return Steppers[iStepper]->name(__VA_ARGS__);	\
 }													\
 
+//////////////////////////////////////////
+// Steppers command called with Sharer
 
 void stop(int mask) {
 	GENERIC_ALL_STEPPER(stop)
 }
+
 
 void setMaxSpeed(int mask, float speed) {
 	GENERIC_ALL_STEPPER(setMaxSpeed, speed)
@@ -71,12 +94,6 @@ void setCurrentPositionAndContinue(int mask, long newPosition) {
 	GENERIC_ALL_STEPPER(setCurrentPosition, newPosition, false);
 }
 
-/*
-float speed(int iStepper) {
-	GENERIC_ONE_STEPPER(speed);
-}
-*/
-
 long distanceToGo(int iStepper) {
 	GENERIC_ONE_STEPPER(distanceToGo);
 }
@@ -98,12 +115,31 @@ void disableOutputs(int mask) {
 	GENERIC_ALL_STEPPER(disableOutputs);
 }
 
-#define MIN   0
-#define MAX  3200
+void enableOutputs(int mask) {
+  GENERIC_ALL_STEPPER(enableOutputs);
+}
 
-#define TH_MIN	(MIN+MAX)/3
+bool isRunning(int iStepper) {
+  GENERIC_ONE_STEPPER(isRunning);
+}
 
-#define TH_MAX	2*TH_MIN
+void setMinPulseWidth(int mask, unsigned int minWidth) {
+  GENERIC_ALL_STEPPER(setMinPulseWidth, minWidth);
+}
+
+bool blockingMove(byte m1, long r1, byte m2, long r2) {
+  bool useM1 = m1 < STEPPER_COUNT;
+  bool useM2 = m2 < STEPPER_COUNT;
+
+  if (useM1) Steppers[m1]->move(r1);
+
+  if (useM2) Steppers[m2]->move(r2);
+
+  while ((useM1 && Steppers[m1]->run()) | (useM2 && Steppers[m2]->run()));
+
+  return true;
+}
+
 
 volatile int long _encoderOffset = 0;
 
@@ -118,31 +154,14 @@ volatile int A5ValueErr;
 int A5ValueS[3];
 int idx = 0;
 
-void enableOutputs(int mask) {
-	GENERIC_ALL_STEPPER(enableOutputs);
 
-	/*
-	delay(500);
 
-	if (mask && (1 << 4)) {
-		_encoderOffset = Steppers[4]->currentPosition() - EncoderPositionInTurn;
-		nbTurn = 0;
-	}
-	*/
-}
-
-bool isRunning(int iStepper) {
-	GENERIC_ONE_STEPPER(isRunning);
-}
-
-void setMinPulseWidth(int mask, unsigned int minWidth) {
-	GENERIC_ALL_STEPPER(setMinPulseWidth, minWidth);
-}
-
+//////////////////////////////////////////
+// Wire command to program magnetic encoders
 
 // Registre 0x08 recoit 160 (PWM 460Hz)
 // Registre 0xFF recoit 0x40 pour le burn des settings
-// les autres registres sont à 0
+// les autres registres sont ï¿½ 0
 // reboot pour prise en compte des valeurs
 int readAMSRegister(byte reg) {
 	Wire.beginTransmission(AMS5600_I2C_ADDRESS);
@@ -171,54 +190,18 @@ uint8_t writeAMSRegister(byte reg, byte val) {
 }
 
 
-bool blockingMove(byte m1, long r1, byte m2, long r2) {
-	bool useM1 = m1 < STEPPER_COUNT;
-	bool useM2 = m2 < STEPPER_COUNT;
-
-	if (useM1) Steppers[m1]->move(r1);
-
-	if (useM2) Steppers[m2]->move(r2);
-
-	while ((useM1 && Steppers[m1]->run()) | (useM2 && Steppers[m2]->run()));
-
-	return true;
-}
-
-void blockingMove2(long r1) {
-	Steppers[3]->move(r1);
-
-	Steppers[4]->move(r1);
-
-	bool moving = true;
-	while (moving) {
-		moving = Steppers[3]->run();
-		moving |= Steppers[4]->run();
-	}
-}
-
 volatile float speed[STEPPER_COUNT];
 volatile long position[STEPPER_COUNT];
 volatile bool enabled[STEPPER_COUNT];
 
 int state;
 long ellapsedMillis;
-/*
-
-volatile unsigned long _lastUpMicros;
-volatile int _cnt;
-
-volatile long EncoderPosition;
-
-float AEncoder = 1.556;
-int BEncoder = 0; // 143;
-
-volatile long _prevEncoderPosition;
-*/
 
 
 void setup() {
 	Sharer.init(115200);
 
+// initialize steppers
 	E0Stepper.setEnablePin(E0_ENABLE_PIN);
 	E1Stepper.setEnablePin(E1_ENABLE_PIN);
 	XStepper.setEnablePin(X_ENABLE_PIN);
@@ -233,7 +216,8 @@ void setup() {
 		Steppers[i]->disableOutputs();
 	}
 
-	
+	// Initialize Sharer
+  
 	Sharer_ShareVoid(blockingMove2, long, r1);
 	Sharer_ShareVoid(stop, int, mask);
 	Sharer_ShareFunction(bool, blockingMove, byte, m1, long, r1, byte, m2, long, r2);
@@ -257,44 +241,6 @@ void setup() {
 	Sharer_ShareFunction(int, writeAMSRegister, byte, reg, byte, val);
 
 	Sharer_ShareVoid(setCurrentPositionAndContinue, int, mask, long, newPosition);
-
-	/*
-	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("pos1");
-
-	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&pos1;
-	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
-	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typelong;
-	Sharer.variableList.count++;
-
-	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("speed1");
-
-	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&speed1;
-	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
-	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typefloat;
-	Sharer.variableList.count++;
-
-	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("test");
-
-	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&test;
-	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
-	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typefloat;
-	Sharer.variableList.count++;
-
-	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("test2");
-
-	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&test2;
-	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
-	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typefloat;
-	Sharer.variableList.count++;
-
-	Sharer.variableList.variables[Sharer.variableList.count].name = PSTR("testSum");
-
-	Sharer.variableList.variables[Sharer.variableList.count].value.pointer = (void*)&testSum;
-	Sharer.variableList.variables[Sharer.variableList.count].value.size = 1;
-	Sharer.variableList.variables[Sharer.variableList.count].value.type = SharerClass::_SharerFunctionArgType::Typefloat;
-	Sharer.variableList.count++;
-	*/
-	
 		
 	Sharer_ShareVariable(float, speed[0]);
 	Sharer_ShareVariable(float, speed[1]);
@@ -313,44 +259,11 @@ void setup() {
 	Sharer_ShareVariable(bool, enabled[2]);
 	Sharer_ShareVariable(bool, enabled[3]);
 	Sharer_ShareVariable(bool, enabled[4]);
-	/*
-	Sharer_ShareVariable(int, A5Value);
-
-
-	//Sharer_ShareVariable(int, _currentEncoderPose);
-
-	Sharer_ShareVariable(long, EncoderPosition);
-	Sharer_ShareVariable(long, EncoderPositionInTurn);
-	Sharer_ShareVariable(long, nbTurn);
-	Sharer_ShareVariable(int, errors);
-	Sharer_ShareVariable(long, _prevEncoderPosition);
-	Sharer_ShareVariable(int, A5ValueErr);
-	*/
-
-	
-	//Sharer_ShareVariable(int, MIN);
-	//Sharer_ShareVariable(int, MAX);
-
-	//Sharer_ShareVariable(float, AEncoder);
-	//Sharer_ShareVariable(int, BEncoder);
 	
 	pinMode(13, OUTPUT);
 
 	state = false;
 	ellapsedMillis = millis();
-
-	//pinMode(18, INPUT_PULLUP);
-
-	/*
-	attachInterrupt(digitalPinToInterrupt(2), OnChange2, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(3), OnChange3, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(18), OnChange18, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(19), OnChange19, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(20), OnChange20, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(21), OnChange21, CHANGE);
-
-	Wire.begin();
-	*/
 }
 
 
@@ -361,66 +274,9 @@ volatile int _turns = 0;
 
 #define STEPS_PER_MOTOR_ROTATION 3200
 
-/*
-#define ENCODER_CLAMP_MICROS 68
-#define ENCODER_PERIOD_MICROS 2174
-
-void OnChange2() {
-	OnChange(2);
-}
-
-void OnChange3() {
-	OnChange(3);
-}
-
-GPIO<BOARD::D18> sng;
-
-
-void OnChange18() {
-	if (sng) {
-		_lastUpMicros = micros();
-	}
-	else {
-		_currentEncoderPose = micros() - _lastUpMicros;
-	}
-	//OnChange(18);
-}
-
-void OnChange19() {
-	OnChange(19);
-}
-
-void OnChange20() {
-	OnChange(20);
-}
-
-void OnChange21() {
-	OnChange(21);
-}
-
-
-
-void OnChange(int pin) {
-
-	/*
-	if (digitalRead(pin)) {
-		_lastUpMicros = micros();
-	}
-	else {
-		int absoluteSteps = constrain(STEPS_PER_MOTOR_ROTATION * (micros() - _lastUpMicros - ENCODER_CLAMP_MICROS) / (ENCODER_PERIOD_MICROS - 2 * ENCODER_CLAMP_MICROS), 0, STEPS_PER_MOTOR_ROTATION);
-
-		int diff = _lastAbsoluteSteps - absoluteSteps;
-		if (abs(diff) > STEPS_PER_MOTOR_ROTATION / 4) _turns += (diff > 0) ? 1 : -1;
-		_lastAbsoluteSteps = absoluteSteps;
-
-		_encoderSteps = _turns * STEPS_PER_MOTOR_ROTATION + absoluteSteps;
-	}
-	
-}
-*/
-
 
 #define STEPS_PER_ROTATION	(200 * 16 )
+
 
 void loop() {
 	for (int i = 0; i < STEPPER_COUNT; i++) {
@@ -442,45 +298,4 @@ void loop() {
 		digitalWrite(13, state);
 		state = !state;
 	}
-
-	/*
-
-	A5ValueS[idx] =  analogRead(A5);
-
-	A5Value = (A5ValueS[0] + A5ValueS[1] + A5ValueS[2]) / 3;
-
-
-
-	//EncoderPositionInTurn = ((double)(constrain(_currentEncoderPose, MIN, MAX) - MIN) * STEPS_PER_ROTATION) / ((double)(MAX - MIN));
-	EncoderPositionInTurn = (long)(3199.0F * (float)A5Value / 1023.0F);
-	
-
-	if ((_prevEncoderPosition < 340) && (A5ValueS[(idx + 1) % 3] >680)) {
-		nbTurn = nbTurn -1 ;
-	}
-	else if ((_prevEncoderPosition > 680) && (A5ValueS[(idx + 1) % 3] < 340)) {
-		nbTurn = nbTurn + 1;
-	}
-
-	EncoderPosition = nbTurn * STEPS_PER_ROTATION + EncoderPositionInTurn + _encoderOffset;
-	
-	if (enabled[4] /*&& Steppers[4]->speed() != 0.0f) {
-		int err = position[4] - EncoderPosition;
-		if (err > 3*16) {
-			//Steppers[4]->setCurrentPosition(Steppers[4]->currentPosition() - 64 * (int)(err/64), false);
-			errors++;
-			A5ValueErr = A5Value;
-		}
-		else if (err < -3*16) {
-			//Steppers[4]->setCurrentPosition(Steppers[4]->currentPosition() + 64 * (int)((-err) / 64), false);
-			errors++;
-			A5ValueErr = A5Value;
-		}
-	}
-
-
-	_prevEncoderPosition = A5ValueS[idx];
-	idx = (idx + 1) % 3;
-
-	*/
 }
