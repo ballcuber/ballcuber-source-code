@@ -2,4 +2,4 @@
 
 <h2 align="center">https://ballcuber.github.io</h1>
 
-![](KinematicCrossRows.gif)
+[![](KinematicCrossRows.gif)](https://ballcuber.github.io)
